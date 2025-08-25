@@ -1,0 +1,22 @@
+[FLASK]
+HOST = "0.0.0.0"
+PORT = 5000
+DEBUG = true
+
+[OPENAPI]
+BLUEPRINTS = ["view.aaa.bp","view.userCtrl.userctrl"]
+[[OPENAPI.SERVERS]]
+url = "http://localhost:5000"
+url1 = "http://127.0.0.1:5000"
+
+[OPENAPI.INFO]
+title = "My API"
+
+[DATABASES.default]
+SQLALCHEMY_DATABASE_URI = "sqlite:///remote_file_access.db"
+
+[DATABASES.log_db]
+SQLALCHEMY_DATABASE_URI = "sqlite:///log.db"
+
+[FILE]
+path = "C:/Users/79247/Desktop/Theo/ftp"

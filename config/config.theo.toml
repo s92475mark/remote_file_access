@@ -1,0 +1,13 @@
+[FLASK]
+HOST = "0.0.0.0"
+PORT = 8964
+DEBUG = true
+
+[OPENAPI]
+BLUEPRINTS = []
+[[OPENAPI.SERVERS]]
+url = "http://localhost:5000"
+url1 = "http://127.0.0.1:5000"
+
+[OPENAPI.INFO]
+title = "My API"

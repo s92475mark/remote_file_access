@@ -1,0 +1,51 @@
+# Gemini Project Configuration
+Project_Root: C:\Users\79247\Desktop\Theo\python_projects\remote_file_access
+Log_File: C:\Users\79247\Desktop\Theo\python_projects\remote_file_access\gemini_project_log.txt
+---
+
+專案日誌：
+- 專案名稱：遠端檔案存取 (remote_file_access)
+- 專案目標：將電腦特定資料夾作為外部可存取空間。
+- 預計使用技術：Flask, Streamlit (後期預計開發手機App測試)。
+- 專案資料夾已建立：C:\Users\79247\Desktop\Theo\python_projects\remote_file_access
+- 專案日誌文件已建立：C:\Users\79247\Desktop\Theo\python_projects\remote_file_access\gemini_project_log.txt
+- 目前進度：等待建立 Python 虛擬環境。
+- 下一步：進入專案資料夾，建立 Python 虛擬環境並安裝 Flask 和 Streamlit。
+- 新增設定：將根據命令執行情況自動更新此日誌。
+- 嘗試建立虛擬環境失敗：由於工具限制，無法直接在非當前工作目錄下建立虛擬環境。
+- 解決方案：請使用者手動切換工作目錄至專案資料夾 `C:\Users\79247\Desktop\Theo\python_projects\remote_file_access` 後，再通知我繼續。
+- `/cd` 命令問題：使用者回報 `/cd` 為 unknown command，表示可能不在 Gemini CLI 環境中。
+- 最終解決方案：請使用者在自己的終端機中手動切換目錄，然後通知我。
+- **進度更新 (2025-08-12):**
+  - 已成功在專案根目錄建立名為 `rfa_env` 的 Python 虛擬環境。
+  - 已在虛擬環境中成功安裝 `Flask` 和 `Streamlit` 及其相依套件。
+  - 已建立基礎 Flask 應用程式檔案 `app.py`。
+  - **下一步**：研究並使用 `Click` 套件為專案建立自定義命令。
+- **進度更新 (2025-08-12):**
+  - **架構升級**：為整合 OpenAPI, JWT, Log, Database, SocketIO 等功能，進行架構擴充。
+  - **安裝套件**：已安裝 `Flask-SQLAlchemy`, `Flask-JWT-Extended`, `Flask-SocketIO`, `Flask-Smorest`, `eventlet`。
+  - **更新設定檔**：擴充 `config.toml` 以包含新功能所需設定，並同步更新 `app.py` 中的 `init-config` 指令。
+  - **下一步**：修改 `app.py`，撰寫初始化新擴充功能的程式碼。
+
+---
+**進度更新 (2025-08-15):**
+
+1.  **專案結構:** 
+    *   使用 `click` 建立了一個命令列介面 (`app.py`)，包含 `run` 和 `configupdate` 兩個主要指令。
+    *   程式碼結構化，將應用程式工廠 (`createapp.py`) 和設定模型 (`config_schema.py`) 分離到 `util/` 目錄下。
+
+2.  **設定管理 (`configupdate` 指令):** 
+    *   使用 Pydantic (`config_schema.py`) 建立了強型別的巢狀設定模型 (`Config` class)，包含 `FLASK` 和 `OPENAPI` 區塊。
+    *   `configupdate` 指令可以接受一個選填的環境名稱參數 (如 `dev`)。
+    *   功能1：如果設定檔不存在，會根據 Pydantic schema 自動建立一個包含預設值的 `.toml` 檔案。
+    *   功能2：如果設定檔已存在，會讀取現有內容，並根據 schema 自動補全任何缺少的欄位。
+
+3.  **應用程式執行 (`run` 指令):** 
+    *   `run` 指令同樣接受選填的環境名稱參數，用以讀取對應的設定檔。
+    *   如果設定檔不存在，程式會報錯並停止。
+    *   成功讀取設定檔後，會將其內容解析為 Pydantic 物件，並存放在一個全域變數 `APP_CONFIG` 中，方便整個應用程式取用。
+    *   `create_app` 函式會接收這個設定物件，並用它來動態設定 OpenAPI (Swagger) 的文件標題等資訊。
+    *   Flask 伺服器會根據設定檔中的 `HOST` 和 `PORT` 啟動。
+
+4.  **環境與相依性:** 
+    *   已在 `rfa_env` 虛擬環境中安裝 `pydantic`, `toml`, `flask-smorest` 等必要套件。

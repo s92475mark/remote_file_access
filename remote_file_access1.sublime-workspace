@@ -1,0 +1,1062 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "app.py",
+			"settings":
+			{
+				"buffer_size": 698,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			},
+			"undo_stack":
+			[
+				[
+					3,
+					1,
+					"insert",
+					{
+						"characters": "\t"
+					},
+					"AQAAAE4BAAAAAAAAUQEAAAAAAAAAAAAA",
+					"BgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAE4BAAAAAAAATgEAAAAAAAAAAAAAAADwvw"
+				],
+				[
+					14,
+					1,
+					"unindent",
+					null,
+					"AQAAAKUFAAAAAAAApQUAAAAAAAAEAAAAICAgIA",
+					"BgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAK0FAAAAAAAArQUAAAAAAAAAAAAAAADwvw"
+				],
+				[
+					18,
+					1,
+					"black",
+					{
+						"use_selection": false
+					},
+					"AQAAAAAAAAAAAAAAFBMAAAAAAABmEwAAaW1wb3J0IGNsaWNrCmltcG9ydCB0b21sCmltcG9ydCBvcwppbXBvcnQgbG9nZ2luZwpmcm9tIGZsYXNrIGltcG9ydCBGbGFzawpmcm9tIGZsYXNrX3NxbGFsY2hlbXkgaW1wb3J0IFNRTEFsY2hlbXkKZnJvbSBmbGFza19qd3RfZXh0ZW5kZWQgaW1wb3J0IEpXVE1hbmFnZXIKZnJvbSBmbGFza19zb2NrZXRpbyBpbXBvcnQgU29ja2V0SU8KZnJvbSBmbGFza19zbW9yZXN0IGltcG9ydCBBcGkKCiMgLS0tIEV4dGVuc2lvbiBJbnN0YW5jZXMgLS0tCmRiID0gU1FMQWxjaGVteSgpCmp3dCA9IEpXVE1hbmFnZXIoKQpzb2NrZXRpbyA9IFNvY2tldElPKCkKCiMgLS0tIEFwcCBGYWN0b3J5IC0tLSAgIApkZWYgY3JlYXRlX2FwcChjb25maWdfb2JqKToKICAgICIiIkNyZWF0ZXMgYW5kIGNvbmZpZ3VyZXMgYSBGbGFzayBhcHAgaW5zdGFuY2UgYmFzZWQgb24gdGhlIHByb3ZpZGVkIGNvbmZpZyBvYmplY3QuIiIiCiAgICBhcHAgPSBGbGFzayhfX25hbWVfXykKCiAgICAjIExvYWQgY29uZmlndXJhdGlvbiBmcm9tIHRoZSB0b21sIG9iamVjdAogICAgYXBwLmNvbmZpZy5mcm9tX21hcHBpbmcoY29uZmlnX29iaikKICAgICMgT3ZlcnJpZGUgd2l0aCBKV1Qgc3BlY2lmaWMga2V5CiAgICBhcHAuY29uZmlnWyJKV1RfU0VDUkVUX0tFWSJdID0gY29uZmlnX29iai5nZXQoIkpXVCIsIHt9KS5nZXQoIkpXVF9TRUNSRVRfS0VZIikKICAgICMgT3ZlcnJpZGUgd2l0aCBEQiBzcGVjaWZpYyBrZXkKICAgIGFwcC5jb25maWdbIlNRTEFMQ0hFTVlfREFUQUJBU0VfVVJJIl0gPSBjb25maWdfb2JqLmdldCgiREFUQUJBU0UiLCB7fSkuZ2V0KCJTUUxBTENIRU1ZX0RBVEFCQVNFX1VSSSIpCgogICAgIyBDb25maWd1cmUgbG9nZ2luZwogICAgY29uZmlndXJlX2xvZ2dpbmcoY29uZmlnX29iai5nZXQoIkxPRyIsIHt9KSkKCiAgICAjIEluaXRpYWxpemUgZXh0ZW5zaW9ucwogICAgZGIuaW5pdF9hcHAoYXBwKQogICAgand0LmluaXRfYXBwKGFwcCkKICAgIAogICAgIyBJbml0aWFsaXplIFNvY2tldElPIHdpdGggYXBwIGFuZCBjb25maWcKICAgIHNvY2tldGlvX2NvbmZpZyA9IGNvbmZpZ19vYmouZ2V0KCJTT0NLRVRJT19TRVJWRVIiLCB7fSkuZ2V0KCJBUFBfQ09ORklHIiwge30pCiAgICBzb2NrZXRpby5pbml0X2FwcChhcHAsICoqc29ja2V0aW9fY29uZmlnKQoKICAgICMgSW5pdGlhbGl6ZSBGbGFzay1TbW9yZXN0IEFQSQogICAgYXBwLmNvbmZpZ1siQVBJX1RJVExFIl0gPSBjb25maWdfb2JqLmdldCgidGl0bGUiLCAiTXkgQVBJIikKICAgIGFwcC5jb25maWdbIkFQSV9WRVJTSU9OIl0gPSBjb25maWdfb2JqLmdldCgidmVyc2lvbiIsICJ2MSIpCiAgICBhcHAuY29uZmlnWyJPUEVOQVBJX1ZFUlNJT04iXSA9IGNvbmZpZ19vYmouZ2V0KCJvcGVuYXBpX3ZlcnNpb24iLCAiMy4wLjIiKQogICAgIyBFeHBsaWNpdGx5IHNldCB0aGUgcGF0aCBmb3IgU3dhZ2dlciBVSQogICAgc3dhZ2dlcl9jb25maWcgPSBjb25maWdfb2JqLmdldCgiU1dBR0dFUiIsIHt9KQogICAgYXBwLmNvbmZpZ1siT1BFTkFQSV9VUkxfUFJFRklYIl0gPSBzd2FnZ2VyX2NvbmZpZy5nZXQoIlVSTF9QUkVGSVgiLCAiL2FwaS1kb2NzIikKICAgIGFwcC5jb25maWdbIk9QRU5BUElfU1dBR0dFUl9VSV9QQVRIIl0gPSAiL3N3YWdnZXItdWkiCiAgICBhcHAuY29uZmlnWyJPUEVOQVBJX1NXQUdHRVJfVUlfVVJMIl0gPSAiaHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L25wbS9zd2FnZ2VyLXVpLWRpc3QvIgogICAgYXBpID0gQXBpKGFwcCkKCiAgICAjIEEgc2ltcGxlIGRlZmF1bHQgcm91dGUKICAgIEBhcHAucm91dGUoJy8nKQogICAgZGVmIGhlbGxvX3dvcmxkKCk6CiAgICAgICAgcmV0dXJuIGYiSGVsbG8sIFdvcmxkISBBcHAgcnVubmluZyB3aXRoIGNvbmZpZyBmcm9tICd7YXBwLmNvbmZpZ1snQ09ORklHX0ZJTEUnXX0nLiIKCiAgICAjIFJlZ2lzdGVyIGJsdWVwcmludHMgaGVyZSwgZm9yIGV4YW1wbGU6CiAgICAjIGZyb20gLmFwaSBpbXBvcnQgdXNlcl9ibHAKICAgICMgYXBpLnJlZ2lzdGVyX2JsdWVwcmludCh1c2VyX2JscCkKCiAgICByZXR1cm4gYXBwCgpkZWYgY29uZmlndXJlX2xvZ2dpbmcobG9nX2NvbmZpZyk6CiAgICAiIiJDb25maWd1cmVzIGFwcGxpY2F0aW9uLXdpZGUgbG9nZ2luZy4iIiIKICAgIGxvZ19kaXIgPSBvcy5wYXRoLmRpcm5hbWUobG9nX2NvbmZpZy5nZXQoIlBBVEgiLCAibG9nL2FwcC5sb2ciKSkKICAgIGlmIG5vdCBvcy5wYXRoLmV4aXN0cyhsb2dfZGlyKToKICAgICAgICBvcy5tYWtlZGlycyhsb2dfZGlyKQoKICAgIGxvZ2dpbmcuYmFzaWNDb25maWcoCiAgICAgICAgbGV2ZWw9bG9nX2NvbmZpZy5nZXQoIkxFVkVMIiwgIklORk8iKSwKICAgICAgICBmb3JtYXQ9IiUoYXNjdGltZSlzIC0gJShuYW1lKXMgLSAlKGxldmVsbmFtZSlzIC0gJShtZXNzYWdlKXMiLAogICAgICAgIGhhbmRsZXJzPVsKICAgICAgICAgICAgbG9nZ2luZy5GaWxlSGFuZGxlcihsb2dfY29uZmlnLmdldCgiUEFUSCIsICJsb2cvYXBwLmxvZyIpKSwKICAgICAgICAgICAgbG9nZ2luZy5TdHJlYW1IYW5kbGVyKCkKICAgICAgICBdCiAgICApCgojIC0tLSBDTEkgQ29tbWFuZHMgLS0tCkBjbGljay5ncm91cCgpCmRlZiBjbGkoKToKICAgICIiIkEgY29tbWFuZC1saW5lIHRvb2wgZm9yIG1hbmFnaW5nIHRoaXMgRmxhc2sgYXBwbGljYXRpb24uIiIiCiAgICBwYXNzCgpAY2xpLmNvbW1hbmQoKQpAY2xpY2sub3B0aW9uKCctLWNvbmZpZycsIGRlZmF1bHQ9J2NvbmZpZy50b21sJywgaGVscD0nUGF0aCB0byB0aGUgY29uZmlndXJhdGlvbiBmaWxlLicsIHR5cGU9Y2xpY2suUGF0aChleGlzdHM9VHJ1ZSkpCmRlZiBydW4oY29uZmlnKToKICAgICIiIlJ1bnMgdGhlIEZsYXNrIHNlcnZlciB3aXRoIHRoZSBzcGVjaWZpZWQgY29uZmlndXJhdGlvbi4iIiIKICAgIHRyeToKICAgICAgICB3aXRoIG9wZW4oY29uZmlnLCAncicpIGFzIGY6CiAgICAgICAgICAgIGNvbmZpZ19kYXRhID0gdG9tbC5sb2FkKGYpCiAgICAgICAgY2xpY2suZWNobyhmIkZvdW5kIGFuZCBsb2FkZWQgY29uZmlndXJhdGlvbiBmcm9tIHtjb25maWd9IikKICAgIGV4Y2VwdCB0b21sLlRvbWxEZWNvZGVFcnJvcjoKICAgICAgICBjbGljay5lY2hvKGYiRXJyb3I6IENvdWxkIG5vdCBkZWNvZGUgdGhlIFRPTUwgZmlsZSAne2NvbmZpZ30nLiBQbGVhc2UgY2hlY2sgaXRzIHN5bnRheC4iKQogICAgICAgIHJldHVybgoKICAgIGNvbmZpZ19kYXRhWyJDT05GSUdfRklMRSJdID0gY29uZmlnCiAgICBhcHAgPSBjcmVhdGVfYXBwKGNvbmZpZ19kYXRhKQogICAgCiAgICBzZXJ2ZXJfY29uZmlnID0gY29uZmlnX2RhdGEuZ2V0KCdzZXJ2ZXInLCB7fSkKICAgIGhvc3QgPSBzZXJ2ZXJfY29uZmlnLmdldCgnaG9zdCcsICcxMjcuMC4wLjEnKQogICAgcG9ydCA9IHNlcnZlcl9jb25maWcuZ2V0KCdwb3J0JywgNTAwMCkKICAgIAogICAgY2xpY2suZWNobyhmIlN0YXJ0aW5nIHNlcnZlciBvbiBodHRwOi8ve2hvc3R9Ontwb3J0fSIpCiAgICBzb2NrZXRpby5ydW4oYXBwLCBob3N0PWhvc3QsIHBvcnQ9cG9ydCwgdXNlX3JlbG9hZGVyPXNlcnZlcl9jb25maWcuZ2V0KCdkZWJ1ZycsIFRydWUpKQoKQGNsaS5jb21tYW5kKCkKQGNsaWNrLm9wdGlvbignLS1maWxlJywgJ2ZpbGVuYW1lJywgZGVmYXVsdD0nY29uZmlnLnRvbWwnLCBoZWxwPSdOYW1lIGZvciB0aGUgZ2VuZXJhdGVkIGNvbmZpZyBmaWxlLicpCmRlZiBpbml0X2NvbmZpZyhmaWxlbmFtZSk6CiAgICAiIiJHZW5lcmF0ZXMgYSBkZWZhdWx0IGNvbmZpZ3VyYXRpb24gZmlsZS4iIiIKICAgICMgQXV0b21hdGljYWxseSBhcHBlbmQgLnRvbWwgaWYgbm90IHByZXNlbnQKICAgIGlmIG5vdCBmaWxlbmFtZS5lbmRzd2l0aCgnLnRvbWwnKToKICAgICAgICBmaWxlbmFtZSArPSAnLnRvbWwnCgogICAgaWYgb3MucGF0aC5leGlzdHMoZmlsZW5hbWUpOgogICAgICAgIGNsaWNrLmVjaG8oZiJGaWxlICd7ZmlsZW5hbWV9JyBhbHJlYWR5IGV4aXN0cy4gQWJvcnRpbmcuIikKICAgICAgICByZXR1cm4KCiAgICBkZWZhdWx0X2NvbmZpZyA9IHsKICAgICAgICAndGl0bGUnOiAnUmVtb3RlIEZpbGUgQWNjZXNzIEFQSScsCiAgICAgICAgJ3NlcnZlcic6IHsKICAgICAgICAgICAgJ2hvc3QnOiAnMTI3LjAuMC4xJywKICAgICAgICAgICAgJ3BvcnQnOiA1MDAwLAogICAgICAgICAgICAnZGVidWcnOiBUcnVlCiAgICAgICAgfSwKICAgICAgICAnZmVhdHVyZXMnOiB7fSwKICAgICAgICAnSldUJzogewogICAgICAgICAgICAnSldUX1NFQ1JFVF9LRVknOiAnc3VwZXItc2VjcmV0LWtleS1jaGFuZ2UtbWUnCiAgICAgICAgfSwKICAgICAgICAnTE9HJzogewogICAgICAgICAgICAnTkFNRSc6ICdSZW1vdGVBcHAnLAogICAgICAgICAgICAnUEFUSCc6ICdsb2cvYXBwLmxvZycsCiAgICAgICAgICAgICdMRVZFTCc6ICdERUJVRycKICAgICAgICB9LAogICAgICAgICdEQVRBQkFTRSc6IHsKICAgICAgICAgICAgJ1NRTEFMQ0hFTVlfREFUQUJBU0VfVVJJJzogJ3NxbGl0ZTovLy9wcm9qZWN0LmRiJywKICAgICAgICAgICAgJ01PREVMX1BBVEgnOiAnYXBwLm1vZGVscycKICAgICAgICB9LAogICAgICAgICdTT0NLRVRJT19TRVJWRVInOiB7CiAgICAgICAgICAgICdBUFBfQ09ORklHJzogewogICAgICAgICAgICAgICAgJ2FzeW5jX21vZGUnOiAnZXZlbnRsZXQnCiAgICAgICAgICAgIH0sCiAgICAgICAgICAgICdOQU1FU1BBQ0VTJzoge30KICAgICAgICB9LAogICAgICAgICdTV0FHR0VSJzogewogICAgICAgICAgICAnVVJMX1BSRUZJWCc6ICcvYXBpLWRvY3MnCiAgICAgICAgfQogICAgfQoKICAgIHdpdGggb3BlbihmaWxlbmFtZSwgJ3cnKSBhcyBmOgogICAgICAgIHRvbWwuZHVtcChkZWZhdWx0X2NvbmZpZywgZikKICAgIAogICAgY2xpY2suZWNobyhmIkRlZmF1bHQgY29uZmlndXJhdGlvbiBmaWxlIGNyZWF0ZWQgYXQgJ3tmaWxlbmFtZX0nIikKCmlmIF9fbmFtZV9fID09ICdfX21haW5fXyc6CiAgICBjbGkoKQ",
+					"BgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADwvwAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8AAAAAAQAAAHcGAAAAAAAAdwYAAAAAAAAAAAAAAADwvw"
+				],
+				[
+					23,
+					1,
+					"revert",
+					null,
+					"AgAAAAAAAAAAAAAAAAAAAAAAAAAUEwAAaW1wb3J0IGNsaWNrCmltcG9ydCB0b21sCmltcG9ydCBvcwppbXBvcnQgbG9nZ2luZwpmcm9tIGZsYXNrIGltcG9ydCBGbGFzawpmcm9tIGZsYXNrX3NxbGFsY2hlbXkgaW1wb3J0IFNRTEFsY2hlbXkKZnJvbSBmbGFza19qd3RfZXh0ZW5kZWQgaW1wb3J0IEpXVE1hbmFnZXIKZnJvbSBmbGFza19zb2NrZXRpbyBpbXBvcnQgU29ja2V0SU8KZnJvbSBmbGFza19zbW9yZXN0IGltcG9ydCBBcGkKCiMgLS0tIEV4dGVuc2lvbiBJbnN0YW5jZXMgLS0tCmRiID0gU1FMQWxjaGVteSgpCmp3dCA9IEpXVE1hbmFnZXIoKQpzb2NrZXRpbyA9IFNvY2tldElPKCkKCgojIC0tLSBBcHAgRmFjdG9yeSAtLS0KZGVmIGNyZWF0ZV9hcHAoY29uZmlnX29iaik6CiAgICAiIiJDcmVhdGVzIGFuZCBjb25maWd1cmVzIGEgRmxhc2sgYXBwIGluc3RhbmNlIGJhc2VkIG9uIHRoZSBwcm92aWRlZCBjb25maWcgb2JqZWN0LiIiIgogICAgYXBwID0gRmxhc2soX19uYW1lX18pCgogICAgIyBMb2FkIGNvbmZpZ3VyYXRpb24gZnJvbSB0aGUgdG9tbCBvYmplY3QKICAgIGFwcC5jb25maWcuZnJvbV9tYXBwaW5nKGNvbmZpZ19vYmopCiAgICAjIE92ZXJyaWRlIHdpdGggSldUIHNwZWNpZmljIGtleQogICAgYXBwLmNvbmZpZ1siSldUX1NFQ1JFVF9LRVkiXSA9IGNvbmZpZ19vYmouZ2V0KCJKV1QiLCB7fSkuZ2V0KCJKV1RfU0VDUkVUX0tFWSIpCiAgICAjIE92ZXJyaWRlIHdpdGggREIgc3BlY2lmaWMga2V5CiAgICBhcHAuY29uZmlnWyJTUUxBTENIRU1ZX0RBVEFCQVNFX1VSSSJdID0gY29uZmlnX29iai5nZXQoIkRBVEFCQVNFIiwge30pLmdldCgKICAgICAgICAiU1FMQUxDSEVNWV9EQVRBQkFTRV9VUkkiCiAgICApCgogICAgIyBDb25maWd1cmUgbG9nZ2luZwogICAgY29uZmlndXJlX2xvZ2dpbmcoY29uZmlnX29iai5nZXQoIkxPRyIsIHt9KSkKCiAgICAjIEluaXRpYWxpemUgZXh0ZW5zaW9ucwogICAgZGIuaW5pdF9hcHAoYXBwKQogICAgand0LmluaXRfYXBwKGFwcCkKCiAgICAjIEluaXRpYWxpemUgU29ja2V0SU8gd2l0aCBhcHAgYW5kIGNvbmZpZwogICAgc29ja2V0aW9fY29uZmlnID0gY29uZmlnX29iai5nZXQoIlNPQ0tFVElPX1NFUlZFUiIsIHt9KS5nZXQoIkFQUF9DT05GSUciLCB7fSkKICAgIHNvY2tldGlvLmluaXRfYXBwKGFwcCwgKipzb2NrZXRpb19jb25maWcpCgogICAgIyBJbml0aWFsaXplIEZsYXNrLVNtb3Jlc3QgQVBJCiAgICBhcHAuY29uZmlnWyJBUElfVElUTEUiXSA9IGNvbmZpZ19vYmouZ2V0KCJ0aXRsZSIsICJNeSBBUEkiKQogICAgYXBwLmNvbmZpZ1siQVBJX1ZFUlNJT04iXSA9IGNvbmZpZ19vYmouZ2V0KCJ2ZXJzaW9uIiwgInYxIikKICAgIGFwcC5jb25maWdbIk9QRU5BUElfVkVSU0lPTiJdID0gY29uZmlnX29iai5nZXQoIm9wZW5hcGlfdmVyc2lvbiIsICIzLjAuMiIpCiAgICAjIEV4cGxpY2l0bHkgc2V0IHRoZSBwYXRoIGZvciBTd2FnZ2VyIFVJCiAgICBzd2FnZ2VyX2NvbmZpZyA9IGNvbmZpZ19vYmouZ2V0KCJTV0FHR0VSIiwge30pCiAgICBhcHAuY29uZmlnWyJPUEVOQVBJX1VSTF9QUkVGSVgiXSA9IHN3YWdnZXJfY29uZmlnLmdldCgiVVJMX1BSRUZJWCIsICIvYXBpLWRvY3MiKQogICAgYXBwLmNvbmZpZ1siT1BFTkFQSV9TV0FHR0VSX1VJX1BBVEgiXSA9ICIvc3dhZ2dlci11aSIKICAgIGFwcC5jb25maWdbCiAgICAgICAgIk9QRU5BUElfU1dBR0dFUl9VSV9VUkwiCiAgICBdID0gImh0dHBzOi8vY2RuLmpzZGVsaXZyLm5ldC9ucG0vc3dhZ2dlci11aS1kaXN0LyIKICAgIGFwaSA9IEFwaShhcHApCgogICAgIyBBIHNpbXBsZSBkZWZhdWx0IHJvdXRlCiAgICBAYXBwLnJvdXRlKCIvIikKICAgIGRlZiBoZWxsb193b3JsZCgpOgogICAgICAgIHJldHVybiAoCiAgICAgICAgICAgIGYiSGVsbG8sIFdvcmxkISBBcHAgcnVubmluZyB3aXRoIGNvbmZpZyBmcm9tICd7YXBwLmNvbmZpZ1snQ09ORklHX0ZJTEUnXX0nLiIKICAgICAgICApCgogICAgIyBSZWdpc3RlciBibHVlcHJpbnRzIGhlcmUsIGZvciBleGFtcGxlOgogICAgIyBmcm9tIC5hcGkgaW1wb3J0IHVzZXJfYmxwCiAgICAjIGFwaS5yZWdpc3Rlcl9ibHVlcHJpbnQodXNlcl9ibHApCgogICAgcmV0dXJuIGFwcAoKCmRlZiBjb25maWd1cmVfbG9nZ2luZyhsb2dfY29uZmlnKToKICAgICIiIkNvbmZpZ3VyZXMgYXBwbGljYXRpb24td2lkZSBsb2dnaW5nLiIiIgogICAgbG9nX2RpciA9IG9zLnBhdGguZGlybmFtZShsb2dfY29uZmlnLmdldCgiUEFUSCIsICJsb2cvYXBwLmxvZyIpKQogICAgaWYgbm90IG9zLnBhdGguZXhpc3RzKGxvZ19kaXIpOgogICAgICAgIG9zLm1ha2VkaXJzKGxvZ19kaXIpCgogICAgbG9nZ2luZy5iYXNpY0NvbmZpZygKICAgICAgICBsZXZlbD1sb2dfY29uZmlnLmdldCgiTEVWRUwiLCAiSU5GTyIpLAogICAgICAgIGZvcm1hdD0iJShhc2N0aW1lKXMgLSAlKG5hbWUpcyAtICUobGV2ZWxuYW1lKXMgLSAlKG1lc3NhZ2UpcyIsCiAgICAgICAgaGFuZGxlcnM9WwogICAgICAgICAgICBsb2dnaW5nLkZpbGVIYW5kbGVyKGxvZ19jb25maWcuZ2V0KCJQQVRIIiwgImxvZy9hcHAubG9nIikpLAogICAgICAgICAgICBsb2dnaW5nLlN0cmVhbUhhbmRsZXIoKSwKICAgICAgICBdLAogICAgKQoKCiMgLS0tIENMSSBDb21tYW5kcyAtLS0KQGNsaWNrLmdyb3VwKCkKZGVmIGNsaSgpOgogICAgIiIiQSBjb21tYW5kLWxpbmUgdG9vbCBmb3IgbWFuYWdpbmcgdGhpcyBGbGFzayBhcHBsaWNhdGlvbi4iIiIKICAgIHBhc3MKCgpAY2xpLmNvbW1hbmQoKQpAY2xpY2sub3B0aW9uKAogICAgIi0tY29uZmlnIiwKICAgIGRlZmF1bHQ9ImNvbmZpZy50b21sIiwKICAgIGhlbHA9IlBhdGggdG8gdGhlIGNvbmZpZ3VyYXRpb24gZmlsZS4iLAogICAgdHlwZT1jbGljay5QYXRoKGV4aXN0cz1UcnVlKSwKKQpkZWYgcnVuKGNvbmZpZyk6CiAgICAiIiJSdW5zIHRoZSBGbGFzayBzZXJ2ZXIgd2l0aCB0aGUgc3BlY2lmaWVkIGNvbmZpZ3VyYXRpb24uIiIiCiAgICB0cnk6CiAgICAgICAgd2l0aCBvcGVuKGNvbmZpZywgInIiKSBhcyBmOgogICAgICAgICAgICBjb25maWdfZGF0YSA9IHRvbWwubG9hZChmKQogICAgICAgIGNsaWNrLmVjaG8oZiJGb3VuZCBhbmQgbG9hZGVkIGNvbmZpZ3VyYXRpb24gZnJvbSB7Y29uZmlnfSIpCiAgICBleGNlcHQgdG9tbC5Ub21sRGVjb2RlRXJyb3I6CiAgICAgICAgY2xpY2suZWNobygKICAgICAgICAgICAgZiJFcnJvcjogQ291bGQgbm90IGRlY29kZSB0aGUgVE9NTCBmaWxlICd7Y29uZmlnfScuIFBsZWFzZSBjaGVjayBpdHMgc3ludGF4LiIKICAgICAgICApCiAgICAgICAgcmV0dXJuCgogICAgY29uZmlnX2RhdGFbIkNPTkZJR19GSUxFIl0gPSBjb25maWcKICAgIGFwcCA9IGNyZWF0ZV9hcHAoY29uZmlnX2RhdGEpCgogICAgc2VydmVyX2NvbmZpZyA9IGNvbmZpZ19kYXRhLmdldCgic2VydmVyIiwge30pCiAgICBob3N0ID0gc2VydmVyX2NvbmZpZy5nZXQoImhvc3QiLCAiMTI3LjAuMC4xIikKICAgIHBvcnQgPSBzZXJ2ZXJfY29uZmlnLmdldCgicG9ydCIsIDUwMDApCgogICAgY2xpY2suZWNobyhmIlN0YXJ0aW5nIHNlcnZlciBvbiBodHRwOi8ve2hvc3R9Ontwb3J0fSIpCiAgICBzb2NrZXRpby5ydW4oCiAgICAgICAgYXBwLCBob3N0PWhvc3QsIHBvcnQ9cG9ydCwgdXNlX3JlbG9hZGVyPXNlcnZlcl9jb25maWcuZ2V0KCJkZWJ1ZyIsIFRydWUpCiAgICApCgoKQGNsaS5jb21tYW5kKCkKQGNsaWNrLm9wdGlvbigKICAgICItLWZpbGUiLAogICAgImZpbGVuYW1lIiwKICAgIGRlZmF1bHQ9ImNvbmZpZy50b21sIiwKICAgIGhlbHA9Ik5hbWUgZm9yIHRoZSBnZW5lcmF0ZWQgY29uZmlnIGZpbGUuIiwKKQpkZWYgaW5pdF9jb25maWcoZmlsZW5hbWUpOgogICAgIiIiR2VuZXJhdGVzIGEgZGVmYXVsdCBjb25maWd1cmF0aW9uIGZpbGUuIiIiCiAgICAjIEF1dG9tYXRpY2FsbHkgYXBwZW5kIC50b21sIGlmIG5vdCBwcmVzZW50CiAgICBpZiBub3QgZmlsZW5hbWUuZW5kc3dpdGgoIi50b21sIik6CiAgICAgICAgZmlsZW5hbWUgKz0gIi50b21sIgoKICAgIGlmIG9zLnBhdGguZXhpc3RzKGZpbGVuYW1lKToKICAgICAgICBjbGljay5lY2hvKGYiRmlsZSAne2ZpbGVuYW1lfScgYWxyZWFkeSBleGlzdHMuIEFib3J0aW5nLiIpCiAgICAgICAgcmV0dXJuCgogICAgZGVmYXVsdF9jb25maWcgPSB7CiAgICAgICAgInRpdGxlIjogIlJlbW90ZSBGaWxlIEFjY2VzcyBBUEkiLAogICAgICAgICJzZXJ2ZXIiOiB7Imhvc3QiOiAiMTI3LjAuMC4xIiwgInBvcnQiOiA1MDAwLCAiZGVidWciOiBUcnVlfSwKICAgICAgICAiZmVhdHVyZXMiOiB7fSwKICAgICAgICAiSldUIjogeyJKV1RfU0VDUkVUX0tFWSI6ICJzdXBlci1zZWNyZXQta2V5LWNoYW5nZS1tZSJ9LAogICAgICAgICJMT0ciOiB7Ik5BTUUiOiAiUmVtb3RlQXBwIiwgIlBBVEgiOiAibG9nL2FwcC5sb2ciLCAiTEVWRUwiOiAiREVCVUcifSwKICAgICAgICAiREFUQUJBU0UiOiB7CiAgICAgICAgICAgICJTUUxBTENIRU1ZX0RBVEFCQVNFX1VSSSI6ICJzcWxpdGU6Ly8vcHJvamVjdC5kYiIsCiAgICAgICAgICAgICJNT0RFTF9QQVRIIjogImFwcC5tb2RlbHMiLAogICAgICAgIH0sCiAgICAgICAgIlNPQ0tFVElPX1NFUlZFUiI6IHsiQVBQX0NPTkZJRyI6IHsiYXN5bmNfbW9kZSI6ICJldmVudGxldCJ9LCAiTkFNRVNQQUNFUyI6IHt9fSwKICAgICAgICAiU1dBR0dFUiI6IHsiVVJMX1BSRUZJWCI6ICIvYXBpLWRvY3MifSwKICAgIH0KCiAgICB3aXRoIG9wZW4oZmlsZW5hbWUsICJ3IikgYXMgZjoKICAgICAgICB0b21sLmR1bXAoZGVmYXVsdF9jb25maWcsIGYpCgogICAgY2xpY2suZWNobyhmIkRlZmF1bHQgY29uZmlndXJhdGlvbiBmaWxlIGNyZWF0ZWQgYXQgJ3tmaWxlbmFtZX0nIikKCgppZiBfX25hbWVfXyA9PSAiX19tYWluX18iOgogICAgY2xpKCkKAAAAAAAAAAA8AQAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAACACAAAAAAAAIAIAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					32,
+					1,
+					"left_delete",
+					null,
+					"AQAAAAQBAAAAAAAABAEAAAAAAAABAAAAdA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAFAQAAAAAAAAUBAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					34,
+					1,
+					"insert",
+					{
+						"characters": "app"
+					},
+					"AwAAAAQBAAAAAAAABQEAAAAAAAAAAAAABQEAAAAAAAAGAQAAAAAAAAAAAAAGAQAAAAAAAAcBAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAEAQAAAAAAAAQBAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					35,
+					1,
+					"insert_completion",
+					{
+						"completion": "lsp_select_completion {\"index\":0,\"session_name\":\"LSP-pyright\"}",
+						"format": "command",
+						"keep_prefix": false,
+						"must_insert": false,
+						"trigger": "create_app"
+					},
+					"AgAAAP0AAAAAAAAA/QAAAAAAAAAKAAAAY3JlYXRlX2FwcP0AAAAAAAAABwEAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAHAQAAAAAAAAcBAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					37,
+					1,
+					"black",
+					{
+						"use_selection": false
+					},
+					"AQAAAAAAAAAAAAAAQQEAAAAAAAA+AQAAZnJvbSBmbGFzayBpbXBvcnQgRmxhc2sKCmRlZiBjcmVhdGVfYXBwKCk6CiAgICAiIiJDcmVhdGVzIGFuZCBjb25maWd1cmVzIGEgRmxhc2sgYXBwIGluc3RhbmNlLiIiIgogICAgYXBwID0gRmxhc2soX19uYW1lX18pCgogICAgQGFwcC5yb3V0ZSgiLyIpCiAgICBkZWYgaGVsbG9fd29ybGQoKToKICAgICAgICByZXR1cm4gIkhlbGxvLCBXb3JsZCEiCgogICAgcmV0dXJuIGFwcAoKaWYgX19uYW1lX18gPT0gIl9fbWFpbl9fIjoKICAgIGFwcCA9IGNyZWF0ZV9hcHAoKQogICAgYXBwLnJ1bihob3N0PSIxMjcuMC4wLjEiLCBwb3J0PTUwMDAsIGRlYnVnPVRydWUp",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAHAQAAAAAAAAcBAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					45,
+					1,
+					"revert",
+					null,
+					"AgAAAAAAAAAAAAAAAAAAAAAAAABBAQAAZnJvbSBmbGFzayBpbXBvcnQgRmxhc2sKCgpkZWYgY3JlYXRlX2FwcCgpOgogICAgIiIiQ3JlYXRlcyBhbmQgY29uZmlndXJlcyBhIEZsYXNrIGFwcCBpbnN0YW5jZS4iIiIKICAgIGFwcCA9IEZsYXNrKF9fbmFtZV9fKQoKICAgIEBhcHAucm91dGUoIi8iKQogICAgZGVmIGhlbGxvX3dvcmxkKCk6CiAgICAgICAgcmV0dXJuICJIZWxsbywgV29ybGQhIgoKICAgIHJldHVybiBhcHAKCgppZiBfX25hbWVfXyA9PSAiX19tYWluX18iOgogICAgYXBwID0gY3JlYXRlX2FwcCgpCiAgICBhcHAucnVuKGhvc3Q9IjEyNy4wLjAuMSIsIHBvcnQ9NTAwMCwgZGVidWc9VHJ1ZSkKAAAAAAAAAACaAgAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABBAQAAAAAAAEEBAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					90,
+					1,
+					"insert",
+					{
+						"characters": "\nf"
+					},
+					"AgAAACQAAAAAAAAAJQAAAAAAAAAAAAAAJQAAAAAAAAAmAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAkAAAAAAAAACQAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					92,
+					1,
+					"left_delete",
+					null,
+					"AQAAACUAAAAAAAAAJQAAAAAAAAABAAAAZg",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAmAAAAAAAAACYAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					93,
+					1,
+					"insert",
+					{
+						"characters": "r"
+					},
+					"AQAAACUAAAAAAAAAJgAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAlAAAAAAAAACUAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					94,
+					1,
+					"left_delete",
+					null,
+					"AQAAACUAAAAAAAAAJQAAAAAAAAABAAAAcg",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAmAAAAAAAAACYAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					95,
+					1,
+					"insert",
+					{
+						"characters": "from"
+					},
+					"BAAAACUAAAAAAAAAJgAAAAAAAAAAAAAAJgAAAAAAAAAnAAAAAAAAAAAAAAAnAAAAAAAAACgAAAAAAAAAAAAAACgAAAAAAAAAKQAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAlAAAAAAAAACUAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					96,
+					1,
+					"insert",
+					{
+						"characters": " util"
+					},
+					"BQAAACkAAAAAAAAAKgAAAAAAAAAAAAAAKgAAAAAAAAArAAAAAAAAAAAAAAArAAAAAAAAACwAAAAAAAAAAAAAACwAAAAAAAAALQAAAAAAAAAAAAAALQAAAAAAAAAuAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAApAAAAAAAAACkAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					97,
+					1,
+					"insert",
+					{
+						"characters": " "
+					},
+					"AQAAAC4AAAAAAAAALwAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAuAAAAAAAAAC4AAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					98,
+					1,
+					"left_delete",
+					null,
+					"AQAAAC4AAAAAAAAALgAAAAAAAAABAAAAIA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAvAAAAAAAAAC8AAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					99,
+					1,
+					"insert",
+					{
+						"characters": "."
+					},
+					"AQAAAC4AAAAAAAAALwAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAuAAAAAAAAAC4AAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					100,
+					1,
+					"insert",
+					{
+						"characters": "cr"
+					},
+					"AgAAAC8AAAAAAAAAMAAAAAAAAAAAAAAAMAAAAAAAAAAxAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAvAAAAAAAAAC8AAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					101,
+					1,
+					"insert_completion",
+					{
+						"completion": "create_app",
+						"format": "text",
+						"keep_prefix": false,
+						"must_insert": false,
+						"trigger": "create_app"
+					},
+					"AgAAAC8AAAAAAAAALwAAAAAAAAACAAAAY3IvAAAAAAAAADkAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAxAAAAAAAAADEAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					102,
+					1,
+					"insert",
+					{
+						"characters": " ip"
+					},
+					"AwAAADkAAAAAAAAAOgAAAAAAAAAAAAAAOgAAAAAAAAA7AAAAAAAAAAAAAAA7AAAAAAAAADwAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA5AAAAAAAAADkAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					103,
+					1,
+					"left_delete",
+					null,
+					"AQAAADsAAAAAAAAAOwAAAAAAAAABAAAAcA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA8AAAAAAAAADwAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					104,
+					1,
+					"insert",
+					{
+						"characters": "mport"
+					},
+					"BQAAADsAAAAAAAAAPAAAAAAAAAAAAAAAPAAAAAAAAAA9AAAAAAAAAAAAAAA9AAAAAAAAAD4AAAAAAAAAAAAAAD4AAAAAAAAAPwAAAAAAAAAAAAAAPwAAAAAAAABAAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA7AAAAAAAAADsAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					105,
+					1,
+					"insert",
+					{
+						"characters": " crea"
+					},
+					"BQAAAEAAAAAAAAAAQQAAAAAAAAAAAAAAQQAAAAAAAABCAAAAAAAAAAAAAABCAAAAAAAAAEMAAAAAAAAAAAAAAEMAAAAAAAAARAAAAAAAAAAAAAAARAAAAAAAAABFAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABAAAAAAAAAAEAAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					106,
+					1,
+					"insert",
+					{
+						"characters": "te"
+					},
+					"AgAAAEUAAAAAAAAARgAAAAAAAAAAAAAARgAAAAAAAABHAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABFAAAAAAAAAEUAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					107,
+					1,
+					"insert_completion",
+					{
+						"completion": "create_app",
+						"format": "text",
+						"keep_prefix": false,
+						"must_insert": false,
+						"trigger": "create_app"
+					},
+					"AgAAAEEAAAAAAAAAQQAAAAAAAAAGAAAAY3JlYXRlQQAAAAAAAABLAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAABHAAAAAAAAAEcAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					114,
+					1,
+					"toggle_comment",
+					{
+						"block": false
+					},
+					"BwAAAPwAAAAAAAAA/gAAAAAAAAAAAAAA3AAAAAAAAADeAAAAAAAAAAAAAADFAAAAAAAAAMcAAAAAAAAAAAAAALEAAAAAAAAAswAAAAAAAAAAAAAAlgAAAAAAAACYAAAAAAAAAAAAAABfAAAAAAAAAGEAAAAAAAAAAAAAAE0AAAAAAAAATwAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAALAQAAAAAAAEwAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					116,
+					1,
+					"black",
+					{
+						"use_selection": false
+					},
+					"AQAAAAAAAAAAAAAA0wIAAAAAAADPAgAAaW1wb3J0IGNsaWNrCmZyb20gZmxhc2sgaW1wb3J0IEZsYXNrCmZyb20gdXRpbC5jcmVhdGVfYXBwIGltcG9ydCBjcmVhdGVfYXBwCgojIGRlZiBjcmVhdGVfYXBwKCk6CiMgICAgICIiIkNyZWF0ZXMgYW5kIGNvbmZpZ3VyZXMgYSBGbGFzayBhcHAgaW5zdGFuY2UuIiIiCiMgICAgIGFwcCA9IEZsYXNrKF9fbmFtZV9fKQoKIyAgICAgQGFwcC5yb3V0ZSgiLyIpCiMgICAgIGRlZiBoZWxsb193b3JsZCgpOgojICAgICAgICAgcmV0dXJuICJIZWxsbywgV29ybGQhIgoKIyAgICAgcmV0dXJuIGFwcAoKQGNsaWNrLmdyb3VwKCkKZGVmIGNsaSgpOgogICAgIiIiQSBjb21tYW5kLWxpbmUgdG9vbCBmb3IgbWFuYWdpbmcgdGhpcyBGbGFzayBhcHBsaWNhdGlvbi4iIiIKICAgIHBhc3MKCkBjbGkuY29tbWFuZCgpCmRlZiBydW4oKToKICAgICIiIlJ1bnMgdGhlIEZsYXNrIHNlcnZlci4iIiIKICAgIGFwcCA9IGNyZWF0ZV9hcHAoKQogICAgY2xpY2suZWNobygiU3RhcnRpbmcgc2VydmVyIG9uIGh0dHA6Ly8xMjcuMC4wLjE6NTAwMCIpCiAgICBhcHAucnVuKGhvc3Q9IjEyNy4wLjAuMSIsIHBvcnQ9NTAwMCwgZGVidWc9VHJ1ZSkKCkBjbGkuY29tbWFuZCgpCmRlZiBhYWEoKToKICAgICIiIlByaW50cyBhIHRlc3Qgc3RyaW5nLiIiIgogICAgY2xpY2suZWNobygiVGhpcyBpcyB0aGUgYWFhIGNvbW1hbmQhIikKCmlmIF9fbmFtZV9fID09ICJfX21haW5fXyI6CiAgICBjbGkoKQo",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAZAQAAAAAAAEwAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					193,
+					1,
+					"left_delete",
+					null,
+					"AQAAADUAAAAAAAAANQAAAAAAAAABAAAAXw",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAA2AAAAAAAAADYAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					196,
+					1,
+					"left_delete",
+					null,
+					"AQAAAA0AAAAAAAAADQAAAAAAAAAYAAAAZnJvbSBmbGFzayBpbXBvcnQgRmxhc2sK",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAANAAAAAAAAACUAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					200,
+					2,
+					"left_delete",
+					null,
+					"AgAAABcAAAAAAAAAFwAAAAAAAAAJAAAAY3JlYXRlYXBwFgAAAAAAAAAWAAAAAAAAAAEAAAAu",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAgAAAAAAAAABcAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					201,
+					1,
+					"insert",
+					{
+						"characters": "."
+					},
+					"AQAAABYAAAAAAAAAFwAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAWAAAAAAAAABYAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					202,
+					5,
+					"left_delete",
+					null,
+					"BQAAABYAAAAAAAAAFgAAAAAAAAABAAAALhUAAAAAAAAAFQAAAAAAAAABAAAAbBQAAAAAAAAAFAAAAAAAAAABAAAAaRMAAAAAAAAAEwAAAAAAAAABAAAAdBIAAAAAAAAAEgAAAAAAAAABAAAAdQ",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAXAAAAAAAAABcAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					203,
+					1,
+					"insert",
+					{
+						"characters": "util."
+					},
+					"BQAAABIAAAAAAAAAEwAAAAAAAAAAAAAAEwAAAAAAAAAUAAAAAAAAAAAAAAAUAAAAAAAAABUAAAAAAAAAAAAAABUAAAAAAAAAFgAAAAAAAAAAAAAAFgAAAAAAAAAXAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAASAAAAAAAAABIAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					204,
+					1,
+					"insert",
+					{
+						"characters": "a"
+					},
+					"AQAAABcAAAAAAAAAGAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAXAAAAAAAAABcAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					205,
+					1,
+					"left_delete",
+					null,
+					"AQAAABcAAAAAAAAAFwAAAAAAAAABAAAAYQ",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAYAAAAAAAAABgAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					206,
+					1,
+					"insert",
+					{
+						"characters": "createa"
+					},
+					"BwAAABcAAAAAAAAAGAAAAAAAAAAAAAAAGAAAAAAAAAAZAAAAAAAAAAAAAAAZAAAAAAAAABoAAAAAAAAAAAAAABoAAAAAAAAAGwAAAAAAAAAAAAAAGwAAAAAAAAAcAAAAAAAAAAAAAAAcAAAAAAAAAB0AAAAAAAAAAAAAAB0AAAAAAAAAHgAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAXAAAAAAAAABcAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					207,
+					1,
+					"insert",
+					{
+						"characters": "pp"
+					},
+					"AgAAAB4AAAAAAAAAHwAAAAAAAAAAAAAAHwAAAAAAAAAgAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAeAAAAAAAAAB4AAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					208,
+					1,
+					"insert_completion",
+					{
+						"completion": "create_app",
+						"format": "text",
+						"keep_prefix": false,
+						"must_insert": false,
+						"trigger": "create_app"
+					},
+					"AgAAABcAAAAAAAAAFwAAAAAAAAAJAAAAY3JlYXRlYXBwFwAAAAAAAAAhAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAgAAAAAAAAACAAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					209,
+					4,
+					"left_delete",
+					null,
+					"BAAAACAAAAAAAAAAIAAAAAAAAAABAAAAcB8AAAAAAAAAHwAAAAAAAAABAAAAcB4AAAAAAAAAHgAAAAAAAAABAAAAYR0AAAAAAAAAHQAAAAAAAAABAAAAXw",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAhAAAAAAAAACEAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					210,
+					1,
+					"insert",
+					{
+						"characters": "app"
+					},
+					"AwAAAB0AAAAAAAAAHgAAAAAAAAAAAAAAHgAAAAAAAAAfAAAAAAAAAAAAAAAfAAAAAAAAACAAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAdAAAAAAAAAB0AAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					211,
+					1,
+					"insert_completion",
+					{
+						"completion": "create_app",
+						"format": "text",
+						"keep_prefix": false,
+						"must_insert": false,
+						"trigger": "create_app"
+					},
+					"AgAAABcAAAAAAAAAFwAAAAAAAAAJAAAAY3JlYXRlYXBwFwAAAAAAAAAhAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAgAAAAAAAAACAAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					212,
+					4,
+					"left_delete",
+					null,
+					"BAAAACAAAAAAAAAAIAAAAAAAAAABAAAAcB8AAAAAAAAAHwAAAAAAAAABAAAAcB4AAAAAAAAAHgAAAAAAAAABAAAAYR0AAAAAAAAAHQAAAAAAAAABAAAAXw",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAhAAAAAAAAACEAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					213,
+					1,
+					"insert",
+					{
+						"characters": "app"
+					},
+					"AwAAAB0AAAAAAAAAHgAAAAAAAAAAAAAAHgAAAAAAAAAfAAAAAAAAAAAAAAAfAAAAAAAAACAAAAAAAAAAAAAAAA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAdAAAAAAAAAB0AAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					215,
+					1,
+					"black",
+					{
+						"use_selection": false
+					},
+					"AQAAAAAAAAAAAAAAugIAAAAAAAC6AgAAaW1wb3J0IGNsaWNrCmZyb20gdXRpbC5jcmVhdGVhcHAgaW1wb3J0IGNyZWF0ZV9hcHAKCiMgZGVmIGNyZWF0ZV9hcHAoKToKIyAgICAgIiIiQ3JlYXRlcyBhbmQgY29uZmlndXJlcyBhIEZsYXNrIGFwcCBpbnN0YW5jZS4iIiIKIyAgICAgYXBwID0gRmxhc2soX19uYW1lX18pCgojICAgICBAYXBwLnJvdXRlKCIvIikKIyAgICAgZGVmIGhlbGxvX3dvcmxkKCk6CiMgICAgICAgICByZXR1cm4gIkhlbGxvLCBXb3JsZCEiCgojICAgICByZXR1cm4gYXBwCgoKQGNsaWNrLmdyb3VwKCkKZGVmIGNsaSgpOgogICAgIiIiQSBjb21tYW5kLWxpbmUgdG9vbCBmb3IgbWFuYWdpbmcgdGhpcyBGbGFzayBhcHBsaWNhdGlvbi4iIiIKICAgIHBhc3MKCgpAY2xpLmNvbW1hbmQoKQpkZWYgcnVuKCk6CiAgICAiIiJSdW5zIHRoZSBGbGFzayBzZXJ2ZXIuIiIiCiAgICBhcHAgPSBjcmVhdGVfYXBwKCkKICAgIGNsaWNrLmVjaG8oIlN0YXJ0aW5nIHNlcnZlciBvbiBodHRwOi8vMTI3LjAuMC4xOjUwMDAiKQogICAgYXBwLnJ1bihob3N0PSIxMjcuMC4wLjEiLCBwb3J0PTUwMDAsIGRlYnVnPVRydWUpCgoKQGNsaS5jb21tYW5kKCkKZGVmIGFhYSgpOgogICAgIiIiUHJpbnRzIGEgdGVzdCBzdHJpbmcuIiIiCiAgICBjbGljay5lY2hvKCJUaGlzIGlzIHRoZSBhYWEgY29tbWFuZCEiKQoKCmlmIF9fbmFtZV9fID09ICJfX21haW5fXyI6CiAgICBjbGkoKQo",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAgAAAAAAAAACAAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					223,
+					1,
+					"black",
+					{
+						"use_selection": false
+					},
+					"AQAAAAAAAAAAAAAAugIAAAAAAAC6AgAAaW1wb3J0IGNsaWNrCmZyb20gdXRpbC5jcmVhdGVhcHAgaW1wb3J0IGNyZWF0ZV9hcHAKCiMgZGVmIGNyZWF0ZV9hcHAoKToKIyAgICAgIiIiQ3JlYXRlcyBhbmQgY29uZmlndXJlcyBhIEZsYXNrIGFwcCBpbnN0YW5jZS4iIiIKIyAgICAgYXBwID0gRmxhc2soX19uYW1lX18pCgojICAgICBAYXBwLnJvdXRlKCIvIikKIyAgICAgZGVmIGhlbGxvX3dvcmxkKCk6CiMgICAgICAgICByZXR1cm4gIkhlbGxvLCBXb3JsZCEiCgojICAgICByZXR1cm4gYXBwCgoKQGNsaWNrLmdyb3VwKCkKZGVmIGNsaSgpOgogICAgIiIiQSBjb21tYW5kLWxpbmUgdG9vbCBmb3IgbWFuYWdpbmcgdGhpcyBGbGFzayBhcHBsaWNhdGlvbi4iIiIKICAgIHBhc3MKCgpAY2xpLmNvbW1hbmQoKQpkZWYgcnVuKCk6CiAgICAiIiJSdW5zIHRoZSBGbGFzayBzZXJ2ZXIuIiIiCiAgICBhcHAgPSBjcmVhdGVfYXBwKCkKICAgIGNsaWNrLmVjaG8oIlN0YXJ0aW5nIHNlcnZlciBvbiBodHRwOi8vMTI3LjAuMC4xOjUwMDAiKQogICAgYXBwLnJ1bihob3N0PSIxMjcuMC4wLjEiLCBwb3J0PTUwMDAsIGRlYnVnPVRydWUpCgoKQGNsaS5jb21tYW5kKCkKZGVmIGFhYSgpOgogICAgIiIiUHJpbnRzIGEgdGVzdCBzdHJpbmcuIiIiCiAgICBjbGljay5lY2hvKCJUaGlzIGlzIHRoZSBhYWEgY29tbWFuZCEiKQoKCmlmIF9fbmFtZV9fID09ICJfX21haW5fXyI6CiAgICBjbGkoKQo",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAB4AQAAAAAAAHgBAAAAAAAAAAAAAAAA8L8"
+				]
+			]
+		},
+		{
+			"file": "util/createapp.py",
+			"settings":
+			{
+				"buffer_size": 216,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			},
+			"undo_stack":
+			[
+				[
+					12,
+					2,
+					"left_delete",
+					null,
+					"AQAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAaW1wb3J0IGNsaWNr",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					15,
+					2,
+					"left_delete",
+					null,
+					"AgAAANgAAAAAAAAA2AAAAAAAAAC2AQAACkBjbGljay5ncm91cCgpCmRlZiBjbGkoKToKICAgICIiIkEgY29tbWFuZC1saW5lIHRvb2wgZm9yIG1hbmFnaW5nIHRoaXMgRmxhc2sgYXBwbGljYXRpb24uIiIiCiAgICBwYXNzCgpAY2xpLmNvbW1hbmQoKQpkZWYgcnVuKCk6CiAgICAiIiJSdW5zIHRoZSBGbGFzayBzZXJ2ZXIuIiIiCiAgICBhcHAgPSBjcmVhdGVfYXBwKCkKICAgIGNsaWNrLmVjaG8oIlN0YXJ0aW5nIHNlcnZlciBvbiBodHRwOi8vMTI3LjAuMC4xOjUwMDAiKQogICAgYXBwLnJ1bihob3N0PSIxMjcuMC4wLjEiLCBwb3J0PTUwMDAsIGRlYnVnPVRydWUpCgpAY2xpLmNvbW1hbmQoKQpkZWYgYWFhKCk6CiAgICAiIiJQcmludHMgYSB0ZXN0IHN0cmluZy4iIiIKICAgIGNsaWNrLmVjaG8oIlRoaXMgaXMgdGhlIGFhYSBjb21tYW5kISIpCgppZiBfX25hbWVfXyA9PSAiX19tYWluX18iOgogICAgY2xpKCkK1wAAAAAAAADXAAAAAAAAAAEAAAAK",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADYAAAAAAAAAI4CAAAAAAAAAAAAAAAA8L8"
+				],
+				[
+					17,
+					1,
+					"black",
+					{
+						"use_selection": false
+					},
+					"AQAAAAAAAAAAAAAA2AAAAAAAAADXAAAACmZyb20gZmxhc2sgaW1wb3J0IEZsYXNrCgpkZWYgY3JlYXRlX2FwcCgpOgogICAgIiIiQ3JlYXRlcyBhbmQgY29uZmlndXJlcyBhIEZsYXNrIGFwcCBpbnN0YW5jZS4iIiIKICAgIGFwcCA9IEZsYXNrKF9fbmFtZV9fKQoKICAgIEBhcHAucm91dGUoIi8iKQogICAgZGVmIGhlbGxvX3dvcmxkKCk6CiAgICAgICAgcmV0dXJuICJIZWxsbywgV29ybGQhIgoKICAgIHJldHVybiBhcHA",
+					"AgAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPC/AAAAAAEAAADXAAAAAAAAANcAAAAAAAAAAAAAAAAA8L8"
+				]
+			]
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"ip",
+				"Package Control: Install Package"
+			],
+			[
+				"IP",
+				"Package Control: Install Package"
+			],
+			[
+				"package list",
+				"Package Control: List Packages"
+			],
+			[
+				"MarkdownEditing",
+				"Preferences: MarkdownEditing Settings"
+			],
+			[
+				"package c",
+				"Package Control: List Packages"
+			],
+			[
+				"json",
+				"Pretty JSON: Format and Sort JSON"
+			],
+			[
+				"Markdown Preview: PEEN",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"MARKDOWNPREVIEW:",
+				"Markdown Preview: Copy to Clipboard"
+			],
+			[
+				"md open in ",
+				"MarkdownEditing: Open Home Page"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/remote_file_access.sublime-project",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/rfa_env/Lib/site-packages/flask_smorest/__init__.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/rfa_env/Lib/site-packages/eventlet/wsgi.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/create_app.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/framework-sample/app/sample/app.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/framework-sample/app/sample/config/config.toml",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/error_message.txt",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/config.toml",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/1233.toml",
+		"/C/Users/79247/Desktop/Theo/python_projects/framework-sample/app/sample/command.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/framework/framework/util/config.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/app.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/adc-2-3-1/framework/create_app.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/adc-2-3-1/app/app002/__main__.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/adc-2-3-1/app/app002/view/inventory_api.py",
+		"/C/Program Files (x86)/Steam/steamapps/common/Cornerpond/Cornerpond.pck",
+		"/C/Users/79247/Desktop/Theo/python_projects/all_images/manifest.json",
+		"/C/Users/79247/Desktop/error.txt",
+		"/C/Users/79247/Desktop/Theo/python_projects/robot/robot_spec_plan.csv",
+		"/C/Users/79247/Desktop/Theo/python_projects/adc-2-3-1/app/app002/view/input_api.py",
+		"/C/Users/79247/Desktop/Theo/MD/測試文件.md",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/config/jei/jei-client.ini",
+		"/C/Program Files (x86)/Steam/steamapps/common/Succubus/www/save/common.rpgsave",
+		"/C/Program Files (x86)/Steam/steamapps/common/Succubus/www/package.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/server_scripts/mods/Hyperbox/hyperbox.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/server_scripts/mods/Mekanism/Rebalance/rebalance.md",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/kubejs/data/silentgear/silentgear_materials/unobtainium.json",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/kubejs/data/silentgear/silentgear_materials/vibranium.json",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/kubejs/data/silentgear/silentgear_traits/advanced_aquatic.json",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/kubejs/data/silentgear/silentgear_traits/advanced_flame_ward.json",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/kubejs/data/silentgear/silentgear_traits/cure_levitation.json",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/kubejs/data/silentgear/silentgear_traits/cure_nausea.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/client_scripts/tooltips.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/client_scripts/server_sync_banlist.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/client_scripts/Mekanism-Tooltips.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/startup_scripts/Modern-Industrialization/atm_stuff.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/startup_scripts/Applied Energistics/Universal_Press.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/startup_scripts/hyperbox/hyperbox.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/startup_scripts/CustomAdditions.js",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/kubejs/data/silentgear/silentgear_materials/allthemodium.json",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/packmenu/resources/assets/packmenu/buttons/language.json",
+		"/C/Users/79247/Downloads/crash-2025-04-12_22.38.01-server.txt",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/unexplored_wood.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/xychorium_gem.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/entro.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/unobtainium.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/sky_steel.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/darkstone.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/crimson_iron.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/allthemodium.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/vibranium.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/black_quartz.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/azure_silver.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/kivi.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/tiers/magical.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/server_scripts/modpack/atm_star.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/server_scripts/banlist_script.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/assets/hostilenetworks/lang/zh_cn.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/assets/compactmachines/lang/zh_cn.json",
+		"/C/Users/79247/Downloads/zh_cn.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/assets/atm/lang/zh_cn.json",
+		"/C/Users/79247/curseforge/minecraft/Instances/Roguelike Adventures and Dungeons 2/saves/world1/DIM1/data/capabilities.dat",
+		"/C/Users/79247/curseforge/minecraft/Instances/Roguelike Adventures and Dungeons 2/saves/world1/DIM1/data/raids_end.dat",
+		"/C/Users/79247/curseforge/minecraft/Instances/Roguelike Adventures and Dungeons 2/saves/world1/DIM1/data/rats_travelling_plague_doctor.dat"
+	],
+	"find":
+	{
+		"height": 41.0
+	},
+	"find_in_files":
+	{
+		"height": 107.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"Flask",
+			"_create",
+			"RichStyle"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"scrollbar_highlights": true,
+		"show_context": true,
+		"use_buffer2": true,
+		"use_gitignore": true,
+		"whole_word": false,
+		"wrap": false
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "app.py",
+					"selected": true,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 698,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								443,
+								443
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html, text.xml"
+								},
+								{
+									"rhs_empty": true,
+									"selector": "punctuation.accessor"
+								},
+								{
+									"characters": ".[\"'",
+									"selector": "meta.tag, source - comment - string.quoted.double.block - string.quoted.single.block - string.unquoted.heredoc",
+									"server": "LSP-pyright"
+								}
+							],
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										442,
+										443
+									]
+								},
+								"icon":
+								{
+									"1":
+									[
+										"Packages/BracketHighlighter/icons/round_bracket.png",
+										"region.yellowish"
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										441,
+										442
+									]
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"lsp_active": true,
+							"lsp_uri": "file:///C:/Users/79247/Desktop/Theo/python_projects/remote_file_access/app.py",
+							"show_definitions": false,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"stack_multiselect": false,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "util/createapp.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 216,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								24,
+								24
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": "<",
+									"selector": "text.html, text.xml"
+								},
+								{
+									"rhs_empty": true,
+									"selector": "punctuation.accessor"
+								},
+								{
+									"characters": ".[\"'",
+									"selector": "meta.tag, source - comment - string.quoted.double.block - string.quoted.single.block - string.unquoted.heredoc",
+									"server": "LSP-pyright"
+								}
+							],
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+								},
+								"icon":
+								{
+								},
+								"open":
+								{
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"lsp_active": true,
+							"lsp_uri": "file:///C:/Users/79247/Desktop/Theo/python_projects/remote_file_access/util/createapp.py",
+							"show_definitions": false,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"stack_multiselect": false,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 29.0
+	},
+	"input":
+	{
+		"height": 41.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.LSP Log Panel":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"output.diagnostics":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"output.find_results":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"output.mdpopups":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"pinned_build_system": "",
+	"project": "remote_file_access1.sublime-project",
+	"replace":
+	{
+		"height": 54.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"C:\\Users\\79247\\Desktop\\Theo\\python_projects\\remote_file_access\\remote_file_access.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+		"lsp_show_inlay_hints": false
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 217.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
