@@ -4,3 +4,4 @@ gemini_project_log.txt
 alembic.ini
 *.db
 *.sublime-project
+*.pyc
