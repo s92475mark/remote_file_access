@@ -1,0 +1,39 @@
+from pydantic import BaseModel, Field
+from typing import Optional, List
+
+
+class request_CreateUser(BaseModel):
+    account: str = Field(..., description="User's account, must be unique")
+    password: str = Field(..., description="User's password")
+    storage_path: str = Field(..., description="User's storage path")
+    name: str = Field(..., description="User's name")
+    note: Optional[str] = Field(None, description="Optional note for the user")
+    # role_ids: List[int] = Field(..., description="要關聯的角色ID列表, e.g., [1, 2, 5]")
+
+
+class response_CreateUser(BaseModel):
+    id: int
+    account: str
+    name: str
+    message: str = "User created successfully"
+
+
+class request_Login(BaseModel):
+    """登入請求模型"""
+
+    account: str = Field(..., description="使用者帳號")
+    password: str = Field(..., description="使用者密碼")
+
+
+class response_Login(BaseModel):
+    """成功登入的回應模型"""
+
+    access_token: str = Field(..., description="JWT Access Token")
+
+
+class request_account_check(BaseModel):
+    account: str
+
+
+class response_account_check(BaseModel):
+    account: bool

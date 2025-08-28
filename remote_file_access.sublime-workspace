@@ -1,0 +1,357 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "Packages/Python/Python.sublime-build",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"RFA Python Env",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Packages/Python/Python.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"ls",
+				"LSP: Restart Server"
+			],
+			[
+				"lsp restar",
+				"LSP: Restart Server"
+			],
+			[
+				"ip",
+				"Package Control: Install Package"
+			],
+			[
+				"IP",
+				"Package Control: Install Package"
+			],
+			[
+				"package list",
+				"Package Control: List Packages"
+			],
+			[
+				"MarkdownEditing",
+				"Preferences: MarkdownEditing Settings"
+			],
+			[
+				"package c",
+				"Package Control: List Packages"
+			],
+			[
+				"json",
+				"Pretty JSON: Format and Sort JSON"
+			],
+			[
+				"Markdown Preview: PEEN",
+				"Markdown Preview: Preview in Browser"
+			],
+			[
+				"MARKDOWNPREVIEW:",
+				"Markdown Preview: Copy to Clipboard"
+			],
+			[
+				"md open in ",
+				"MarkdownEditing: Open Home Page"
+			]
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/config",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/controller",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/util"
+	],
+	"file_history":
+	[
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/error_message.txt",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/share/define/model_enum.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/schema/request_userCtrl.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/controller/Cont_userCtrl.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/config/config.toml",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/alembic/versions/a5c2a7fe095c_調整.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/share/model/model.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/util/config_schema.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/view/userCtrl.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/alembic.ini",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/alembic/env.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/util/createapp.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/view/aaa.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/adc-2-3-1/app/app003/view/Supply_api.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/util/db.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/util/global_variable.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/share/model/__init__.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/view/share/__init__.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/config/config.theo.toml",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/app.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/rfa_env/Lib/site-packages/flask_smorest/__init__.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/remote_file_access.sublime-project",
+		"/C/Users/79247/Desktop/Theo/python_projects/framework-sample/app/sample/config/config.toml",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/config.toml",
+		"/C/Users/79247/Desktop/Theo/python_projects/remote_file_access/1233.toml",
+		"/C/Users/79247/Desktop/Theo/python_projects/framework-sample/app/sample/command.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/framework/framework/util/config.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/framework-sample/app/sample/app.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/adc-2-3-1/framework/create_app.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/adc-2-3-1/app/app002/__main__.py",
+		"/C/Users/79247/Desktop/Theo/python_projects/adc-2-3-1/app/app002/view/inventory_api.py",
+		"/C/Program Files (x86)/Steam/steamapps/common/Cornerpond/Cornerpond.pck",
+		"/C/Users/79247/Desktop/Theo/python_projects/all_images/manifest.json",
+		"/C/Users/79247/Desktop/error.txt",
+		"/C/Users/79247/Desktop/Theo/python_projects/robot/robot_spec_plan.csv",
+		"/C/Users/79247/Desktop/Theo/python_projects/adc-2-3-1/app/app002/view/input_api.py",
+		"/C/Users/79247/Desktop/Theo/MD/測試文件.md",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/config/jei/jei-client.ini",
+		"/C/Program Files (x86)/Steam/steamapps/common/Succubus/www/save/common.rpgsave",
+		"/C/Program Files (x86)/Steam/steamapps/common/Succubus/www/package.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/server_scripts/mods/Hyperbox/hyperbox.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/server_scripts/mods/Mekanism/Rebalance/rebalance.md",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/kubejs/data/silentgear/silentgear_materials/unobtainium.json",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/kubejs/data/silentgear/silentgear_materials/vibranium.json",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/kubejs/data/silentgear/silentgear_traits/advanced_aquatic.json",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/kubejs/data/silentgear/silentgear_traits/advanced_flame_ward.json",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/kubejs/data/silentgear/silentgear_traits/cure_levitation.json",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/kubejs/data/silentgear/silentgear_traits/cure_nausea.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/client_scripts/tooltips.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/client_scripts/server_sync_banlist.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/client_scripts/Mekanism-Tooltips.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/startup_scripts/Modern-Industrialization/atm_stuff.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/startup_scripts/Applied Energistics/Universal_Press.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/startup_scripts/hyperbox/hyperbox.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/startup_scripts/CustomAdditions.js",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/kubejs/data/silentgear/silentgear_materials/allthemodium.json",
+		"/C/Users/79247/curseforge/minecraft/Instances/All the Mods 10 - ATM10 (1)/packmenu/resources/assets/packmenu/buttons/language.json",
+		"/C/Users/79247/Downloads/crash-2025-04-12_22.38.01-server.txt",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/unexplored_wood.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/xychorium_gem.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/entro.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/unobtainium.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/sky_steel.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/darkstone.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/crimson_iron.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/allthemodium.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/vibranium.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/black_quartz.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/azure_silver.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/crops/kivi.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/config/mysticalcustomization/tiers/magical.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/server_scripts/modpack/atm_star.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/server_scripts/banlist_script.js",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/assets/hostilenetworks/lang/zh_cn.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/assets/compactmachines/lang/zh_cn.json",
+		"/C/Users/79247/Downloads/zh_cn.json",
+		"/C/Users/79247/Downloads/All-the-Mods-10-ATM10-v2.42-汉化补丁/All-the-Mods-10-ATM10-v2.42-汉化补丁/kubejs/assets/atm/lang/zh_cn.json",
+		"/C/Users/79247/curseforge/minecraft/Instances/Roguelike Adventures and Dungeons 2/saves/world1/DIM1/data/capabilities.dat",
+		"/C/Users/79247/curseforge/minecraft/Instances/Roguelike Adventures and Dungeons 2/saves/world1/DIM1/data/raids_end.dat",
+		"/C/Users/79247/curseforge/minecraft/Instances/Roguelike Adventures and Dungeons 2/saves/world1/DIM1/data/rats_travelling_plague_doctor.dat"
+	],
+	"find":
+	{
+		"height": 41.0
+	},
+	"find_in_files":
+	{
+		"height": 107.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"UserCreate",
+			"Application",
+			"with",
+			"RichStyle"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"scrollbar_highlights": true,
+		"show_context": true,
+		"use_buffer2": true,
+		"use_gitignore": true,
+		"whole_word": false,
+		"wrap": false
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 29.0
+	},
+	"input":
+	{
+		"height": 41.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.LSP Log Panel":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"output.diagnostics":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"output.exec":
+	{
+		"height": 171.0,
+		"history":
+		[
+		]
+	},
+	"output.find_results":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"output.mdpopups":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"pinned_build_system": "",
+	"project": "remote_file_access.sublime-project",
+	"replace":
+	{
+		"height": 54.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"C:\\Users\\79247\\Desktop\\Theo\\python_projects\\remote_file_access\\remote_file_access1.sublime-workspace"
+			]
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+		"lsp_show_inlay_hints": false
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 289.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

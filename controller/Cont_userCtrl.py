@@ -1,0 +1,101 @@
+from util.db import get_db_session
+from sqlalchemy.orm import Session
+from util.security import hash_password
+from sqlalchemy import select
+from share.define.model_enum import RoleName
+
+from util.global_variable import global_variable
+
+from share.model.model import User, Role
+from schema.request_userCtrl import (
+    request_CreateUser,
+    response_CreateUser,
+    request_account_check,
+    response_account_check,
+    request_Login,
+    response_Login,
+)
+from util.security import verify_password
+from flask import abort
+from flask_jwt_extended import create_access_token
+
+import os
+
+
+class checkAccount:
+    """檢查帳號是否可行"""
+
+    def __init__(self, session: Session, body: request_account_check):
+        self.session = session
+        self.body = body
+
+    def data(self):
+        # 檢查帳號是否存在
+        existing_user = (
+            self.session.query(User).filter(User.account == self.body.account).first()
+        )
+        if existing_user:
+            return {
+                "message": "Account already exists",
+                "detail": f"Account '{self.body.account}' is already taken.",
+            }, 409
+        return response_account_check(account=True)
+
+
+class createUser:
+    """建立使用者"""
+
+    def __init__(self, session: Session, body: request_CreateUser):
+        self.session = session
+        self.body = body
+
+    def data(self):
+        get_roles_id = select(Role).where(Role.role_name == RoleName.lv3.value)
+        q_get_roles_id = self.session.execute(get_roles_id).scalars().all()
+        # --- 建立使用者專屬資料夾 ---
+        base_path = global_variable.config.FILE.path
+        user_storage_path = os.path.join(base_path, self.body.account)
+        os.makedirs(user_storage_path, exist_ok=True)
+
+        new_user = User(
+            account=self.body.account,
+            password=hash_password(self.body.password),
+            storage_path=user_storage_path,  # <-- 使用新建的資料夾路徑
+            user_name=self.body.name,
+            note=self.body.note,
+            roles=q_get_roles_id,
+        )
+
+        self.session.add(new_user)
+        self.session.commit()
+        self.session.refresh(new_user)
+        return response_CreateUser(
+            id=new_user.id,
+            account=new_user.account,
+            name=new_user.user_name,
+            message="User created successfully",
+        ).model_dump()
+
+
+class LoginUser:
+    """登入驗證"""
+
+    def __init__(self, session: Session, body: request_Login):
+        self.session = session
+        self.body = body
+
+    def login(self):
+        # 1. 根據帳號查詢使用者
+        user = (
+            self.session.query(User).filter(User.account == self.body.account).first()
+        )
+
+        # 2. 驗證使用者是否存在，以及密碼是否正確
+        if not user or not verify_password(self.body.password, user.password):
+            abort(401, description="帳號或密碼錯誤")
+
+        # 3. 密碼驗證成功，產生 JWT
+        access_token = create_access_token(identity=user.account)
+
+        # 4. 回傳 Token
+        return response_Login(access_token=access_token).model_dump()
