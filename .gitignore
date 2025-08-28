@@ -1,0 +1,6 @@
+error_message.txt
+gemini_project_log.txt
+/alembic
+alembic.ini
+*.db
+*.sublime-project
