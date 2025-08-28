@@ -86,31 +86,27 @@ class LoginUser:
         self.body = body
 
     def login(self):
-        # 1. 根據帳號查詢使用者
         user = (
             self.session.query(User).filter(User.account == self.body.account).first()
         )
 
-        print("user", user)
-        # 2. 驗證使用者是否存在，以及密碼是否正確
+        # 驗證使用者是否存在，以及密碼是否正確
         if not user or not verify_password(self.body.password, user.password):
             abort(401, description="帳號或密碼錯誤")
 
-        # 3. 密碼驗證成功，產生 JWT
+        # 密碼驗證成功，產生 JWT
         access_token = create_access_token(identity=user.account)
 
-        # 4.尋找 ID 最小的角色
-        user_level = "0"  # 預設等級 ID
+        # 尋找 ID 最小的角色
+        user_level = None  # 預設等級 ID
         user_level_name = "No Role Assigned"  # 預設等級名稱
 
         if user.roles:
             # 使用 min()函式和 lambda 來找到 id 最小的 role 物件
-            min_id_role = min(user.roles, key=lambda role: role.id)
-            # Pydantic 模型中 level是 str,所以我們轉換一下
-            user_level = str(min_id_role.id)
+            min_id_role = min(user.roles, key=lambda role: role.level)
+            user_level = min_id_role.level
             user_level_name = min_id_role.role_name
 
-        # 5. 回傅 Token 和等級資訊
         return response_Login(
             access_token=access_token, level=user_level, level_name=user_level_name
         ).model_dump()

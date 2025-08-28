@@ -30,7 +30,7 @@ class response_Login(BaseModel):
     """成功登入的回應模型"""
 
     access_token: str = Field(..., description="JWT Access Token")
-    level: str = Field(..., description="使用者等級")
+    level: int | None = Field(..., description="使用者等級")
     level_name: str = Field(..., description="使用者等級名稱")
 
 
