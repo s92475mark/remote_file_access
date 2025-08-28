@@ -1,3 +1,4 @@
+from click import Option
 from pydantic import BaseModel, Field
 from typing import Optional, List
 
@@ -29,6 +30,8 @@ class response_Login(BaseModel):
     """成功登入的回應模型"""
 
     access_token: str = Field(..., description="JWT Access Token")
+    level: str = Field(..., description="使用者等級")
+    level_name: str = Field(..., description="使用者等級名稱")
 
 
 class request_account_check(BaseModel):
