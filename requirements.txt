@@ -1,0 +1,9 @@
+flask
+flask-openapi3
+flask-jwt-extended
+pydantic
+sqlalchemy
+toml
+click
+streamlit
+streamlit-option-menu
