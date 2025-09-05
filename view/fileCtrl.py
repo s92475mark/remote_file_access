@@ -6,6 +6,7 @@ from flask_jwt_extended import get_jwt_identity
 from util.db import get_db_session
 from util.auth import permission_required
 from controller.Cont_fileCtrl import UploadFile
+from datetime import date, datetime, time
 
 # --- API 藍圖和標籤定義 ---
 tag = Tag(name="File Operations", description="檔案相關操作")
@@ -32,21 +33,29 @@ class FileUploadResponse(BaseModel):
 
 class FileInfo(BaseModel):
     """單一檔案的資訊模型"""
+
     id: int
     filename: str
     size_bytes: int
-    upload_time: str
+    upload_time: datetime
+    del_time: datetime | None
 
 
 class FileListResponse(BaseModel):
     """檔案列表的回應模型"""
+
     files: list[FileInfo]
 
 
 # --- API 端點定義 ---
 
 
-@filectrl.post("/upload", summary="上傳單一檔案", responses={200: FileUploadResponse}, security=[{"BearerAuth": []}])
+@filectrl.post(
+    "/upload",
+    summary="上傳單一檔案",
+    responses={200: FileUploadResponse},
+    security=[{"BearerAuth": []}],
+)
 @permission_required("file:upload")
 def upload_single_file(form: FileUploadForm):
     """
@@ -66,8 +75,13 @@ def upload_single_file(form: FileUploadForm):
         return logic.save()
 
 
-@filectrl.get("/list", summary="獲取檔案列表", responses={200: FileListResponse}, security=[{"BearerAuth": []}])
-@permission_required("file:read")
+@filectrl.get(
+    "/list",
+    summary="獲取檔案列表",
+    responses={200: FileListResponse},
+    security=[{"BearerAuth": []}],
+)
+@permission_required("file:read:own")
 def list_files():
     """
     獲取當前使用者的檔案列表。
@@ -76,6 +90,7 @@ def list_files():
     current_user_account = get_jwt_identity()
     with get_db_session() as db:
         from share.model.model import User, File
+
         user = db.query(User).filter(User.account == current_user_account).one_or_none()
         if not user:
             return {"files": []}
@@ -87,9 +102,9 @@ def list_files():
                 id=f.id,
                 filename=f.filename,
                 size_bytes=f.file_size,
-                upload_time=f.upload_time.isoformat(),
+                upload_time=f.createTime,
+                del_time=f.expiry_time,
             )
             for f in files
         ]
-
-        return {"files": file_list}
+        return FileListResponse(files=file_list).model_dump()
