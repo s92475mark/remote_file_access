@@ -5,3 +5,4 @@ alembic.ini
 *.db
 *.sublime-project
 *.pyc
+*.sublime-workspace
