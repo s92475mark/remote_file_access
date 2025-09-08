@@ -7,5 +7,5 @@ toml
 click
 streamlit
 streamlit-option-menu
-
-
+passlib
+alembic
