@@ -1,5 +1,5 @@
 flask
-flask-openapi3
+flask-openapi3[swagger,redoc,rapidoc,rapipdf,scalar,elements]
 flask-jwt-extended
 pydantic
 sqlalchemy
@@ -7,3 +7,5 @@ toml
 click
 streamlit
 streamlit-option-menu
+
+
