@@ -39,12 +39,25 @@ class FileInfo(BaseModel):
     size_bytes: int
     upload_time: datetime
     del_time: datetime | None
+    is_permanent: bool
 
 
 class FileListResponse(BaseModel):
     """檔案列表的回應模型"""
 
     files: list[FileInfo]
+
+
+class UpdateFileStatusForm(BaseModel):
+    """更新檔案狀態的請求模型"""
+
+    is_permanent: bool = Field(..., description="是否設定為永久檔案")
+
+
+class FileIdPath(BaseModel):
+    """檔案ID路徑參數模型"""
+
+    file_id: int = Field(..., description="檔案ID")
 
 
 # --- API 端點定義 ---
@@ -88,7 +101,7 @@ def list_files():
     - 需要 `file:read` 權限。
     """
     current_user_account = get_jwt_identity()
-    with get_db_session() as db:  # <-- 已修正此處的語法錯誤
+    with get_db_session() as db:
         from share.model.model import User, File
 
         user = db.query(User).filter(User.account == current_user_account).one_or_none()
@@ -102,6 +115,7 @@ def list_files():
                 File.file_size.label("file_size_bytes"),
                 File.createTime.label("creation_time"),
                 File.expiry_time.label("expiration_time"),
+                File.is_permanent.label("is_permanent"),
             )
             .filter(File.owner_id == user.id)
             .all()
@@ -114,7 +128,43 @@ def list_files():
                 size_bytes=f.file_size_bytes,
                 upload_time=f.creation_time,
                 del_time=f.expiration_time,
+                is_permanent=f.is_permanent,
             )
             for f in files
         ]
         return FileListResponse(files=file_list).model_dump()
+
+
+@filectrl.patch(
+    "/<int:file_id>/status",
+    summary="更新檔案的永久狀態",
+    responses={200: FileInfo},
+    security=[{"BearerAuth": []}],
+)
+@permission_required("file:upload")
+def update_file_status(path: FileIdPath, body: UpdateFileStatusForm):
+    """
+    切換檔案的永久/非永久狀態。
+    - 需要 `file:update:status` 權限。
+    - 切換為永久時，會檢查使用者的永久檔案配額。
+    """
+    current_user_account = get_jwt_identity()
+    with get_db_session() as db:
+        from controller.Cont_fileCtrl import UpdateFileStatus
+
+        logic = UpdateFileStatus(
+            session=db,
+            user_account=current_user_account,
+            file_id=path.file_id,
+            is_permanent=body.is_permanent,
+        )
+        updated_file = logic.run()
+
+        return FileInfo(
+            id=updated_file.id,
+            filename=updated_file.filename,
+            size_bytes=updated_file.file_size,
+            upload_time=updated_file.createTime,
+            del_time=updated_file.expiry_time,
+            is_permanent=updated_file.is_permanent,
+        ).model_dump()
