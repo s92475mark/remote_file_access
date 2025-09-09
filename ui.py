@@ -222,7 +222,7 @@ def page_change_password():
                         "new_password": new_password,
                     }
                     # 假設 API 端點是 /user/change-password
-                    response = api_request("post", "user/change-password", json=payload)
+                    response = api_request("post", "userCtrl/change-password", json=payload)
 
                     if response and response.status_code == 200:
                         st.success("密碼已成功更改！")
