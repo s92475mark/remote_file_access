@@ -1,4 +1,5 @@
 import importlib
+from flask import jsonify
 from flask_openapi3 import (
     OpenAPI,
     Info,
@@ -11,6 +12,7 @@ from sqlalchemy import create_engine  # <-- 新增
 from sqlalchemy.orm import sessionmaker  # <-- 新增
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
+from jwt.exceptions import ExpiredSignatureError
 
 
 class Application:
@@ -57,6 +59,16 @@ class Application:
         self.app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=self.config.JWT.JWT_ACCESS_TOKEN_EXPIRES)
         # 初始化 JWTManager
         self.jwt = JWTManager(self.app)
+
+        # --- 註冊 JWT 錯誤處理器 ---
+        @self.app.errorhandler(ExpiredSignatureError)
+        def handle_expired_token_error(e):
+            """
+            捕捉 JWT token 過期錯誤，並回傳自訂的 JSON 格式。
+            """
+            return jsonify(
+                {"message": "Token has expired.", "error_code": "TOKEN_EXPIRED"}
+            ), 401
 
         # 呼叫內部方法來完成設定
         self._register_blueprints()

@@ -17,6 +17,39 @@ if "user_role" not in st.session_state:
 # --- 頁面函式 ---
 
 
+def api_request(method, endpoint, **kwargs):
+    """
+    一個包裝函式，用於發送 API 請求並集中處理認證和錯誤。
+    """
+    headers = kwargs.pop("headers", {})
+    if st.session_state.token:
+        headers["Authorization"] = f"Bearer {st.session_state.token}"
+
+    try:
+        response = requests.request(
+            method, f"{API_URL}/{endpoint}", headers=headers, **kwargs
+        )
+
+        # 檢查 token 是否過期
+        if response.status_code == 401:
+            try:
+                error_data = response.json()
+                if error_data.get("error_code") == "TOKEN_EXPIRED":
+                    st.error("連線逾時，請重新登入。")
+                    st.session_state.token = None
+                    st.session_state.user_role = None
+                    st.rerun()
+                    return None  # Stop further execution
+            except ValueError:  # If response is not JSON
+                pass  # Fall through to the generic error display
+
+        return response
+
+    except requests.exceptions.RequestException as e:
+        st.error(f"無法連線到 API: {e}")
+        return None
+
+
 def page_login():
     left, center, right = st.columns([3, 4, 3])
 
@@ -46,66 +79,87 @@ def page_login():
 def page_file_list():
     st.header("檔案列表")
 
-    headers = {"Authorization": f"Bearer {st.session_state.token}"}
-    try:
-        response = requests.get(f"{API_URL}/files/list", headers=headers)
-        if response.status_code == 200:
-            files = response.json().get("files", [])
-            if not files:
-                st.write("沒有找到任何檔案。")
-            else:
-                with st.container(
-                    border=True,
-                    height="stretch",
-                    horizontal_alignment="center",
-                    width="stretch",
-                ):
-                    # Create a header row
-                    list_type = [5, 2, 2, 2, 4, 2, 2]
+    # --- 檔案上傳區塊 ---
+    with st.expander("上傳新檔案"):
+        uploaded_file = st.file_uploader("選擇檔案", label_visibility="collapsed")
+        if uploaded_file is not None:
+            if st.button("確認上傳"):
+                # 使用 multipart/form-data 格式準備檔案
+                file_payload = {
+                    "file": (uploaded_file.name, uploaded_file, uploaded_file.type)
+                }
+                # 呼叫後端上傳 API
+                response = api_request("post", "files/upload", files=file_payload)
+
+                if response and response.status_code == 200:
+                    st.success(f"檔案 '{uploaded_file.name}' 上傳成功！")
+                    st.rerun()  # 重新整理頁面以看到新檔案
+                elif response:
+                    st.error(f"上傳失敗: {response.json().get('message', '未知錯誤')}")
+
+    # --- 檔案列表顯示區塊 ---
+    response = api_request("get", "files/list")
+
+    if response and response.status_code == 200:
+        files = response.json().get("files", [])
+        if not files:
+            st.write("沒有找到任何檔案。")
+        else:
+            with st.container(
+                border=True,
+                height="stretch",
+                horizontal_alignment="center",
+                width="stretch",
+            ):
+                # 建立標頭
+                list_type = [5, 2, 2, 2, 4, 2, 2]
+                col1, col2, col3, col4, col5, col6, col7 = st.columns(list_type)
+                with col1:
+                    st.write("**檔案名稱**")
+                with col2:
+                    st.write("**檔案大小 (Bytes)**")
+                with col3:
+                    st.write("**上傳時間**")
+                with col4:
+                    st.write("**移除時間**")
+                with col5:
+                    st.write("**狀態**")
+                with col6:
+                    st.write("")
+                with col7:
+                    st.write("")
+
+                # 循環顯示檔案
+                for f in files:
+                    del_time = f["del_time"]
+                    if del_time:
+                        del_time_index = 1
+                    else:
+                        del_time_index = 0
                     col1, col2, col3, col4, col5, col6, col7 = st.columns(list_type)
                     with col1:
-                        st.write("**檔案名稱**")
+                        st.write(f["filename"])
                     with col2:
-                        st.write("**檔案大小 (Bytes)**")
+                        st.write(f["size_bytes"])
                     with col3:
-                        st.write("**上傳時間**")
+                        st.write(f["upload_time"])
                     with col4:
-                        st.write("**移除時間**")
+                        st.write(f["del_time"])
                     with col5:
-                        st.write("**狀態**")
+                        st.selectbox(
+                            label="",
+                            options=["永久", f"{del_time}"],
+                            index=del_time_index,
+                            key=f"status_{f['id']}",
+                            label_visibility="collapsed",
+                        )
                     with col6:
-                        st.write("**操作1**")
+                        st.button("下載", key=f"download_{f['id']}")
                     with col7:
-                        st.write("**操作2**")
+                        st.button("刪除", key=f"delete_{f['id']}")
 
-                    # Loop through the files and create a row for each
-                    for f in files:
-                        del_time = f["del_time"]
-                        col1, col2, col3, col4, col5, col6, col7 = st.columns(list_type)
-                        with col1:
-                            st.write(f["filename"])
-                        with col2:
-                            st.write(f["size_bytes"])
-                        with col3:
-                            st.write(f["upload_time"])
-                        with col4:
-                            st.write(f["del_time"])
-                        with col5:
-                            st.selectbox(
-                                label="",
-                                options=["永久", f"{del_time}"],
-                                key=f"status_{f['id']}",
-                                label_visibility="collapsed",
-                            )
-                        with col6:
-                            st.button("下載", key=f"download_{f['id']}")
-                        with col7:
-                            st.button("刪除", key=f"delete_{f['id']}")
-
-        else:
-            st.error(f"獲取檔案列表失敗: {response.json().get('message', '未知錯誤')}")
-    except requests.exceptions.RequestException as e:
-        st.error(f"無法連線到 API: {e}")
+    elif response:  # 處理非 200 但非 token 過期的錯誤
+        st.error(f"獲取檔案列表失敗: {response.json().get('message', '未知錯誤')}")
 
 
 def page_user_management():
