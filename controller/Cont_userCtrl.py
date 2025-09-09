@@ -110,3 +110,30 @@ class LoginUser:
         return response_Login(
             access_token=access_token, level=user_level, level_name=user_level_name
         ).model_dump()
+
+
+class ChangePassword:
+    """更改使用者密碼"""
+
+    def __init__(self, session: Session, user_account: str, old_password: str, new_password: str):
+        self.session = session
+        self.user_account = user_account
+        self.old_password = old_password
+        self.new_password = new_password
+
+    def run(self):
+        # 1. 查詢使用者
+        user = self.session.query(User).filter(User.account == self.user_account).one_or_none()
+        if not user:
+            # 理論上，因為有 JWT 保護，所以不會發生這種情況
+            abort(404, "User not found.")
+
+        # 2. 驗證舊密碼
+        if not verify_password(self.old_password, user.password):
+            abort(401, "舊密碼不正確")
+
+        # 3. 將新密碼雜湊化並更新
+        user.password = hash_password(self.new_password)
+        self.session.commit()
+
+        return {"message": "密碼已成功更新"}

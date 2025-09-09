@@ -12,7 +12,8 @@ from schema.request_userCtrl import (
     request_Login,
     response_Login,
 )
-from controller.Cont_userCtrl import createUser, checkAccount, LoginUser
+from controller.Cont_userCtrl import createUser, checkAccount, LoginUser, ChangePassword
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 class ErrorResponse(BaseModel):
@@ -62,3 +63,42 @@ def user_login(body: request_Login):
         data = LoginUser(session=db, body=body)
         Outcome_dict = data.login()
         return Outcome_dict
+
+
+# --- Pydantic Models for Change Password ---
+class ChangePasswordForm(BaseModel):
+    """更改密碼的請求模型"""
+
+    old_password: str
+    new_password: str
+
+
+class ChangePasswordResponse(BaseModel):
+    """更改密碼的成功回應模型"""
+
+    message: str
+
+
+# --- API Endpoint for Change Password ---
+@userctrl.post(
+    "/change-password",
+    summary="更改當前使用者密碼",
+    responses={200: ChangePasswordResponse, 401: {"description": "舊密碼不正確"}},
+    security=[{"BearerAuth": []}],
+)
+@jwt_required()
+def change_password(body: ChangePasswordForm):
+    """
+    更改目前已登入使用者的密碼。
+    - 需要有效的 JWT Token。
+    - 會驗證舊密碼是否正確。
+    """
+    current_user_account = get_jwt_identity()
+    with get_db_session("default") as db:
+        logic = ChangePassword(
+            session=db,
+            user_account=current_user_account,
+            old_password=body.old_password,
+            new_password=body.new_password,
+        )
+        return logic.run()
