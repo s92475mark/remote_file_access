@@ -69,7 +69,9 @@ def handle_status_change(file_id: int):
         if not is_permanent_after_update and expiry_time_str:
             try:
                 # 使用 strptime 和指定的格式代碼來解析日期字串
-                expiry_time = datetime.strptime(expiry_time_str, "%a, %d %b %Y %H:%M:%S %Z")
+                expiry_time = datetime.strptime(
+                    expiry_time_str, "%a, %d %b %Y %H:%M:%S %Z"
+                )
                 if expiry_time < datetime.now():
                     st.toast("該檔案已過期，將在系統下次清理時自動刪除。", icon="⚠️")
                     return
@@ -106,8 +108,6 @@ def page_login():
                         st.error(f"登入失敗: {response.json().get('message', '未知錯誤')}")
                 except requests.exceptions.RequestException as e:
                     st.error(f"無法連線到 API: {e}")
-
-
 
 
 def page_file_list():
@@ -165,7 +165,7 @@ def page_file_list():
                 for f in files:
                     # 根據 is_permanent 狀態設定 selectbox 的預設索引
                     del_time_index = 0 if f.get("is_permanent") else 1
-                    
+
                     col1, col2, col3, col4, col5, col6 = st.columns(list_type)
                     with col1:
                         st.write(f["filename"])
@@ -176,7 +176,7 @@ def page_file_list():
                     with col4:
                         st.selectbox(
                             label="",
-                            options=["永久", f.get("del_time") or "設定期限"], # 若無到期日，顯示通用文字
+                            options=["永久", f.get("del_time") or "設定期限"],  # 若無到期日，顯示通用文字
                             index=del_time_index,
                             key=f"status_{f['id']}",
                             on_change=handle_status_change,
