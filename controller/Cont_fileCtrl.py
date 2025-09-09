@@ -18,7 +18,6 @@ class UploadFile:
         self.file = file
 
     def save(self):
-        # 1. 查詢使用者和他的角色/檔案資訊
         user = (
             self.session.query(User)
             .filter(User.account == self.user_account)
@@ -26,8 +25,6 @@ class UploadFile:
         )
         if not user:
             abort(404, "User not found.")
-
-        # 2. 決定使用者的配額 (取使用者所有角色中最高的配額)
         file_limit = -1
         lifetime_days = -1
         if user.roles:
@@ -160,3 +157,45 @@ class UpdateFileStatus:
         self.session.refresh(file_to_update)
 
         return file_to_update
+
+
+class DownloadFile:
+    """處理檔案下載的核心邏輯"""
+
+    def __init__(self, session: Session, user_account: str, file_id: int):
+        self.session = session
+        self.user_account = user_account
+        self.file_id = file_id
+
+    def run(self):
+        # 1. 查詢使用者和檔案
+        user = (
+            self.session.query(User)
+            .filter(User.account == self.user_account)
+            .one_or_none()
+        )
+        if not user:
+            abort(404, "User not found.")
+
+        file_to_download = (
+            self.session.query(File).filter(File.id == self.file_id).one_or_none()
+        )
+        print("\033c")
+        print("file_to_download.owner_id", file_to_download.owner_id)
+        print("user.id", user.id)
+        if not file_to_download:
+            abort(404, "File not found.")
+
+        # 2. 檢查檔案所有權
+        if file_to_download.owner_id != user.id:
+            abort(403, "You do not have permission to download this file.")
+
+        # 3. 檢查實體檔案是否存在
+        if not os.path.exists(file_to_download.storage_path):
+            abort(404, "File not found on server storage.")
+
+        # 4. 回傳給 View 層需要的資訊
+        return {
+            "storage_path": file_to_download.storage_path,
+            "filename": file_to_download.filename,
+        }

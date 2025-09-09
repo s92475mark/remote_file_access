@@ -1,11 +1,12 @@
 from flask_openapi3 import APIBlueprint, Tag
+from flask import send_file
 from flask_openapi3.models.file import FileStorage
 from pydantic import BaseModel, Field
 from flask_jwt_extended import get_jwt_identity
 
 from util.db import get_db_session
 from util.auth import permission_required
-from controller.Cont_fileCtrl import UploadFile
+from controller.Cont_fileCtrl import UploadFile, DownloadFile
 from datetime import date, datetime, time
 
 # --- API 藍圖和標籤定義 ---
@@ -168,3 +169,29 @@ def update_file_status(path: FileIdPath, body: UpdateFileStatusForm):
             del_time=updated_file.expiry_time,
             is_permanent=updated_file.is_permanent,
         ).model_dump()
+
+
+@filectrl.get(
+    "/<int:file_id>/download",
+    summary="下載檔案",
+    security=[{"BearerAuth": []}],
+)
+@permission_required("file:upload")
+def download_file(path: FileIdPath):
+    """
+    下載指定的檔案。
+    - 需要 `file:download:own` 權限。
+    - 回傳檔案串流。
+    """
+    current_user_account = get_jwt_identity()
+    with get_db_session() as db:
+        logic = DownloadFile(
+            session=db, user_account=current_user_account, file_id=path.file_id
+        )
+        file_info = logic.run()
+
+        return send_file(
+            file_info["storage_path"],
+            as_attachment=True,
+            download_name=file_info["filename"],
+        )

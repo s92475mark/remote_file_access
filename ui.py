@@ -113,6 +113,18 @@ def page_login():
 def page_file_list():
     st.header("檔案列表")
 
+    # --- 處理下載請求 ---
+    if "download_file" in st.session_state and st.session_state.download_file:
+        file_info = st.session_state.download_file
+        st.download_button(
+            label=f"點此下載 {file_info['name']}",
+            data=file_info['content'],
+            file_name=file_info['name'],
+            key="final_download_button",
+        )
+        # 清除 session state，避免重複顯示下載按鈕
+        st.session_state.download_file = None
+
     # --- 檔案上傳區塊 ---
     with st.expander("上傳新檔案"):
         uploaded_file = st.file_uploader("選擇檔案", label_visibility="collapsed")
@@ -176,7 +188,7 @@ def page_file_list():
                     with col4:
                         st.selectbox(
                             label="",
-                            options=["永久", f.get("del_time") or "設定期限"],  # 若無到期日，顯示通用文字
+                            options=["永久", f.get("del_time") or "設定期限"], # 若無到期日，顯示通用文字
                             index=del_time_index,
                             key=f"status_{f['id']}",
                             on_change=handle_status_change,
@@ -184,7 +196,16 @@ def page_file_list():
                             label_visibility="collapsed",
                         )
                     with col5:
-                        st.button("下載", key=f"download_{f['id']}")
+                        if st.button("下載", key=f"download_{f['id']}"):
+                            response = api_request("get", f"files/{f['id']}/download")
+                            if response and response.status_code == 200:
+                                st.session_state.download_file = {
+                                    "name": f["filename"],
+                                    "content": response.content,
+                                }
+                                st.rerun() # 重新整理頁面以顯示下載按鈕
+                            elif response:
+                                st.error(f"下載失敗: {response.json().get('message', '未知錯誤')}")
                     with col6:
                         st.button("刪除", key=f"delete_{f['id']}")
 
