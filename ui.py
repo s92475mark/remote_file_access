@@ -199,9 +199,38 @@ def page_user_management():
 
 
 def page_change_password():
-    st.header("更改密碼")
-    st.write("這裡是更改密碼介面。")
-    # TODO: Implement change password view
+    _, center_col, _ = st.columns([2, 4, 2])
+
+    with center_col:
+        st.header("更改密碼")
+        with st.form("change_password_form", clear_on_submit=True):
+            old_password = st.text_input("舊密碼", type="password")
+            new_password = st.text_input("新密碼", type="password")
+            confirm_password = st.text_input("確認新密碼", type="password")
+
+            submitted = st.form_submit_button("確認更改")
+
+            if submitted:
+                if not old_password or not new_password or not confirm_password:
+                    st.warning("所有欄位皆為必填。")
+                elif new_password != confirm_password:
+                    st.error("新密碼與確認密碼不相符！")
+                else:
+                    # 準備呼叫後端 API
+                    payload = {
+                        "old_password": old_password,
+                        "new_password": new_password,
+                    }
+                    # 假設 API 端點是 /user/change-password
+                    response = api_request("post", "user/change-password", json=payload)
+
+                    if response and response.status_code == 200:
+                        st.success("密碼已成功更改！")
+                    elif response:
+                        st.error(f"更改失敗: {response.json().get('message', '未知錯誤')}")
+
+        if st.button("忘記密碼？"):
+            st.info("忘記密碼功能尚在開發中。")
 
 
 # --- 主應用程式 ---
