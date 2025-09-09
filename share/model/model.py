@@ -58,7 +58,7 @@ class Role(Base):
     level: Mapped[int] = mapped_column(comment="角色等級，有0 ~ 4，0為最高權限")
     file_limit: Mapped[int] = mapped_column(comment="總檔案數量限制 (-1 為無限)")
     permanent_file_limit: Mapped[int] = mapped_column(comment="永久檔案數量限制 (-1 為無限)")
-    file_lifetime_days: Mapped[int] = mapped_column(comment="檔案生命週期(天) (-1 為無限)")
+    file_lifetime_days: Mapped[int] = mapped_column(comment="檔案生命週期(天)")
 
     permissions: Mapped[List[Permission]] = relationship(
         secondary=role_permissions_table, backref="roles", lazy="selectin"
