@@ -6,3 +6,4 @@ alembic.ini
 *.sublime-project
 *.pyc
 *.sublime-workspace
+data_permission.txt
