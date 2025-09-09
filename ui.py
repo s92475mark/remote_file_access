@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 from streamlit_option_menu import option_menu
 from share.define.model_enum import RoleName
+from datetime import datetime
 
 # --- 設定 API 的基本 URL ---
 API_URL = "http://127.0.0.1:8965"
@@ -50,6 +51,37 @@ def api_request(method, endpoint, **kwargs):
         return None
 
 
+def handle_status_change(file_id: int):
+    """當下拉選單變動時，呼叫 API 更新檔案狀態"""
+    # 從 session_state 讀取新選擇的值
+    new_value = st.session_state[f"status_{file_id}"]
+    is_permanent = new_value == "永久"
+
+    # 準備 API 請求
+    body = {"is_permanent": is_permanent}
+    response = api_request("patch", f"files/{file_id}/status", json=body)
+
+    if response and response.status_code == 200:
+        updated_file = response.json()
+        is_permanent_after_update = updated_file.get("is_permanent", False)
+        expiry_time_str = updated_file.get("del_time")
+
+        if not is_permanent_after_update and expiry_time_str:
+            try:
+                # 使用 strptime 和指定的格式代碼來解析日期字串
+                expiry_time = datetime.strptime(expiry_time_str, "%a, %d %b %Y %H:%M:%S %Z")
+                if expiry_time < datetime.now():
+                    st.toast("該檔案已過期，將在系統下次清理時自動刪除。", icon="⚠️")
+                    return
+            except ValueError as e:
+                # 如果因任何原因解析失敗，印出錯誤，避免程式崩潰
+                print(f"Error parsing date: {e}")
+
+        st.toast("成功更新檔案狀態！", icon="✅")
+    else:
+        st.toast("更新失敗", icon="❌")
+
+
 def page_login():
     left, center, right = st.columns([3, 4, 3])
 
@@ -74,6 +106,8 @@ def page_login():
                         st.error(f"登入失敗: {response.json().get('message', '未知錯誤')}")
                 except requests.exceptions.RequestException as e:
                     st.error(f"無法連線到 API: {e}")
+
+
 
 
 def page_file_list():
@@ -112,8 +146,8 @@ def page_file_list():
                 width="stretch",
             ):
                 # 建立標頭
-                list_type = [5, 2, 2, 2, 4, 2, 2]
-                col1, col2, col3, col4, col5, col6, col7 = st.columns(list_type)
+                list_type = [5, 2, 2, 4, 2, 2]
+                col1, col2, col3, col4, col5, col6 = st.columns(list_type)
                 with col1:
                     st.write("**檔案名稱**")
                 with col2:
@@ -121,22 +155,18 @@ def page_file_list():
                 with col3:
                     st.write("**上傳時間**")
                 with col4:
-                    st.write("**移除時間**")
-                with col5:
                     st.write("**狀態**")
+                with col5:
+                    st.write("**操作1**")
                 with col6:
-                    st.write("")
-                with col7:
-                    st.write("")
+                    st.write("**操作2**")
 
                 # 循環顯示檔案
                 for f in files:
-                    del_time = f["del_time"]
-                    if del_time:
-                        del_time_index = 1
-                    else:
-                        del_time_index = 0
-                    col1, col2, col3, col4, col5, col6, col7 = st.columns(list_type)
+                    # 根據 is_permanent 狀態設定 selectbox 的預設索引
+                    del_time_index = 0 if f.get("is_permanent") else 1
+                    
+                    col1, col2, col3, col4, col5, col6 = st.columns(list_type)
                     with col1:
                         st.write(f["filename"])
                     with col2:
@@ -144,18 +174,18 @@ def page_file_list():
                     with col3:
                         st.write(f["upload_time"])
                     with col4:
-                        st.write(f["del_time"])
-                    with col5:
                         st.selectbox(
                             label="",
-                            options=["永久", f"{del_time}"],
+                            options=["永久", f.get("del_time") or "設定期限"], # 若無到期日，顯示通用文字
                             index=del_time_index,
                             key=f"status_{f['id']}",
+                            on_change=handle_status_change,
+                            kwargs={"file_id": f["id"]},
                             label_visibility="collapsed",
                         )
-                    with col6:
+                    with col5:
                         st.button("下載", key=f"download_{f['id']}")
-                    with col7:
+                    with col6:
                         st.button("刪除", key=f"delete_{f['id']}")
 
     elif response:  # 處理非 200 但非 token 過期的錯誤
