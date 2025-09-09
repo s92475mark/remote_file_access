@@ -88,22 +88,32 @@ def list_files():
     - 需要 `file:read` 權限。
     """
     current_user_account = get_jwt_identity()
-    with get_db_session() as db:
+    with get_db_session() as db:  # <-- 已修正此處的語法錯誤
         from share.model.model import User, File
 
         user = db.query(User).filter(User.account == current_user_account).one_or_none()
         if not user:
             return {"files": []}
 
-        files = db.query(File).filter(File.owner_id == user.id).all()
+        files = (
+            db.query(
+                File.id.label("file_id"),
+                File.filename.label("file_name"),
+                File.file_size.label("file_size_bytes"),
+                File.createTime.label("creation_time"),
+                File.expiry_time.label("expiration_time"),
+            )
+            .filter(File.owner_id == user.id)
+            .all()
+        )
 
         file_list = [
             FileInfo(
-                id=f.id,
-                filename=f.filename,
-                size_bytes=f.file_size,
-                upload_time=f.createTime,
-                del_time=f.expiry_time,
+                id=f.file_id,
+                filename=f.file_name,
+                size_bytes=f.file_size_bytes,
+                upload_time=f.creation_time,
+                del_time=f.expiration_time,
             )
             for f in files
         ]
