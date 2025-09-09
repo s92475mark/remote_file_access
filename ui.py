@@ -225,7 +225,10 @@ def page_change_password():
                     response = api_request("post", "userCtrl/change-password", json=payload)
 
                     if response and response.status_code == 200:
-                        st.success("密碼已成功更改！")
+                        st.success("密碼已成功更改！請使用新密碼重新登入。")
+                        st.session_state.token = None
+                        st.session_state.user_role = None
+                        st.rerun()
                     elif response:
                         st.error(f"更改失敗: {response.json().get('message', '未知錯誤')}")
 
