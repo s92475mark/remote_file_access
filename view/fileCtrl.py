@@ -6,7 +6,7 @@ from flask_jwt_extended import get_jwt_identity
 
 from util.db import get_db_session
 from util.auth import permission_required
-from controller.Cont_fileCtrl import UploadFile, DownloadFile
+from controller.Cont_fileCtrl import UploadFile, DownloadFile, DeleteFile
 from datetime import date, datetime, time
 
 # --- API 藍圖和標籤定義 ---
@@ -195,3 +195,23 @@ def download_file(path: FileIdPath):
             as_attachment=True,
             download_name=file_info["filename"],
         )
+
+
+@filectrl.delete(
+    "/<int:file_id>",
+    summary="刪除檔案",
+    responses={200: {"description": "File deleted successfully"}},
+    security=[{"BearerAuth": []}],
+)
+@permission_required("file:delete:own")
+def delete_file(path: FileIdPath):
+    """
+    刪除指定的檔案。
+    - 需要 `file:delete:own` 權限。
+    """
+    current_user_account = get_jwt_identity()
+    with get_db_session() as db:
+        logic = DeleteFile(
+            session=db, user_account=current_user_account, file_id=path.file_id
+        )
+        return logic.run()

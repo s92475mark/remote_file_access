@@ -207,7 +207,13 @@ def page_file_list():
                             elif response:
                                 st.error(f"下載失敗: {response.json().get('message', '未知錯誤')}")
                     with col6:
-                        st.button("刪除", key=f"delete_{f['id']}")
+                        if st.button("刪除", key=f"delete_{f['id']}"):
+                            response = api_request("delete", f"files/{f['id']}")
+                            if response and response.status_code == 200:
+                                st.toast("檔案刪除成功！", icon="✅")
+                                st.rerun() # 重新整理頁面以更新列表
+                            elif response:
+                                st.error(f"刪除失敗: {response.json().get('message', '未知錯誤')}")
 
     elif response:  # 處理非 200 但非 token 過期的錯誤
         st.error(f"獲取檔案列表失敗: {response.json().get('message', '未知錯誤')}")

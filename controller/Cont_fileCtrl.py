@@ -199,3 +199,45 @@ class DownloadFile:
             "storage_path": file_to_download.storage_path,
             "filename": file_to_download.filename,
         }
+
+
+class DeleteFile:
+    """處理檔案刪除的核心邏輯"""
+
+    def __init__(self, session: Session, user_account: str, file_id: int):
+        self.session = session
+        self.user_account = user_account
+        self.file_id = file_id
+
+    def run(self):
+        # 1. 查詢使用者和檔案
+        user = (
+            self.session.query(User)
+            .filter(User.account == self.user_account)
+            .one_or_none()
+        )
+        if not user:
+            abort(404, "User not found.")
+
+        file_to_delete = (
+            self.session.query(File).filter(File.id == self.file_id).one_or_none()
+        )
+        if not file_to_delete:
+            abort(404, "File not found.")
+
+        # 2. 檢查檔案所有權
+        if file_to_delete.owner_id != user.id:
+            abort(403, "You do not have permission to delete this file.")
+
+        # 3. 檢查實體檔案是否存在並刪除
+        if os.path.exists(file_to_delete.storage_path):
+            os.remove(file_to_delete.storage_path)
+        else:
+            # 如果檔案不存在於磁碟，但資料庫有紀錄，也視為成功，只刪除資料庫紀錄
+            print(f"Warning: File {file_to_delete.storage_path} not found on disk but exists in DB. Deleting DB record.")
+
+        # 4. 從資料庫刪除紀錄
+        self.session.delete(file_to_delete)
+        self.session.commit()
+
+        return {"message": "File deleted successfully"}
