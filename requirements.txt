@@ -9,3 +9,4 @@ streamlit
 streamlit-option-menu
 passlib
 alembic
+apscheduler

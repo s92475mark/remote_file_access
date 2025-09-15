@@ -13,6 +13,9 @@ from sqlalchemy.orm import sessionmaker  # <-- 新增
 from flask_jwt_extended import JWTManager
 from datetime import timedelta
 from jwt.exceptions import ExpiredSignatureError
+from apscheduler.schedulers.background import BackgroundScheduler
+import atexit
+from util.register_jobs import scheduler_jobs
 
 
 class Application:
@@ -73,6 +76,18 @@ class Application:
         # 呼叫內部方法來完成設定
         self._register_blueprints()
         self._register_default_route()
+        self._init_scheduler()
+
+    def _init_scheduler(self):
+        """初始化並啟動排程器"""
+        self.scheduler = BackgroundScheduler(daemon=True)
+        for job in scheduler_jobs:
+            self.scheduler.add_job(**job)
+        
+        self.scheduler.start()
+        print(f"排程器已啟動，並已加入 {len(scheduler_jobs)} 個任務。")
+        # 註冊應用程式關閉時執行的函式
+        atexit.register(lambda: self.scheduler.shutdown())
 
     def _register_blueprints(self):
         """根據設定檔自動註冊藍圖"""
