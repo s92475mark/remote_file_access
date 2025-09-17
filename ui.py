@@ -5,7 +5,7 @@ from share.define.model_enum import RoleName
 from datetime import datetime
 
 # --- 設定 API 的基本 URL ---
-API_URL = "http://127.0.0.1:8965"
+API_URL = "http://127.0.0.1:8964/api"
 
 # --- Session State 初始化 ---
 st.set_page_config(layout="wide")  # 擴展主畫面寬度
@@ -118,8 +118,8 @@ def page_file_list():
         file_info = st.session_state.download_file
         st.download_button(
             label=f"點此下載 {file_info['name']}",
-            data=file_info['content'],
-            file_name=file_info['name'],
+            data=file_info["content"],
+            file_name=file_info["name"],
             key="final_download_button",
         )
         # 清除 session state，避免重複顯示下載按鈕
@@ -187,8 +187,8 @@ def page_file_list():
                         st.write(f["upload_time"])
                     with col4:
                         st.selectbox(
-                            label="",
-                            options=["永久", f.get("del_time") or "設定期限"], # 若無到期日，顯示通用文字
+                            label="狀態",
+                            options=["永久", f.get("del_time") or "設定期限"],  # 若無到期日，顯示通用文字
                             index=del_time_index,
                             key=f"status_{f['id']}",
                             on_change=handle_status_change,
@@ -203,17 +203,21 @@ def page_file_list():
                                     "name": f["filename"],
                                     "content": response.content,
                                 }
-                                st.rerun() # 重新整理頁面以顯示下載按鈕
+                                st.rerun()  # 重新整理頁面以顯示下載按鈕
                             elif response:
-                                st.error(f"下載失敗: {response.json().get('message', '未知錯誤')}")
+                                st.error(
+                                    f"下載失敗: {response.json().get('message', '未知錯誤')}"
+                                )
                     with col6:
                         if st.button("刪除", key=f"delete_{f['id']}"):
                             response = api_request("delete", f"files/{f['id']}")
                             if response and response.status_code == 200:
                                 st.toast("檔案刪除成功！", icon="✅")
-                                st.rerun() # 重新整理頁面以更新列表
+                                st.rerun()  # 重新整理頁面以更新列表
                             elif response:
-                                st.error(f"刪除失敗: {response.json().get('message', '未知錯誤')}")
+                                st.error(
+                                    f"刪除失敗: {response.json().get('message', '未知錯誤')}"
+                                )
 
     elif response:  # 處理非 200 但非 token 過期的錯誤
         st.error(f"獲取檔案列表失敗: {response.json().get('message', '未知錯誤')}")
@@ -221,8 +225,25 @@ def page_file_list():
 
 def page_user_management():
     st.header("使用者管理")
-    st.write("這裡是使用者管理介面。")
-    # TODO: Implement user management view
+
+    # --- 彈出式表單：用於建立新使用者 ---
+    with st.expander("建立新使用者", expanded=False):
+        with st.form("new_user_form"):
+            new_account = st.text_input("新帳號")
+            new_password = st.text_input("新密碼", type="password")
+            # TODO: 這裡應該從 API 獲取可用的角色列表
+            # new_role = st.selectbox("權限等級", ["admin", "user"])
+
+            submitted = st.form_submit_button("確認新增")
+            if submitted:
+                # TODO: 呼叫後端 API 來建立新使用者
+
+                st.success(f"已成功建立使用者：{new_account}")
+                st.rerun()
+
+    st.write("---")
+    st.write("現有使用者列表：")
+    # TODO: 實作顯示使用者列表的邏輯
 
 
 def page_change_password():
@@ -249,7 +270,9 @@ def page_change_password():
                         "new_password": new_password,
                     }
                     # 假設 API 端點是 /user/change-password
-                    response = api_request("post", "userCtrl/change-password", json=payload)
+                    response = api_request(
+                        "post", "userCtrl/change-password", json=payload
+                    )
 
                     if response and response.status_code == 200:
                         st.success("密碼已成功更改！請使用新密碼重新登入。")
