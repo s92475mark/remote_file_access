@@ -25,6 +25,14 @@ class Application:
         """
         self.config = config
         global_variable.config = config  # <-- 新增：設定 global_variable.config
+        servers = []
+        if self.config.OPENAPI.SERVERS:
+            server_config_obj = self.config.OPENAPI.SERVERS[0]  # 將其轉換為字典
+            server_urls_dict = server_config_obj.model_dump()
+            # 為字典中的每一個 URL 值都建立一個 Server 物件
+            for url_value in server_urls_dict.values():
+                if url_value:
+                    servers.append(Server(url=url_value))
 
         # 使用 flask_openapi3 的方式建立 app
         self.app = OpenAPI(
@@ -34,6 +42,7 @@ class Application:
                 version="v1",
                 security=[{"BearerAuth": []}],
             ),
+            servers=servers,  # 使用我們客製化建立的 server 列表
             # 定義安全方案
             security_schemes={
                 "BearerAuth": SecurityScheme(
@@ -59,7 +68,9 @@ class Application:
         # --- 初始化 JWT ---
         # 從我們自己的 Pydantic Config 模型中讀取金鑰，設定到 Flask app 的 config 中
         self.app.config["JWT_SECRET_KEY"] = self.config.JWT.JWT_SECRET_KEY
-        self.app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(minutes=self.config.JWT.JWT_ACCESS_TOKEN_EXPIRES)
+        self.app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(
+            minutes=self.config.JWT.JWT_ACCESS_TOKEN_EXPIRES
+        )
         # 初始化 JWTManager
         self.jwt = JWTManager(self.app)
 
@@ -69,9 +80,12 @@ class Application:
             """
             捕捉 JWT token 過期錯誤，並回傳自訂的 JSON 格式。
             """
-            return jsonify(
-                {"message": "Token has expired.", "error_code": "TOKEN_EXPIRED"}
-            ), 401
+            return (
+                jsonify(
+                    {"message": "Token has expired.", "error_code": "TOKEN_EXPIRED"}
+                ),
+                401,
+            )
 
         # 呼叫內部方法來完成設定
         self._register_blueprints()
@@ -83,7 +97,7 @@ class Application:
         self.scheduler = BackgroundScheduler(daemon=True)
         for job in scheduler_jobs:
             self.scheduler.add_job(**job)
-        
+
         self.scheduler.start()
         print(f"排程器已啟動，並已加入 {len(scheduler_jobs)} 個任務。")
         # 註冊應用程式關閉時執行的函式
