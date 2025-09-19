@@ -165,10 +165,10 @@ class UpdateFileStatus:
 class DownloadFile:
     """處理檔案下載的核心邏輯"""
 
-    def __init__(self, session: Session, user_account: str, file_id: int):
+    def __init__(self, session: Session, user_account: str, save_filename: str):
         self.session = session
         self.user_account = user_account
-        self.file_id = file_id
+        self.save_filename = save_filename
 
     def run(self):
         # 1. 查詢使用者和檔案
@@ -181,11 +181,11 @@ class DownloadFile:
             abort(404, "User not found.")
 
         file_to_download = (
-            self.session.query(File).filter(File.id == self.file_id).one_or_none()
+            self.session.query(File)
+            .filter(File.safe_filename == self.save_filename)
+            .one_or_none()
         )
-        print("\033c")
-        print("file_to_download.owner_id", file_to_download.owner_id)
-        print("user.id", user.id)
+
         if not file_to_download:
             abort(404, "File not found.")
 
@@ -237,7 +237,9 @@ class DeleteFile:
             os.remove(file_to_delete.storage_path)
         else:
             # 如果檔案不存在於磁碟，但資料庫有紀錄，也視為成功，只刪除資料庫紀錄
-            print(f"Warning: File {file_to_delete.storage_path} not found on disk but exists in DB. Deleting DB record.")
+            print(
+                f"Warning: File {file_to_delete.storage_path} not found on disk but exists in DB. Deleting DB record."
+            )
 
         # 4. 從資料庫刪除紀錄
         self.session.delete(file_to_delete)
