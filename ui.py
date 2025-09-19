@@ -177,7 +177,18 @@ def page_file_list():
                     st.error(f"上傳失敗: {response.json().get('message', '未知錯誤')}")
 
     # --- 檔案列表顯示區塊 ---
-    params = {"filename": st.session_state.search_term}
+    # 初始化排序狀態
+    if "sort_by" not in st.session_state:
+        st.session_state.sort_by = "upload_time"
+    if "sort_order" not in st.session_state:
+        st.session_state.sort_order = "desc"
+
+    # 修改 API 請求，加入搜尋和排序參數
+    params = {
+        "filename": st.session_state.search_term,
+        "sort_by": st.session_state.sort_by,
+        "order": st.session_state.sort_order,
+    }
     response = api_request("get", "files/list", params=params)
 
     if response and response.status_code == 200:
@@ -186,21 +197,41 @@ def page_file_list():
             st.write("沒有找到任何檔案。")
         else:
             with st.container():
-                # 建立標頭
+                # --- 建立可點擊的標頭 ---
                 list_type = [5, 2, 2, 4, 2, 2]
                 col1, col2, col3, col4, col5, col6 = st.columns(list_type)
-                with col1:
-                    st.write("**檔案名稱**")
-                with col2:
-                    st.write("**檔案大小 (Bytes)**")
-                with col3:
-                    st.write("**上傳時間**")
+                current_sort_by = st.session_state.get("sort_by")
+                current_order = st.session_state.get("sort_order")
+
+                def create_sort_button(col, column_name, display_text):
+                    with col:
+                        arrow = ""
+                        if current_sort_by == column_name:
+                            arrow = "🔼" if current_order == "asc" else "🔽"
+
+                        if st.button(f"**{display_text}** {arrow}"):
+                            if (
+                                current_sort_by == column_name
+                                and current_order == "asc"
+                            ):
+                                st.session_state.sort_order = "desc"
+                            else:
+                                st.session_state.sort_by = column_name
+                                st.session_state.sort_order = "asc"
+                            st.rerun()
+
+                # 建立可排序的標頭
+                create_sort_button(col1, "filename", "檔案名稱")
+                create_sort_button(col2, "size_bytes", "檔案大小 (Bytes)")
+                create_sort_button(col3, "upload_time", "上傳時間")
+
+                # 建立不可排序的標頭 (使用 disabled button 以統一外觀)
                 with col4:
-                    st.write("**狀態**")
+                    st.button("**狀態**", disabled=True)
                 with col5:
-                    st.write("**操作1**")
+                    st.button("**操作1**", disabled=True)
                 with col6:
-                    st.write("**操作2**")
+                    st.button("**操作2**", disabled=True)
 
                 # 循環顯示檔案
                 for f in files:
