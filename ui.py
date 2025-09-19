@@ -185,14 +185,16 @@ def page_file_list():
                             label="狀態",
                             options=["永久", f.get("del_time") or "設定期限"],
                             index=del_time_index,
-                            key=f"status_{f['id']}",
+                            key=f"status_{f['safe_filename']}",
                             on_change=handle_status_change,
-                            kwargs={"file_id": f["id"]},
+                            kwargs={"safe_filename": f["safe_filename"]},
                             label_visibility="collapsed",
                         )
                     with col5:
-                        if st.button("下載", key=f"download_{f['id']}"):
-                            response = api_request("get", f"files/{f['id']}/download")
+                        if st.button("下載", key=f"download_{f['safe_filename']}"):
+                            response = api_request(
+                                "get", f"files/{f['safe_filename']}/download"
+                            )
                             if response and response.status_code == 200:
                                 st.session_state.download_file = {
                                     "name": f["filename"],
@@ -204,8 +206,10 @@ def page_file_list():
                                     f"下載失敗: {response.json().get('message', '未知錯誤')}"
                                 )
                     with col6:
-                        if st.button("刪除", key=f"delete_{f['id']}"):
-                            response = api_request("delete", f"files/{f['id']}")
+                        if st.button("刪除", key=f"delete_{f['safe_filename']}"):
+                            response = api_request(
+                                "delete", f"files/{f['safe_filename']}"
+                            )
                             if response and response.status_code == 200:
                                 st.toast("檔案刪除成功！", icon="✅")
                                 st.rerun()  # 重新整理頁面以更新列表

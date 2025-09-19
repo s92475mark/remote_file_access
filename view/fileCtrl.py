@@ -60,7 +60,7 @@ class UpdateFileStatusForm(BaseModel):
 class FileIdPath(BaseModel):
     """檔案路徑參數模型"""
 
-    save_filename: str = Field(..., description="檔案安全名稱")
+    safe_filename: str = Field(..., description="檔案安全名稱")
 
 
 # --- API 端點定義 ---
@@ -141,7 +141,7 @@ def list_files():
 
 
 @filectrl.patch(
-    "/<int:file_id>/status",
+    "/<string:safe_filename>/status",
     summary="更新檔案的永久狀態",
     responses={200: FileInfo},
     security=[{"BearerAuth": []}],
@@ -160,7 +160,7 @@ def update_file_status(path: FileIdPath, body: UpdateFileStatusForm):
         logic = UpdateFileStatus(
             session=db,
             user_account=current_user_account,
-            file_id=path.file_id,
+            safe_filename=path.safe_filename,
             is_permanent=body.is_permanent,
         )
         updated_file = logic.run()
@@ -172,6 +172,7 @@ def update_file_status(path: FileIdPath, body: UpdateFileStatusForm):
             upload_time=updated_file.createTime,
             del_time=updated_file.expiry_time,
             is_permanent=updated_file.is_permanent,
+            safe_filename=updated_file.safe_filename,
         ).model_dump()
 
 

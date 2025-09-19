@@ -97,11 +97,15 @@ class UpdateFileStatus:
     """處理檔案狀態切換的核心邏輯"""
 
     def __init__(
-        self, session: Session, user_account: str, file_id: int, is_permanent: bool
+        self,
+        session: Session,
+        user_account: str,
+        safe_filename: int,
+        is_permanent: bool,
     ):
         self.session = session
         self.user_account = user_account
-        self.file_id = file_id
+        self.safe_filename = safe_filename
         self.is_permanent = is_permanent
 
     def run(self):
@@ -115,7 +119,9 @@ class UpdateFileStatus:
             abort(404, "User not found.")
 
         file_to_update = (
-            self.session.query(File).filter(File.id == self.file_id).one_or_none()
+            self.session.query(File)
+            .filter(File.safe_filename == self.safe_filename)
+            .one_or_none()
         )
         if not file_to_update:
             abort(404, "File not found.")
