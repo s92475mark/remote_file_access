@@ -42,6 +42,7 @@ class FileInfo(BaseModel):
     upload_time: datetime
     del_time: datetime | None
     is_permanent: bool
+    safe_filename: str
 
 
 class FileListResponse(BaseModel):
@@ -118,6 +119,7 @@ def list_files():
                 File.createTime.label("creation_time"),
                 File.expiry_time.label("expiration_time"),
                 File.is_permanent.label("is_permanent"),
+                File.safe_filename.label("safe_filename"),
             )
             .filter(File.owner_id == user.id)
             .all()
@@ -131,6 +133,7 @@ def list_files():
                 upload_time=f.creation_time,
                 del_time=f.expiration_time,
                 is_permanent=f.is_permanent,
+                safe_filename=f.safe_filename,
             )
             for f in files
         ]

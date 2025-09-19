@@ -151,12 +151,7 @@ def page_file_list():
         if not files:
             st.write("沒有找到任何檔案。")
         else:
-            with st.container(
-                border=True,
-                height="stretch",
-                horizontal_alignment="center",
-                width="stretch",
-            ):
+            with st.container():
                 # 建立標頭
                 list_type = [5, 2, 2, 4, 2, 2]
                 col1, col2, col3, col4, col5, col6 = st.columns(list_type)
@@ -188,7 +183,7 @@ def page_file_list():
                     with col4:
                         st.selectbox(
                             label="狀態",
-                            options=["永久", f.get("del_time") or "設定期限"],  # 若無到期日，顯示通用文字
+                            options=["永久", f.get("del_time") or "設定期限"],
                             index=del_time_index,
                             key=f"status_{f['id']}",
                             on_change=handle_status_change,
