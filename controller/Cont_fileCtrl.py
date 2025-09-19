@@ -50,9 +50,11 @@ class UploadFile:
         # 取得副檔名
         _, extension = os.path.splitext(self.file.filename)
         # 產生一個安全、唯一的檔名
-        safe_filename = f"{uuid.uuid4().hex}{extension}"
+        safe_filename = uuid.uuid4().hex
+        safe_filename_extension = f"{safe_filename}{extension}"
+
         # 組合儲存路徑 (使用者的專屬資料夾)
-        save_path = os.path.join(user.storage_path, safe_filename)
+        save_path = os.path.join(user.storage_path, safe_filename_extension)
 
         # 儲存檔案到磁碟
         self.file.save(save_path)

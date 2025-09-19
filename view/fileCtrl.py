@@ -56,9 +56,9 @@ class UpdateFileStatusForm(BaseModel):
 
 
 class FileIdPath(BaseModel):
-    """檔案ID路徑參數模型"""
+    """檔案路徑參數模型"""
 
-    file_id: int = Field(..., description="檔案ID")
+    save_filename: str = Field(..., description="檔案安全名稱")
 
 
 # --- API 端點定義 ---
@@ -172,7 +172,7 @@ def update_file_status(path: FileIdPath, body: UpdateFileStatusForm):
 
 
 @filectrl.get(
-    "/<int:file_id>/download",
+    "/<string:save_filename>/download",
     summary="下載檔案",
     security=[{"BearerAuth": []}],
 )
@@ -186,7 +186,9 @@ def download_file(path: FileIdPath):
     current_user_account = get_jwt_identity()
     with get_db_session() as db:
         logic = DownloadFile(
-            session=db, user_account=current_user_account, file_id=path.file_id
+            session=db,
+            user_account=current_user_account,
+            save_filename=path.save_filename,
         )
         file_info = logic.run()
 
