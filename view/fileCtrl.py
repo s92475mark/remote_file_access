@@ -1,6 +1,7 @@
 from flask_openapi3 import APIBlueprint, Tag
 from flask import send_file
 from flask_openapi3.models.file import FileStorage
+from numpy import save
 from pydantic import BaseModel, Field
 from flask_jwt_extended import get_jwt_identity
 
@@ -200,7 +201,7 @@ def download_file(path: FileIdPath):
 
 
 @filectrl.delete(
-    "/<int:file_id>",
+    "/<string:save_filename>",
     summary="刪除檔案",
     responses={200: {"description": "File deleted successfully"}},
     security=[{"BearerAuth": []}],
@@ -214,6 +215,8 @@ def delete_file(path: FileIdPath):
     current_user_account = get_jwt_identity()
     with get_db_session() as db:
         logic = DeleteFile(
-            session=db, user_account=current_user_account, file_id=path.file_id
+            session=db,
+            user_account=current_user_account,
+            save_filename=path.save_filename,
         )
         return logic.run()

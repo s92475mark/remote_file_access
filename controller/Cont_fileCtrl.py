@@ -207,10 +207,10 @@ class DownloadFile:
 class DeleteFile:
     """處理檔案刪除的核心邏輯"""
 
-    def __init__(self, session: Session, user_account: str, file_id: int):
+    def __init__(self, session: Session, user_account: str, save_filename: str):
         self.session = session
         self.user_account = user_account
-        self.file_id = file_id
+        self.save_filename = save_filename
 
     def run(self):
         # 1. 查詢使用者和檔案
@@ -223,7 +223,9 @@ class DeleteFile:
             abort(404, "User not found.")
 
         file_to_delete = (
-            self.session.query(File).filter(File.id == self.file_id).one_or_none()
+            self.session.query(File)
+            .filter(File.safe_filename == self.save_filename)
+            .one_or_none()
         )
         if not file_to_delete:
             abort(404, "File not found.")
