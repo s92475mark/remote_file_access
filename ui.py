@@ -111,7 +111,40 @@ def page_login():
 
 
 def page_file_list():
-    st.header("檔案列表")
+    # --- 新增：使用 CSS 讓整列垂直置中 ---
+    st.markdown(
+        """
+        <style>
+        div[data-testid="stHorizontalBlock"] {
+            align-items: center;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # --- 修改：將標題和搜尋框放在同一列 ---
+    col1, col2 = st.columns([8, 2])  # 8:2 的寬度比例，讓搜尋框寬一點
+
+    with col1:
+        st.header("檔案列表")
+
+    with col2:
+        # --- 檔案名稱搜尋 ---
+        if "search_term" not in st.session_state:
+            st.session_state.search_term = ""
+
+        search_term_input = st.text_input(
+            "搜尋檔案名稱：",
+            value=st.session_state.search_term,
+            placeholder="檔案搜尋...",
+            label_visibility="collapsed",  # 隱藏標籤
+        )
+
+    # 如果輸入框的內容與 session_state 中的不同，就更新 session_state 並觸發 rerun
+    if search_term_input != st.session_state.search_term:
+        st.session_state.search_term = search_term_input
+        st.rerun()
 
     # --- 處理下載請求 ---
     if "download_file" in st.session_state and st.session_state.download_file:
@@ -144,7 +177,8 @@ def page_file_list():
                     st.error(f"上傳失敗: {response.json().get('message', '未知錯誤')}")
 
     # --- 檔案列表顯示區塊 ---
-    response = api_request("get", "files/list")
+    params = {"filename": st.session_state.search_term}
+    response = api_request("get", "files/list", params=params)
 
     if response and response.status_code == 200:
         files = response.json().get("files", [])
