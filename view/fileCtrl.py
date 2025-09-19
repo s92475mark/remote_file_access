@@ -63,6 +63,14 @@ class FileIdPath(BaseModel):
     safe_filename: str = Field(..., description="檔案安全名稱")
 
 
+class FileListQuery(BaseModel):
+    """檔案列表的查詢參數模型"""
+
+    filename: str | None = Field(None, description="用於搜尋的檔案名稱關鍵字")
+    sort_by: str | None = Field("upload_time", description="排序欄位")
+    order: str | None = Field("desc", description="排序順序 (asc/desc)")
+
+
 # --- API 端點定義 ---
 
 
@@ -98,40 +106,32 @@ def upload_single_file(form: FileUploadForm):
     security=[{"BearerAuth": []}],
 )
 @permission_required("file:read:own")
-def list_files():
+def list_files(query: FileListQuery):
     """
     獲取當前使用者的檔案列表。
+    - 可選擇性地提供檔名進行搜尋，以及指定排序方式。
     - 需要 `file:read` 權限。
     """
     current_user_account = get_jwt_identity()
     with get_db_session() as db:
-        from share.model.model import User, File
+        from controller.Cont_fileCtrl import ListFiles
 
-        user = db.query(User).filter(User.account == current_user_account).one_or_none()
-        if not user:
-            return {"files": []}
-
-        files = (
-            db.query(
-                File.id.label("file_id"),
-                File.filename.label("file_name"),
-                File.file_size.label("file_size_bytes"),
-                File.createTime.label("creation_time"),
-                File.expiry_time.label("expiration_time"),
-                File.is_permanent.label("is_permanent"),
-                File.safe_filename.label("safe_filename"),
-            )
-            .filter(File.owner_id == user.id)
-            .all()
+        logic = ListFiles(
+            session=db,
+            user_account=current_user_account,
+            filename=query.filename,
+            sort_by=query.sort_by,
+            order=query.order,
         )
+        files = logic.run()
 
         file_list = [
             FileInfo(
-                id=f.file_id,
-                filename=f.file_name,
-                size_bytes=f.file_size_bytes,
-                upload_time=f.creation_time,
-                del_time=f.expiration_time,
+                id=f.id,
+                filename=f.filename,
+                size_bytes=f.file_size,
+                upload_time=f.createTime,
+                del_time=f.expiry_time,
                 is_permanent=f.is_permanent,
                 safe_filename=f.safe_filename,
             )

@@ -254,3 +254,52 @@ class DeleteFile:
         self.session.commit()
 
         return {"message": "File deleted successfully"}
+
+
+class ListFiles:
+    """處理獲取檔案列表的核心邏輯"""
+
+    def __init__(
+        self,
+        session: Session,
+        user_account: str,
+        filename: str = None,
+        sort_by: str = "upload_time",
+        order: str = "desc",
+    ):
+        self.session = session
+        self.user_account = user_account
+        self.filename = filename
+        self.sort_by = sort_by
+        self.order = order
+
+    def run(self):
+        user = (
+            self.session.query(User)
+            .filter(User.account == self.user_account)
+            .one_or_none()
+        )
+        if not user:
+            return []  # 如果找不到使用者，回傳空列表
+
+        # 基本查詢
+        query = self.session.query(File).filter(File.owner_id == user.id)
+
+        # 處理檔案名稱搜尋
+        if self.filename:
+            query = query.filter(File.filename.like(f"%{self.filename}%"))
+
+        # 處理排序
+        sort_column_map = {
+            "filename": File.filename,
+            "size_bytes": File.file_size,
+            "upload_time": File.createTime,
+        }
+        sort_column = sort_column_map.get(self.sort_by, File.createTime)
+
+        if self.order == "asc":
+            query = query.order_by(sort_column.asc())
+        else:
+            query = query.order_by(sort_column.desc())
+
+        return query.all()

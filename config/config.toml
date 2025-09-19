@@ -8,6 +8,7 @@ BLUEPRINTS = ["view.aaa.bp","view.userCtrl.userctrl","view.fileCtrl.filectrl"]
 [[OPENAPI.SERVERS]]
 url = "http://127.0.0.1:8965"
 url1 = "http://localhost:8965"
+url2 = "http://lf2theo.ddns.net:8964/api"
 
 [OPENAPI.INFO]
 title = "My API"
