@@ -72,6 +72,9 @@ class File(Base):
     __tablename__ = "files"
 
     filename: Mapped[str] = mapped_column(String(255), nullable=False, comment="原始檔名")
+    safe_filename: Mapped[str] = mapped_column(
+        String(255), nullable=False, comment="原始檔名"
+    )
     storage_path: Mapped[str] = mapped_column(
         String(512), unique=True, nullable=False, comment="儲存在伺服器上的路徑或檔名"
     )

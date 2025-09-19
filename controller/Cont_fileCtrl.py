@@ -71,6 +71,7 @@ class UploadFile:
         # 6. 建立檔案的資料庫紀錄
         new_file_record = File(
             filename=self.file.filename,
+            safe_filename=safe_filename,
             storage_path=save_path,
             file_size=file_size,
             owner_id=user.id,
