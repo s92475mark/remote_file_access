@@ -51,15 +51,15 @@ def api_request(method, endpoint, **kwargs):
         return None
 
 
-def handle_status_change(file_id: int):
+def handle_status_change(safe_filename: str):
     """當下拉選單變動時，呼叫 API 更新檔案狀態"""
     # 從 session_state 讀取新選擇的值
-    new_value = st.session_state[f"status_{file_id}"]
+    new_value = st.session_state[f"status_{safe_filename}"]
     is_permanent = new_value == "永久"
 
     # 準備 API 請求
     body = {"is_permanent": is_permanent}
-    response = api_request("patch", f"files/{file_id}/status", json=body)
+    response = api_request("patch", f"files/{safe_filename}/status", json=body)
 
     if response and response.status_code == 200:
         updated_file = response.json()
