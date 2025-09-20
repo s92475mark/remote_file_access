@@ -1,14 +1,21 @@
 from flask_openapi3 import APIBlueprint, Tag
-from flask import send_file
+from flask import send_file, abort
 from flask_openapi3.models.file import FileStorage
-from numpy import save
 from pydantic import BaseModel, Field
 from flask_jwt_extended import get_jwt_identity
+from datetime import datetime
 
 from util.db import get_db_session
 from util.auth import permission_required
-from controller.Cont_fileCtrl import UploadFile, DownloadFile, DeleteFile
-from datetime import date, datetime, time
+from controller.Cont_fileCtrl import (
+    UploadFile,
+    DownloadFile,
+    DeleteFile,
+    ListFiles,
+    UpdateFileStatus,
+    CreateShareLink,
+    RemoveShareLink,
+)
 
 # --- API 藍圖和標籤定義 ---
 tag = Tag(name="File Operations", description="檔案相關操作")
@@ -16,8 +23,6 @@ filectrl = APIBlueprint("filectrl", __name__, url_prefix="/files", abp_tags=[tag
 
 
 # --- Pydantic 模型定義 ---
-
-
 class FileUploadForm(BaseModel):
     """檔案上傳表單模型"""
 
@@ -43,6 +48,7 @@ class FileInfo(BaseModel):
     del_time: datetime | None
     is_permanent: bool
     safe_filename: str
+    share_token: str | None
 
 
 class FileListResponse(BaseModel):
@@ -61,6 +67,18 @@ class FileIdPath(BaseModel):
     """檔案路徑參數模型"""
 
     safe_filename: str = Field(..., description="檔案安全名稱")
+
+
+class ShareTokenPath(BaseModel):
+    """分享 Token 的路徑參數模型"""
+
+    share_token: str = Field(..., description="檔案分享 token")
+
+
+class ShareLinkResponse(BaseModel):
+    """建立分享連結的回應模型"""
+
+    share_token: str
 
 
 class FileListQuery(BaseModel):
@@ -87,15 +105,11 @@ def upload_single_file(form: FileUploadForm):
     - 需要 `file:upload` 權限。
     - 後端會檢查使用者的檔案數量配額。
     """
-    # 從 JWT 取得當前使用者是誰
     current_user_account = get_jwt_identity()
-
     with get_db_session() as db:
-        # 建立 Controller 實例並傳入需要的參數
         logic = UploadFile(
             session=db, user_account=current_user_account, file=form.file
         )
-        # 呼叫核心邏輯並回傳結果
         return logic.save()
 
 
@@ -114,8 +128,6 @@ def list_files(query: FileListQuery):
     """
     current_user_account = get_jwt_identity()
     with get_db_session() as db:
-        from controller.Cont_fileCtrl import ListFiles
-
         logic = ListFiles(
             session=db,
             user_account=current_user_account,
@@ -124,7 +136,6 @@ def list_files(query: FileListQuery):
             order=query.order,
         )
         files = logic.run()
-
         file_list = [
             FileInfo(
                 id=f.id,
@@ -134,6 +145,7 @@ def list_files(query: FileListQuery):
                 del_time=f.expiry_time,
                 is_permanent=f.is_permanent,
                 safe_filename=f.safe_filename,
+                share_token=f.share_token,
             )
             for f in files
         ]
@@ -155,8 +167,6 @@ def update_file_status(path: FileIdPath, body: UpdateFileStatusForm):
     """
     current_user_account = get_jwt_identity()
     with get_db_session() as db:
-        from controller.Cont_fileCtrl import UpdateFileStatus
-
         logic = UpdateFileStatus(
             session=db,
             user_account=current_user_account,
@@ -164,7 +174,6 @@ def update_file_status(path: FileIdPath, body: UpdateFileStatusForm):
             is_permanent=body.is_permanent,
         )
         updated_file = logic.run()
-
         return FileInfo(
             id=updated_file.id,
             filename=updated_file.filename,
@@ -173,11 +182,12 @@ def update_file_status(path: FileIdPath, body: UpdateFileStatusForm):
             del_time=updated_file.expiry_time,
             is_permanent=updated_file.is_permanent,
             safe_filename=updated_file.safe_filename,
+            share_token=updated_file.share_token,
         ).model_dump()
 
 
 @filectrl.get(
-    "/<string:save_filename>/download",
+    "/<string:safe_filename>/download",
     summary="下載檔案",
     security=[{"BearerAuth": []}],
 )
@@ -193,10 +203,9 @@ def download_file(path: FileIdPath):
         logic = DownloadFile(
             session=db,
             user_account=current_user_account,
-            save_filename=path.save_filename,
+            safe_filename=path.safe_filename,
         )
         file_info = logic.run()
-
         return send_file(
             file_info["storage_path"],
             as_attachment=True,
@@ -205,7 +214,7 @@ def download_file(path: FileIdPath):
 
 
 @filectrl.delete(
-    "/<string:save_filename>",
+    "/<string:safe_filename>",
     summary="刪除檔案",
     responses={200: {"description": "File deleted successfully"}},
     security=[{"BearerAuth": []}],
@@ -221,6 +230,80 @@ def delete_file(path: FileIdPath):
         logic = DeleteFile(
             session=db,
             user_account=current_user_account,
-            save_filename=path.save_filename,
+            safe_filename=path.safe_filename,
         )
         return logic.run()
+
+
+@filectrl.post(
+    "/<string:safe_filename>/share",
+    summary="建立檔案的分享連結",
+    responses={200: ShareLinkResponse},
+    security=[{"BearerAuth": []}],
+)
+@permission_required("file:share")
+def create_share_link(path: FileIdPath):
+    """
+    為指定的檔案建立一個公開的分享連結。
+    - 如果連結已存在，則直接回傳現有的。
+    - 需要 `file:share` 權限。
+    """
+    current_user_account = get_jwt_identity()
+    with get_db_session() as db:
+        logic = CreateShareLink(
+            session=db,
+            user_account=current_user_account,
+            safe_filename=path.safe_filename,
+        )
+        file_record = logic.run()
+        return {"share_token": file_record.share_token}
+
+
+@filectrl.delete(
+    "/<string:safe_filename>/share",
+    summary="移除檔案的分享連結",
+    responses={200: {"description": "Share link removed successfully"}},
+    security=[{"BearerAuth": []}],
+)
+@permission_required("file:share")
+def remove_share_link(path: FileIdPath):
+    """
+    移除指定檔案的公開分享連結。
+    - 需要 `file:share` 權限。
+    """
+    current_user_account = get_jwt_identity()
+    with get_db_session() as db:
+        logic = RemoveShareLink(
+            session=db,
+            user_account=current_user_account,
+            safe_filename=path.safe_filename,
+        )
+        return logic.run()
+
+
+@filectrl.get(
+    "/shared/<string:share_token>",
+    summary="透過分享連結下載檔案",
+    # 此處故意不放 security 參數，使其成為公開 API
+)
+def public_download_file(path: ShareTokenPath):
+    """
+    處理公開分享連結的下載請求。
+    - 此 API 無須 JWT 認證。
+    """
+    with get_db_session() as db:
+        from share.model.model import File
+        import os
+
+        file_record = (
+            db.query(File).filter(File.share_token == path.share_token).one_or_none()
+        )
+
+        if not file_record or not os.path.exists(file_record.storage_path):
+            abort(404, "File not found or link has expired.")
+
+        return send_file(
+            file_record.storage_path,
+            as_attachment=True,
+            download_name=file_record.filename,
+        )

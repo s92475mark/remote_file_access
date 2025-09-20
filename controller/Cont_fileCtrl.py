@@ -303,3 +303,82 @@ class ListFiles:
             query = query.order_by(sort_column.desc())
 
         return query.all()
+
+
+class CreateShareLink:
+    """建立分享連結的核心邏輯"""
+
+    def __init__(self, session: Session, user_account: str, safe_filename: str):
+        self.session = session
+        self.user_account = user_account
+        self.safe_filename = safe_filename
+
+    def run(self):
+        user = (
+            self.session.query(User)
+            .filter(User.account == self.user_account)
+            .one_or_none()
+        )
+        if not user:
+            abort(404, "User not found.")
+
+        file_record = (
+            self.session.query(File)
+            .filter(
+                File.safe_filename == self.safe_filename, File.owner_id == user.id
+            )
+            .one_or_none()
+        )
+
+        if not file_record:
+            abort(404, "File not found or you do not have permission.")
+
+        # 如果 token 已存在，直接回傳
+        if file_record.share_token:
+            return file_record
+
+        # 產生新 token 並儲存
+        file_record.share_token = uuid.uuid4().hex
+        self.session.commit()
+        self.session.refresh(file_record)
+
+        return file_record
+
+
+class RemoveShareLink:
+    """移除分享連結的核心邏輯"""
+
+    def __init__(self, session: Session, user_account: str, safe_filename: str):
+        self.session = session
+        self.user_account = user_account
+        self.safe_filename = safe_filename
+
+    def run(self):
+        user = (
+            self.session.query(User)
+            .filter(User.account == self.user_account)
+            .one_or_none()
+        )
+        if not user:
+            abort(404, "User not found.")
+
+        file_record = (
+            self.session.query(File)
+            .filter(
+                File.safe_filename == self.safe_filename, File.owner_id == user.id
+            )
+            .one_or_none()
+        )
+
+        if not file_record:
+            abort(404, "File not found or you do not have permission.")
+
+        # 如果 token 本來就沒有，也直接回傳成功
+        if not file_record.share_token:
+            return {"message": "Share link already removed."}
+
+        # 移除 token 並儲存
+        file_record.share_token = None
+        self.session.commit()
+
+        return {"message": "Share link removed successfully."}
