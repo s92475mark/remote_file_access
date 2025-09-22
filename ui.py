@@ -198,8 +198,17 @@ def page_file_list():
         else:
             with st.container():
                 # --- 建立可點擊的標頭 ---
-                list_type = [5, 2, 2, 4, 2, 2]
-                col1, col2, col3, col4, col5, col6 = st.columns(list_type)
+                list_type = [4, 1, 2, 3, 1, 1, 1, 5]  # 調整比例並新增第8欄
+                (
+                    col1,
+                    col2,
+                    col3,
+                    col4,
+                    col5,
+                    col6,
+                    col7,
+                    col8,
+                ) = st.columns(list_type)
                 current_sort_by = st.session_state.get("sort_by")
                 current_order = st.session_state.get("sort_order")
 
@@ -222,23 +231,31 @@ def page_file_list():
 
                 # 建立可排序的標頭
                 create_sort_button(col1, "filename", "檔案名稱")
-                create_sort_button(col2, "size_bytes", "檔案大小 (Bytes)")
+                create_sort_button(col2, "size_bytes", "size")
                 create_sort_button(col3, "upload_time", "上傳時間")
 
                 # 建立不可排序的標頭 (使用 disabled button 以統一外觀)
                 with col4:
                     st.button("**狀態**", disabled=True)
                 with col5:
-                    st.button("**操作1**", disabled=True)
+                    pass
+                    # st.button("****", disabled=True)
                 with col6:
-                    st.button("**操作2**", disabled=True)
+                    pass
+                    # st.button("**2**", disabled=True)
+                with col7:
+                    pass
+                    # st.button("**分享**", disabled=True)
 
                 # 循環顯示檔案
                 for f in files:
                     # 根據 is_permanent 狀態設定 selectbox 的預設索引
                     del_time_index = 0 if f.get("is_permanent") else 1
 
-                    col1, col2, col3, col4, col5, col6 = st.columns(list_type)
+                    (col1, col2, col3, col4, col5, col6, col7, col8) = st.columns(
+                        list_type
+                    )
+                    share_token = f.get("share_token")
                     with col1:
                         st.write(f["filename"])
                     with col2:
@@ -282,6 +299,44 @@ def page_file_list():
                                 st.error(
                                     f"刪除失敗: {response.json().get('message', '未知錯誤')}"
                                 )
+                    with col7:
+                        # share_token = f.get("share_token")
+                        if share_token:
+                            # full_share_url = f"{API_URL.replace('/api', '')}/api/files/shared/{share_token}"
+
+                            if st.button(
+                                "移除分享", key=f"remove_share_{f['safe_filename']}"
+                            ):
+                                response = api_request(
+                                    "delete", f"files/{f['safe_filename']}/share"
+                                )
+                                if response and response.status_code == 200:
+                                    st.toast("分享已移除！", icon="🗑️")
+                                    st.rerun()
+                                else:
+                                    st.error("移除失敗")
+                        else:
+                            if st.button(
+                                "建立分享", key=f"create_share_{f['safe_filename']}"
+                            ):
+                                response = api_request(
+                                    "post", f"files/{f['safe_filename']}/share"
+                                )
+                                if response and response.status_code == 200:
+                                    st.toast("分享連結已產生！", icon="✅")
+                                    st.rerun()
+                                else:
+                                    st.error("建立失敗")
+                    with col8:
+                        if share_token:
+                            full_share_url = f"http://lf2theo.ddns.net:8964/api/files/shared/{share_token}"
+                            st.text_input(
+                                "分享連結",
+                                full_share_url,
+                                key=f"link_{f['safe_filename']}",
+                                disabled=True,
+                                label_visibility="collapsed",
+                            )
 
     elif response:  # 處理非 200 但非 token 過期的錯誤
         st.error(f"獲取檔案列表失敗: {response.json().get('message', '未知錯誤')}")
