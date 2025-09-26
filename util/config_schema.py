@@ -53,10 +53,17 @@ class JWT(BaseModel):
     JWT_ACCESS_TOKEN_EXPIRES: int = 30
 
 
+class App(BaseModel):
+    """應用程式層級的公開設定"""
+
+    PUBLIC_DOMAIN: str = "http://127.0.0.1:8964"
+
+
 class Config(BaseModel):
     """設定檔相關"""
 
     FLASK: Optional[Flask] = Flask()
+    APP: Optional[App] = App()
     OPENAPI: Optional[OpenApi] = OpenApi()
     DATABASES: Dict[str, Database] = {}
     FILE: FileConfig
