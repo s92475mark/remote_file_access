@@ -15,6 +15,17 @@ if "token" not in st.session_state:
 if "user_role" not in st.session_state:
     st.session_state.user_role = None
 
+if "public_domain" not in st.session_state:
+    try:
+        response = requests.get(f"{API_URL.replace('/api', '')}/api/config/public-domain")
+        if response.status_code == 200:
+            st.session_state.public_domain = response.json().get("public_domain")
+        else:
+            # 如果後端API取不到，給一個備用值
+            st.session_state.public_domain = "http://127.0.0.1:8964"
+    except Exception:
+        st.session_state.public_domain = "http://127.0.0.1:8964"
+
 # --- 頁面函式 ---
 
 
@@ -329,7 +340,8 @@ def page_file_list():
                                     st.error("建立失敗")
                     with col8:
                         if share_token:
-                            full_share_url = f"http://lf2theo.ddns.net:8964/api/files/shared/{share_token}"
+                            public_domain = st.session_state.get("public_domain", "")
+                            full_share_url = f"{public_domain}/api/files/shared/{share_token}"
                             st.text_input(
                                 "分享連結",
                                 full_share_url,
