@@ -171,10 +171,10 @@ class UpdateFileStatus:
 class DownloadFile:
     """處理檔案下載的核心邏輯"""
 
-    def __init__(self, session: Session, user_account: str, save_filename: str):
+    def __init__(self, session: Session, user_account: str, safe_filename: str):
         self.session = session
         self.user_account = user_account
-        self.save_filename = save_filename
+        self.safe_filename = safe_filename
 
     def run(self):
         # 1. 查詢使用者和檔案
@@ -188,7 +188,7 @@ class DownloadFile:
 
         file_to_download = (
             self.session.query(File)
-            .filter(File.safe_filename == self.save_filename)
+            .filter(File.safe_filename == self.safe_filename)
             .one_or_none()
         )
 
@@ -324,9 +324,7 @@ class CreateShareLink:
 
         file_record = (
             self.session.query(File)
-            .filter(
-                File.safe_filename == self.safe_filename, File.owner_id == user.id
-            )
+            .filter(File.safe_filename == self.safe_filename, File.owner_id == user.id)
             .one_or_none()
         )
 
@@ -364,9 +362,7 @@ class RemoveShareLink:
 
         file_record = (
             self.session.query(File)
-            .filter(
-                File.safe_filename == self.safe_filename, File.owner_id == user.id
-            )
+            .filter(File.safe_filename == self.safe_filename, File.owner_id == user.id)
             .one_or_none()
         )
 
