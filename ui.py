@@ -14,10 +14,14 @@ if "token" not in st.session_state:
     st.session_state.token = None
 if "user_role" not in st.session_state:
     st.session_state.user_role = None
+if "user_name" not in st.session_state:
+    st.session_state.user_name = None
 
 if "public_domain" not in st.session_state:
     try:
-        response = requests.get(f"{API_URL.replace('/api', '')}/api/config/public-domain")
+        response = requests.get(
+            f"{API_URL.replace('/api', '')}/api/config/public-domain"
+        )
         if response.status_code == 200:
             st.session_state.public_domain = response.json().get("public_domain")
         else:
@@ -112,8 +116,10 @@ def page_login():
                         json={"account": account, "password": password},
                     )
                     if response.status_code == 200:
-                        st.session_state.token = response.json().get("access_token")
-                        st.session_state.user_role = response.json().get("level_name")
+                        login_data = response.json()
+                        st.session_state.token = login_data.get("access_token")
+                        st.session_state.user_role = login_data.get("level_name")
+                        st.session_state.user_name = login_data.get("user_name")  # 新增
                         st.rerun()
                     else:
                         st.error(f"登入失敗: {response.json().get('message', '未知錯誤')}")
@@ -341,7 +347,9 @@ def page_file_list():
                     with col8:
                         if share_token:
                             public_domain = st.session_state.get("public_domain", "")
-                            full_share_url = f"{public_domain}/api/files/shared/{share_token}"
+                            full_share_url = (
+                                f"{public_domain}/api/files/shared/{share_token}"
+                            )
                             st.text_input(
                                 "分享連結",
                                 full_share_url,
@@ -378,10 +386,55 @@ def page_user_management():
 
 
 def page_change_password():
-    _, center_col, _ = st.columns([2, 4, 2])
+    st.header("使用者設定")
+
+    # --- 區塊一：使用者資訊 ---
+    st.subheader("使用者資訊")
+
+    with st.spinner("正在獲取使用者資訊..."):
+        response = api_request("get", "userCtrl/info")
+
+    if response and response.status_code == 200:
+        user_info = response.json()
+
+        # 格式化空間使用量 (例如: 1024 KB -> 1 MB)
+        storage_usage_bytes = user_info.get("storage_usage", 0)
+        if storage_usage_bytes > (1024 * 1024):
+            storage_display = f"{storage_usage_bytes / (1024 * 1024):.2f} MB"
+        elif storage_usage_bytes > 1024:
+            storage_display = f"{storage_usage_bytes / 1024:.2f} KB"
+        else:
+            storage_display = f"{storage_usage_bytes} Bytes"
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.text_input(
+                "使用者名稱", value=user_info.get("user_name", "N/A"), disabled=True
+            )
+            st.text_input(
+                "總檔案數量", value=user_info.get("file_count", "N/A"), disabled=True
+            )
+
+        with col2:
+            st.text_input("帳號", value=user_info.get("account", "N/A"), disabled=True)
+            st.text_input(
+                "永久檔案數量",
+                value=user_info.get("permanent_file_count", "N/A"),
+                disabled=True,
+            )
+
+        st.text_input("總空間使用量", value=storage_display, disabled=True)
+
+    else:
+        st.error("無法獲取使用者資訊。")
+
+    st.divider()  # 分隔線
+
+    # --- 區塊二：更改密碼 ---
+    st.subheader("更改密碼")
+    _, center_col, _ = st.columns([2, 4, 2])  # 讓表單置中
 
     with center_col:
-        st.header("更改密碼")
         with st.form("change_password_form", clear_on_submit=True):
             old_password = st.text_input("舊密碼", type="password")
             new_password = st.text_input("新密碼", type="password")
@@ -395,20 +448,20 @@ def page_change_password():
                 elif new_password != confirm_password:
                     st.error("新密碼與確認密碼不相符！")
                 else:
-                    # 準備呼叫後端 API
                     payload = {
                         "old_password": old_password,
                         "new_password": new_password,
                     }
-                    # 假設 API 端點是 /user/change-password
                     response = api_request(
                         "post", "userCtrl/change-password", json=payload
                     )
 
                     if response and response.status_code == 200:
                         st.success("密碼已成功更改！請使用新密碼重新登入。")
+                        # 清除 session state 並強制重新登入
                         st.session_state.token = None
                         st.session_state.user_role = None
+                        st.session_state.user_name = None
                         st.rerun()
                     elif response:
                         st.error(f"更改失敗: {response.json().get('message', '未知錯誤')}")
@@ -427,12 +480,16 @@ if st.session_state.token is None:
     page_login()
 else:
     with st.sidebar:
+        if st.session_state.user_name:
+            st.markdown(f"### 你好，{st.session_state.user_name}")
+            st.divider()
+
         if st.session_state.user_role in (
             [RoleName.superadmin.value, RoleName.admin.value]
         ):
             selected = option_menu(
                 "主選單",
-                ["檔案列表", "使用者管理", "更改密碼", "登出"],
+                ["檔案列表", "使用者管理", "使用者設定", "登出"],
                 icons=["list-task", "people", "key", "box-arrow-right"],
                 menu_icon="cast",
                 default_index=0,
@@ -440,7 +497,7 @@ else:
         else:
             selected = option_menu(
                 "主選單",
-                ["檔案列表", "更改密碼", "登出"],
+                ["檔案列表", "使用者設定", "登出"],
                 icons=["list-task", "people", "key", "box-arrow-right"],
                 menu_icon="cast",
                 default_index=0,
@@ -450,7 +507,7 @@ else:
         page_file_list()
     elif selected == "使用者管理":
         page_user_management()
-    elif selected == "更改密碼":
+    elif selected == "使用者設定":
         page_change_password()
     elif selected == "登出":
         st.session_state.token = None
