@@ -2,12 +2,12 @@ from operator import le
 from util.db import get_db_session
 from sqlalchemy.orm import Session
 from util.security import hash_password
-from sqlalchemy import select
+from sqlalchemy import select, func
 from share.define.model_enum import RoleName
 
 from util.global_variable import global_variable
 
-from share.model.model import User, Role
+from share.model.model import File, User, Role
 from schema.request_userCtrl import (
     request_CreateUser,
     response_CreateUser,
@@ -19,7 +19,6 @@ from schema.request_userCtrl import (
 from util.security import verify_password
 from flask import abort
 from flask_jwt_extended import create_access_token
-
 import os
 
 
@@ -108,14 +107,19 @@ class LoginUser:
             user_level_name = min_id_role.role_name
 
         return response_Login(
-            access_token=access_token, level=user_level, level_name=user_level_name
+            access_token=access_token,
+            user_name=user.user_name,
+            level=user_level,
+            level_name=user_level_name,
         ).model_dump()
 
 
 class ChangePassword:
     """更改使用者密碼"""
 
-    def __init__(self, session: Session, user_account: str, old_password: str, new_password: str):
+    def __init__(
+        self, session: Session, user_account: str, old_password: str, new_password: str
+    ):
         self.session = session
         self.user_account = user_account
         self.old_password = old_password
@@ -123,7 +127,11 @@ class ChangePassword:
 
     def run(self):
         # 1. 查詢使用者
-        user = self.session.query(User).filter(User.account == self.user_account).one_or_none()
+        user = (
+            self.session.query(User)
+            .filter(User.account == self.user_account)
+            .one_or_none()
+        )
         if not user:
             # 理論上，因為有 JWT 保護，所以不會發生這種情況
             abort(404, "User not found.")
@@ -137,3 +145,65 @@ class ChangePassword:
         self.session.commit()
 
         return {"message": "密碼已成功更新"}
+
+
+class GetUserInfo:
+    """獲取使用者詳細資訊的核心邏輯"""
+
+    def __init__(self, session: Session, user_account: str):
+        self.session = session
+        self.user_account = user_account
+
+    def run(self):
+        from sqlalchemy import String, cast, func, select
+
+        # 1. 建立一個子查詢，專門用來計算永久檔案的數量
+        #    它會根據外部查詢的 User.id 來做關聯查詢
+        perm_count_sq = (
+            select(
+                func.count(File.id).label("sub_permanent_file_count"),
+                User.id.label("sub_user_id"),
+            )
+            .where(File.owner_id == User.id)  # 關聯外部的 User.id
+            .where(File.is_permanent == True)
+            .subquery()
+        )
+
+        # 2. 建立主查詢
+        q = (
+            select(
+                User.account,
+                User.user_name,
+                func.sum(File.file_size).label("storage_usage"),  # 計算總大小
+                func.count(File.id).label("file_count"),  # 計算總數量
+                perm_count_sq.c.sub_permanent_file_count.label(
+                    "permanent_file_count"
+                ),  # 將子查詢作為一個欄位
+            )
+            .select_from(User)
+            .join(perm_count_sq, perm_count_sq.c.sub_user_id == User.id)
+            .join(
+                File, File.owner_id == User.id, isouter=True
+            )  # 使用 outer join 以免使用者沒有檔案時查不到
+            .where(User.account == self.user_account)  # 指定要查詢的使用者
+            .group_by(User.id)  # 根據使用者 ID 分組
+        )
+
+        # 3. 執行查詢並取得結果
+        result = self.session.execute(q).first()
+
+        if not result:
+            abort(404, "User not found.")
+
+        # 4. 組合回傳的字典
+        return {
+            "user_name": result.user_name,
+            "account": result.account,
+            "storage_usage": int(result.storage_usage)
+            if result.storage_usage is not None
+            else 0,
+            "file_count": result.file_count,
+            "permanent_file_count": result.permanent_file_count
+            if result.permanent_file_count is not None
+            else 0,
+        }

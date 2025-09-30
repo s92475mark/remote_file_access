@@ -11,8 +11,15 @@ from schema.request_userCtrl import (
     request_account_check,
     request_Login,
     response_Login,
+    response_UserInfo, # 新增
 )
-from controller.Cont_userCtrl import createUser, checkAccount, LoginUser, ChangePassword
+from controller.Cont_userCtrl import (
+    createUser,
+    checkAccount,
+    LoginUser,
+    ChangePassword,
+    GetUserInfo, # 新增
+)
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
@@ -101,4 +108,22 @@ def change_password(body: ChangePasswordForm):
             old_password=body.old_password,
             new_password=body.new_password,
         )
+        return logic.run()
+
+
+@userctrl.get(
+    "/info",
+    summary="獲取當前使用者資訊",
+    responses={200: response_UserInfo},
+    security=[{"BearerAuth": []}],
+)
+@jwt_required()
+def get_user_info():
+    """
+    獲取目前已登入使用者的詳細資訊。
+    - 需要有效的 JWT Token。
+    """
+    current_user_account = get_jwt_identity()
+    with get_db_session("default") as db:
+        logic = GetUserInfo(session=db, user_account=current_user_account)
         return logic.run()

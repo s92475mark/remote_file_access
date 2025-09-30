@@ -30,6 +30,7 @@ class response_Login(BaseModel):
     """成功登入的回應模型"""
 
     access_token: str = Field(..., description="JWT Access Token")
+    user_name: str = Field(..., description="使用者名稱")
     level: int | None = Field(..., description="使用者等級")
     level_name: str = Field(..., description="使用者等級名稱")
 
@@ -40,3 +41,12 @@ class request_account_check(BaseModel):
 
 class response_account_check(BaseModel):
     account: bool
+
+
+class response_UserInfo(BaseModel):
+    """使用者詳細資訊的回應模型"""
+    user_name: str
+    account: str
+    storage_usage: int
+    file_count: int
+    permanent_file_count: int
