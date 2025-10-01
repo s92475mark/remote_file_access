@@ -181,7 +181,7 @@ class GetUserInfo:
                 ),  # 將子查詢作為一個欄位
             )
             .select_from(User)
-            .join(perm_count_sq, perm_count_sq.c.sub_user_id == User.id)
+            .join(perm_count_sq, perm_count_sq.c.sub_user_id == User.id, isouter=True) # 改為 LEFT OUTER JOIN
             .join(
                 File, File.owner_id == User.id, isouter=True
             )  # 使用 outer join 以免使用者沒有檔案時查不到

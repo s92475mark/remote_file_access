@@ -137,8 +137,6 @@ def list_files(query: FileListQuery):
             order=query.order,
         )
         result = logic.run()
-        print("\033c")
-        print("result", result)
 
         # 將 File ORM 物件轉換為 FileInfo Pydantic 模型
         file_list_pydantic = [
