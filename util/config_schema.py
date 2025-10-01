@@ -15,6 +15,9 @@ class OpenApiServer(BaseModel):
     url: str = "http://localhost:5000"
     url1: str = "http://127.0.0.1:5000"
 
+    class Config:
+        extra = "allow"
+
 
 class OpenApi(BaseModel):
     """OpenAPI 相關"""
