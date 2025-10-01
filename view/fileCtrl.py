@@ -5,6 +5,8 @@ from pydantic import BaseModel, Field
 from flask_jwt_extended import get_jwt_identity
 from datetime import datetime
 
+from schema.request_userCtrl import FileInfo  # 新增匯入
+
 from util.db import get_db_session
 from util.auth import permission_required
 from controller.Cont_fileCtrl import (
@@ -38,23 +40,22 @@ class FileUploadResponse(BaseModel):
     message: str = "File uploaded successfully"
 
 
-class FileInfo(BaseModel):
-    """單一檔案的資訊模型"""
+class FileListStats(BaseModel):
+    file_count: int
+    permanent_file_count: int
 
-    id: int
-    filename: str
-    size_bytes: int
-    upload_time: datetime
-    del_time: datetime | None
-    is_permanent: bool
-    safe_filename: str
-    share_token: str | None
+
+class FileListLimits(BaseModel):
+    file_limit: str | int
+    permanent_file_limit: str | int
 
 
 class FileListResponse(BaseModel):
     """檔案列表的回應模型"""
 
     files: list[FileInfo]
+    stats: FileListStats
+    limits: FileListLimits
 
 
 class UpdateFileStatusForm(BaseModel):
@@ -135,8 +136,12 @@ def list_files(query: FileListQuery):
             sort_by=query.sort_by,
             order=query.order,
         )
-        files = logic.run()
-        file_list = [
+        result = logic.run()
+        print("\033c")
+        print("result", result)
+
+        # 將 File ORM 物件轉換為 FileInfo Pydantic 模型
+        file_list_pydantic = [
             FileInfo(
                 id=f.id,
                 filename=f.filename,
@@ -147,9 +152,14 @@ def list_files(query: FileListQuery):
                 safe_filename=f.safe_filename,
                 share_token=f.share_token,
             )
-            for f in files
+            for f in result["files"]
         ]
-        return FileListResponse(files=file_list).model_dump()
+
+        return FileListResponse(
+            files=file_list_pydantic,
+            stats=result["stats"],
+            limits=result["limits"],
+        ).model_dump()
 
 
 @filectrl.patch(

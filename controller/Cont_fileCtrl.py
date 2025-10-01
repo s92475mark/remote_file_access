@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from flask import abort
 from werkzeug.datastructures import FileStorage
 
-from share.model.model import User, File
+from share.model.model import User, File, Role
 from util.global_variable import global_variable
 
 
@@ -274,16 +274,43 @@ class ListFiles:
         self.order = order
 
     def run(self):
-        user = (
-            self.session.query(User)
+        from sqlalchemy import case, cast, String, func
+
+        # 查詢 1: 獲取使用者及其權限限制
+        user_and_limits = (
+            self.session.query(
+                User.id.label("user_id"),
+                Role.file_limit,
+                Role.permanent_file_limit,
+            )
+            .join(User.roles)
             .filter(User.account == self.user_account)
+            .order_by(Role.level.asc())
+            .limit(1)
             .one_or_none()
         )
-        if not user:
-            return []  # 如果找不到使用者，回傳空列表
 
-        # 基本查詢
-        query = self.session.query(File).filter(File.owner_id == user.id)
+        if not user_and_limits:
+            return {
+                "files": [],
+                "stats": {"file_count": 0, "permanent_file_count": 0},
+                "limits": {"file_limit": 0, "permanent_file_limit": 0},
+            }
+
+        # 查詢 2: 獲取檔案統計數據
+        file_stats = (
+            self.session.query(
+                func.count(File.id).label("file_count"),
+                func.sum(
+                    case((File.is_permanent == True, 1), else_=0)
+                ).label("permanent_file_count"),
+            )
+            .filter(File.owner_id == user_and_limits.user_id)
+            .first()
+        )
+
+        # 查詢 3: 獲取檔案列表本身
+        query = self.session.query(File).filter(File.owner_id == user_and_limits.user_id)
 
         # 處理檔案名稱搜尋
         if self.filename:
@@ -302,7 +329,22 @@ class ListFiles:
         else:
             query = query.order_by(sort_column.desc())
 
-        return query.all()
+        files = query.all()
+
+        # 組合所有結果並回傳
+        return {
+            "files": files,
+            "stats": {
+                "file_count": file_stats.file_count if file_stats else 0,
+                "permanent_file_count": file_stats.permanent_file_count
+                if file_stats
+                else 0,
+            },
+            "limits": {
+                "file_limit": "∞" if user_and_limits.file_limit == -1 else user_and_limits.file_limit,
+                "permanent_file_limit": "∞" if user_and_limits.permanent_file_limit == -1 else user_and_limits.permanent_file_limit,
+            },
+        }
 
 
 class CreateShareLink:

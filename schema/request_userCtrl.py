@@ -1,6 +1,7 @@
 from click import Option
 from pydantic import BaseModel, Field
 from typing import Optional, List
+from datetime import datetime  # 新增這一行
 
 
 class request_CreateUser(BaseModel):
@@ -26,6 +27,19 @@ class request_Login(BaseModel):
     password: str = Field(..., description="使用者密碼")
 
 
+class FileInfo(BaseModel):
+    """單一檔案的資訊模型"""
+
+    id: int
+    filename: str
+    size_bytes: int
+    upload_time: datetime
+    del_time: datetime | None
+    is_permanent: bool
+    safe_filename: str
+    share_token: str | None
+
+
 class response_Login(BaseModel):
     """成功登入的回應模型"""
 
@@ -41,6 +55,24 @@ class request_account_check(BaseModel):
 
 class response_account_check(BaseModel):
     account: bool
+
+
+class FileListStats(BaseModel):
+    file_count: int
+    permanent_file_count: int
+
+
+class FileListLimits(BaseModel):
+    file_limit: str | int
+    permanent_file_limit: str | int
+
+
+class FileListResponse(BaseModel):
+    """檔案列表的回應模型"""
+
+    files: list[FileInfo]
+    stats: FileListStats
+    limits: FileListLimits
 
 
 class response_UserInfo(BaseModel):
