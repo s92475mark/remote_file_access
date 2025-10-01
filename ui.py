@@ -36,7 +36,6 @@ if "public_domain" not in st.session_state:
 
 # --- 頁面函式 ---
 
-
 def api_request(method, endpoint, **kwargs):
     """
     一個包裝函式，用於發送 API 請求並集中處理認證和錯誤。
@@ -68,7 +67,6 @@ def api_request(method, endpoint, **kwargs):
     except requests.exceptions.RequestException as e:
         st.error(f"無法連線到 API: {e}")
         return None
-
 
 def handle_status_change(safe_filename: str):
     """當下拉選單變動時，呼叫 API 更新檔案狀態"""
@@ -102,7 +100,6 @@ def handle_status_change(safe_filename: str):
     else:
         st.toast("更新失敗", icon="❌")
 
-
 def page_login():
     left, center, right = st.columns([3, 4, 3])
 
@@ -129,7 +126,6 @@ def page_login():
                         st.error(f"登入失敗: {response.json().get('message', '未知錯誤')}")
                 except requests.exceptions.RequestException as e:
                     st.error(f"無法連線到 API: {e}")
-
 
 def page_file_list():
     # --- 新增：使用 CSS 讓整列垂直置中 ---
@@ -213,7 +209,11 @@ def page_file_list():
     response = api_request("get", "files/list", params=params)
 
     if response and response.status_code == 200:
-        files = response.json().get("files", [])
+        data = response.json()
+        files = data.get("files", [])
+        stats = data.get("stats", {})
+        limits = data.get("limits", {})
+
         if not files:
             st.write("沒有找到任何檔案。")
         else:
@@ -260,17 +260,13 @@ def page_file_list():
                     st.button("**狀態**", disabled=True)
                 with col5:
                     pass
-                    # st.button("****", disabled=True)
                 with col6:
                     pass
-                    # st.button("**2**", disabled=True)
                 with col7:
                     pass
-                    # st.button("**分享**", disabled=True)
 
                 # 循環顯示檔案
                 for f in files:
-                    # 根據 is_permanent 狀態設定 selectbox 的預設索引
                     del_time_index = 0 if f.get("is_permanent") else 1
 
                     (col1, col2, col3, col4, col5, col6, col7, col8) = st.columns(
@@ -303,7 +299,7 @@ def page_file_list():
                                     "name": f["filename"],
                                     "content": response.content,
                                 }
-                                st.rerun()  # 重新整理頁面以顯示下載按鈕
+                                st.rerun()
                             elif response:
                                 st.error(
                                     f"下載失敗: {response.json().get('message', '未知錯誤')}"
@@ -315,16 +311,13 @@ def page_file_list():
                             )
                             if response and response.status_code == 200:
                                 st.toast("檔案刪除成功！", icon="✅")
-                                st.rerun()  # 重新整理頁面以更新列表
+                                st.rerun()
                             elif response:
                                 st.error(
                                     f"刪除失敗: {response.json().get('message', '未知錯誤')}"
                                 )
                     with col7:
-                        # share_token = f.get("share_token")
                         if share_token:
-                            # full_share_url = f"{API_URL.replace('/api', '')}/api/files/shared/{share_token}"
-
                             if st.button(
                                 "移除分享", key=f"remove_share_{f['safe_filename']}"
                             ):
@@ -361,6 +354,18 @@ def page_file_list():
                                 disabled=True,
                                 label_visibility="collapsed",
                             )
+
+            # --- 在列表下方顯示統計資訊 (靠右) ---
+            st.divider()
+            st.markdown(
+                f"""
+                <div style="text-align: right;">
+                    檔案數量: {stats.get('file_count', 0)} / {limits.get('file_limit', 'N/A')}<br>
+                    永久檔案: {stats.get('permanent_file_count', 0)} / {limits.get('permanent_file_limit', 'N/A')}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
     elif response:  # 處理非 200 但非 token 過期的錯誤
         st.error(f"獲取檔案列表失敗: {response.json().get('message', '未知錯誤')}")
