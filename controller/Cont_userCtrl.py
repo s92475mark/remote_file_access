@@ -40,7 +40,7 @@ class checkAccount:
                 "message": "Account already exists",
                 "detail": f"Account '{self.body.account}' is already taken.",
             }, 409
-        return response_account_check(account=True)
+        return response_account_check(account=True).model_dump()
 
 
 class createUser:
