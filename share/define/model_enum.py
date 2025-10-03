@@ -34,3 +34,10 @@ class RoleName(DocEnum):
     lv1 = "lv1User", "一階使用者"
     lv2 = "lv2User", "二階使用者"
     lv3 = "lv3User", "三階使用者"
+
+
+class permanent_file(DocEnum):
+    """是否為永久檔案"""
+
+    is_permanent = True, "永久檔案"
+    not_permanent = False, "期限檔案"
