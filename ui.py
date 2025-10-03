@@ -36,6 +36,7 @@ if "public_domain" not in st.session_state:
 
 # --- 頁面函式 ---
 
+
 def api_request(method, endpoint, **kwargs):
     """
     一個包裝函式，用於發送 API 請求並集中處理認證和錯誤。
@@ -67,6 +68,7 @@ def api_request(method, endpoint, **kwargs):
     except requests.exceptions.RequestException as e:
         st.error(f"無法連線到 API: {e}")
         return None
+
 
 def handle_status_change(safe_filename: str):
     """當下拉選單變動時，呼叫 API 更新檔案狀態"""
@@ -100,6 +102,7 @@ def handle_status_change(safe_filename: str):
     else:
         st.toast("更新失敗", icon="❌")
 
+
 def page_login():
     left, center, right = st.columns([3, 4, 3])
 
@@ -126,6 +129,7 @@ def page_login():
                         st.error(f"登入失敗: {response.json().get('message', '未知錯誤')}")
                 except requests.exceptions.RequestException as e:
                     st.error(f"無法連線到 API: {e}")
+
 
 def page_file_list():
     # --- 新增：使用 CSS 讓整列垂直置中 ---
@@ -384,10 +388,42 @@ def page_user_management():
 
             submitted = st.form_submit_button("確認新增")
             if submitted:
-                # TODO: 呼叫後端 API 來建立新使用者
+                if not new_account or not new_password:
+                    st.warning("帳號和密碼為必填欄位。")
+                else:
+                    # 步驟 1: 呼叫 API 檢查帳號是否已存在
+                    check_params = {"account": new_account}
+                    check_response = api_request(
+                        "get", "userCtrl/accountCheck", params=check_params
+                    )
 
-                st.success(f"已成功建立使用者：{new_account}")
-                st.rerun()
+                    # 步驟 2: 根據檢查結果，決定是否繼續建立使用者
+                    if check_response and check_response.status_code == 200:
+                        # 帳號合法，繼續建立使用者
+                        payload = {
+                            "account": new_account,
+                            "password": new_password,
+                            "name": new_account,  # 暫用 account 替代
+                            "storage_path": new_account,  # 暫用 account 替代
+                        }
+                        create_response = api_request(
+                            "post", "userCtrl/createUser", json=payload
+                        )
+
+                        if create_response and create_response.status_code == 200:
+                            st.success(f"已成功建立使用者：{new_account}")
+                            st.rerun()
+                        elif create_response:
+                            st.error(
+                                f"建立失敗: {create_response.json().get('message', '未知錯誤')}"
+                            )
+
+                    elif check_response.status_code == 409:
+                        # 帳號已存在
+                        st.error(f"帳號 '{new_account}' 已被使用，請更換一個。")
+                    else:
+                        # 其他可能的錯誤
+                        st.error("帳號驗證失敗，請稍後再試。")
 
     st.write("---")
     st.write("現有使用者列表：")
@@ -421,14 +457,16 @@ def page_change_password():
                 "使用者名稱", value=user_info.get("user_name", "N/A"), disabled=True
             )
             st.text_input(
-                "總檔案數量", value=user_info.get("file_count", "N/A"), disabled=True
+                "總檔案數量",
+                value=f"{user_info.get('file_count', 0)} / {user_info.get('file_limit', 'N/A')}",
+                disabled=True,
             )
 
         with col2:
             st.text_input("帳號", value=user_info.get("account", "N/A"), disabled=True)
             st.text_input(
                 "永久檔案數量",
-                value=user_info.get("permanent_file_count", "N/A"),
+                value=f"{user_info.get('permanent_file_count', 0)} / {user_info.get('permanent_file_limit', 'N/A')}",
                 disabled=True,
             )
 
