@@ -11,14 +11,17 @@ from schema.request_userCtrl import (
     request_account_check,
     request_Login,
     response_Login,
-    response_UserInfo, # 新增
+    response_UserInfo,
+    UserInfoForAdmin,
+    UserListResponse,
 )
 from controller.Cont_userCtrl import (
     createUser,
     checkAccount,
     LoginUser,
     ChangePassword,
-    GetUserInfo, # 新增
+    GetUserInfo,
+    ListAllUsers,
 )
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
@@ -39,9 +42,7 @@ userctrl = APIBlueprint("userctrl", __name__, url_prefix="/userCtrl")
 def create_user(body: request_CreateUser):
     with get_db_session("default") as db:
         data = createUser(session=db, body=body)
-
         Outcome_dict = data.data()
-
         return Outcome_dict
 
 
@@ -51,19 +52,14 @@ def create_user(body: request_CreateUser):
 def account_check(query: request_account_check):
     with get_db_session("default") as db:
         data = checkAccount(session=db, body=query)
-
         Outcome_dict = data.data()
-
         return Outcome_dict
 
 
 @userctrl.post(
     "/login",
     summary="使用者登入",
-    responses={
-        200: response_Login,
-        401: {"description": "帳號或密碼錯誤"}
-    }
+    responses={200: response_Login, 401: {"description": "帳號或密碼錯誤"}},
 )
 def user_login(body: request_Login):
     with get_db_session("default") as db:
@@ -127,3 +123,23 @@ def get_user_info():
     with get_db_session("default") as db:
         logic = GetUserInfo(session=db, user_account=current_user_account)
         return logic.run()
+
+
+@userctrl.get(
+    "/list-all",
+    summary="獲取所有使用者列表",
+    responses={200: UserListResponse},
+    security=[{"BearerAuth": []}],
+)
+# @permission_required("admin:read")
+def list_all_users():
+    """
+    獲取系統內所有使用者的列表。
+    - 僅限管理者等級權限使用。
+    """
+    with get_db_session("default") as db:
+        logic = ListAllUsers(session=db)
+        users_rows = logic.run()
+        # 將 SQLAlchemy Row 物件列表轉換為 Pydantic 模型列表
+        user_list = [UserInfoForAdmin(**row._asdict()) for row in users_rows]
+        return UserListResponse(users=user_list).model_dump()

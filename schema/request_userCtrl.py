@@ -1,6 +1,6 @@
 from click import Option
-from pydantic import BaseModel, Field
-from typing import Optional, List
+from pydantic import BaseModel, Field, field_validator
+from typing import Optional, List, Any
 from datetime import datetime  # 新增這一行
 
 
@@ -77,8 +77,51 @@ class FileListResponse(BaseModel):
 
 class response_UserInfo(BaseModel):
     """使用者詳細資訊的回應模型"""
+
     user_name: str
     account: str
     storage_usage: int
     file_count: int
     permanent_file_count: int
+    file_limit: str | int
+    permanent_file_limit: str | int
+
+
+class UserInfoForAdmin(BaseModel):
+    """在管理者列表中顯示的單一使用者資訊 (包含統計)"""
+
+    account: str
+    name: str
+    role_name: Optional[str] = None
+    file_limit: str  # 明確指定為字串
+    permanent_file_limit: str  # 明確指定為字串
+    total_file: int
+    total_file_size: int
+    p_total_file: int
+    p_sub_file_size: int
+
+    @field_validator("file_limit", "permanent_file_limit", mode="before")
+    @classmethod
+    def format_limits_to_string(cls, v):
+        if v == -1:
+            return "∞"
+        if v is None:
+            return "N/A"  # 處理可能為 None 的情況
+        return str(v)  # 將數字轉換為字串
+
+    @field_validator(
+        "total_file",
+        "total_file_size",
+        "p_total_file",
+        "p_sub_file_size",
+        mode="before",
+    )
+    @classmethod
+    def default_to_zero(cls, v):
+        return v if v is not None else 0
+
+
+class UserListResponse(BaseModel):
+    """使用者列表的回應模型"""
+
+    users: List[UserInfoForAdmin]

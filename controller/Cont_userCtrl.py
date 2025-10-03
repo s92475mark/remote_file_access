@@ -1,9 +1,9 @@
 from operator import le
 from util.db import get_db_session
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
 from util.security import hash_password
-from sqlalchemy import select, func
-from share.define.model_enum import RoleName
+from sqlalchemy import label, select, func
+from share.define.model_enum import RoleName, permanent_file
 
 from util.global_variable import global_variable
 
@@ -15,6 +15,7 @@ from schema.request_userCtrl import (
     response_account_check,
     request_Login,
     response_Login,
+    response_UserInfo,
 )
 from util.security import verify_password
 from flask import abort
@@ -155,47 +156,50 @@ class GetUserInfo:
         self.user_account = user_account
 
     def run(self):
-        from sqlalchemy import String, cast, func, select
+        from sqlalchemy import String, cast, func, select, case
 
-        # 1. 建立一個子查詢，專門用來計算永久檔案的數量
-        #    它會根據外部查詢的 User.id 來做關聯查詢
-        perm_count_sq = (
-            select(
-                func.count(File.id).label("sub_permanent_file_count"),
-                User.id.label("sub_user_id"),
-            )
-            .where(File.owner_id == User.id)  # 關聯外部的 User.id
-            .where(File.is_permanent == True)
-            .subquery()
-        )
-
-        # 2. 建立主查詢
-        q = (
-            select(
+        # 查詢使用者、統計資料和權限
+        result = (
+            self.session.query(
                 User.account,
                 User.user_name,
-                func.sum(File.file_size).label("storage_usage"),  # 計算總大小
-                func.count(File.id).label("file_count"),  # 計算總數量
-                perm_count_sq.c.sub_permanent_file_count.label(
+                func.count(File.id).label("file_count"),
+                func.sum(File.file_size).label("storage_usage"),
+                func.sum(case((File.is_permanent == True, 1), else_=0)).label(
                     "permanent_file_count"
-                ),  # 將子查詢作為一個欄位
+                ),
+                Role.file_limit,
+                Role.permanent_file_limit,
             )
             .select_from(User)
-            .join(perm_count_sq, perm_count_sq.c.sub_user_id == User.id, isouter=True) # 改為 LEFT OUTER JOIN
-            .join(
-                File, File.owner_id == User.id, isouter=True
-            )  # 使用 outer join 以免使用者沒有檔案時查不到
-            .where(User.account == self.user_account)  # 指定要查詢的使用者
-            .group_by(User.id)  # 根據使用者 ID 分組
+            .outerjoin(User.roles)  # 使用 outerjoin 以免使用者沒有角色
+            .outerjoin(File, File.owner_id == User.id)  # 使用 outerjoin 以免使用者沒有檔案
+            .filter(User.account == self.user_account)
+            .group_by(User.id, Role.id)
+            .order_by(Role.level.asc())
+            .first()
         )
 
-        # 3. 執行查詢並取得結果
-        result = self.session.execute(q).first()
-
         if not result:
-            abort(404, "User not found.")
+            # 如果上面的查詢找不到結果(例如一個完全沒有角色的新使用者)，做一個備用查詢
+            user = (
+                self.session.query(User)
+                .filter(User.account == self.user_account)
+                .one_or_none()
+            )
+            if not user:
+                abort(404, "User not found.")
+            return {
+                "user_name": user.user_name,
+                "account": user.account,
+                "storage_usage": 0,
+                "file_count": 0,
+                "permanent_file_count": 0,
+                "file_limit": "N/A",
+                "permanent_file_limit": "N/A",
+            }
 
-        # 4. 組合回傳的字典
+        # 組合回傳的字典
         return {
             "user_name": result.user_name,
             "account": result.account,
@@ -203,7 +207,53 @@ class GetUserInfo:
             if result.storage_usage is not None
             else 0,
             "file_count": result.file_count,
-            "permanent_file_count": result.permanent_file_count
-            if result.permanent_file_count is not None
-            else 0,
+            "permanent_file_count": result.permanent_file_count,
+            "file_limit": "∞" if result.file_limit == -1 else result.file_limit,
+            "permanent_file_limit": "∞"
+            if result.permanent_file_limit == -1
+            else result.permanent_file_limit,
         }
+
+
+class ListAllUsers:
+    """獲取所有使用者列表的核心邏輯"""
+
+    def __init__(self, session: Session):
+        self.session = session
+
+    def run(self):
+        file_count = (
+            select(
+                User.id.label("sub_user_id"),
+                func.count(File.id).label("sub_file_count"),
+                func.sum(File.file_size).label("sub_file_size"),
+            )
+            .join(File, File.owner_id == User.id)
+            .group_by(User.id)
+        )
+        sub_file_count = file_count.subquery()
+        p_file_count = file_count.where(
+            File.is_permanent == permanent_file.is_permanent.value
+        )
+        sub_p_file_count = p_file_count.subquery()
+
+        query = (
+            select(
+                User.account.label("account"),
+                User.user_name.label("name"),
+                Role.role_name.label("role_name"),
+                Role.file_limit.label("file_limit"),  # 檔案上限
+                Role.permanent_file_limit.label("permanent_file_limit"),  # 永久檔案數量上限
+                sub_file_count.c.sub_file_count.label("total_file"),  # 擁有檔案數量
+                sub_file_count.c.sub_file_size.label("total_file_size"),  # 擁有檔案大小
+                sub_p_file_count.c.sub_file_count.label("p_total_file"),  # 擁有的永久檔案數量
+                sub_p_file_count.c.sub_file_size.label("p_sub_file_size"),  # 擁有的永久檔案大小
+            )
+            .select_from(User)
+            .join(User.roles.of_type(Role))
+            .outerjoin(sub_file_count, sub_file_count.c.sub_user_id == User.id)
+            .outerjoin(sub_p_file_count, sub_p_file_count.c.sub_user_id == User.id)
+        )
+
+        users = self.session.execute(query).all()
+        return users
