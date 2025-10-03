@@ -380,11 +380,9 @@ def page_user_management():
 
     # --- 彈出式表單：用於建立新使用者 ---
     with st.expander("建立新使用者", expanded=False):
-        with st.form("new_user_form"):
+        with st.form("new_user_form", clear_on_submit=True):
             new_account = st.text_input("新帳號")
             new_password = st.text_input("新密碼", type="password")
-            # TODO: 這裡應該從 API 獲取可用的角色列表
-            # new_role = st.selectbox("權限等級", ["admin", "user"])
 
             submitted = st.form_submit_button("確認新增")
             if submitted:
@@ -418,16 +416,55 @@ def page_user_management():
                                 f"建立失敗: {create_response.json().get('message', '未知錯誤')}"
                             )
 
-                    elif check_response.status_code == 409:
+                    elif check_response and check_response.status_code == 409:
                         # 帳號已存在
                         st.error(f"帳號 '{new_account}' 已被使用，請更換一個。")
                     else:
                         # 其他可能的錯誤
                         st.error("帳號驗證失敗，請稍後再試。")
 
-    st.write("---")
-    st.write("現有使用者列表：")
-    # TODO: 實作顯示使用者列表的邏輯
+    st.divider()
+
+    # --- 現有使用者列表 ---
+    st.subheader("現有使用者列表")
+    response = api_request("get", "userCtrl/list-all")
+
+    if response and response.status_code == 200:
+        users = response.json().get("users", [])
+        if not users:
+            st.info("目前沒有任何使用者。")
+        else:
+            # 建立標頭
+            cols = st.columns([2, 2, 2, 2, 2, 2])
+            headers = ["帳號", "名稱", "角色", "檔案數量", "永久檔案", "空間用量"]
+            for col, header in zip(cols, headers):
+                col.write(f"**{header}**")
+
+            # 循環顯示使用者
+            for user in users:
+                # 格式化空間使用量
+                storage_usage_bytes = user.get("total_file_size", 0)
+                if storage_usage_bytes > (1024 * 1024):
+                    storage_display = f"{storage_usage_bytes / (1024 * 1024):.2f} MB"
+                elif storage_usage_bytes > 1024:
+                    storage_display = f"{storage_usage_bytes / 1024:.2f} KB"
+                else:
+                    storage_display = f"{storage_usage_bytes} Bytes"
+
+                cols = st.columns([2, 2, 2, 2, 2, 2])
+                cols[0].write(user.get("account"))
+                cols[1].write(user.get("name"))
+                cols[2].write(user.get("role_name"))
+                cols[3].write(
+                    f"{user.get('total_file', 0)} / {user.get('file_limit', 'N/A')}"
+                )
+                cols[4].write(
+                    f"{user.get('p_total_file', 0)} / {user.get('permanent_file_limit', 'N/A')}"
+                )
+                cols[5].write(storage_display)
+
+    else:
+        st.error("無法獲取使用者列表。")
 
 
 def page_change_password():
@@ -528,7 +565,7 @@ if st.session_state.token is None:
 else:
     with st.sidebar:
         if st.session_state.user_name:
-            st.markdown(f"### 你好，{st.session_state.user_name}")
+            st.markdown(f"### 您好，{st.session_state.user_name}")
             st.divider()
 
         if st.session_state.user_role in (
