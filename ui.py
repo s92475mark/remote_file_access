@@ -180,8 +180,13 @@ def page_file_list():
         st.session_state.download_file = None
 
     # --- 檔案上傳區塊 ---
+    if "upload_key" not in st.session_state:
+        st.session_state.upload_key = 0
+
     with st.expander("上傳新檔案"):
-        uploaded_file = st.file_uploader("選擇檔案", label_visibility="collapsed")
+        uploaded_file = st.file_uploader(
+            "選擇檔案", label_visibility="collapsed", key=st.session_state.upload_key
+        )
         if uploaded_file is not None:
             if st.button("確認上傳"):
                 # 使用 multipart/form-data 格式準備檔案
@@ -193,6 +198,7 @@ def page_file_list():
 
                 if response and response.status_code == 200:
                     st.success(f"檔案 '{uploaded_file.name}' 上傳成功！")
+                    st.session_state.upload_key += 1
                     st.rerun()  # 重新整理頁面以看到新檔案
                 elif response:
                     st.error(f"上傳失敗: {response.json().get('message', '未知錯誤')}")
