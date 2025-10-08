@@ -559,6 +559,10 @@ left, center, right = st.columns([3, 4, 3])
 
 with center:
     st.title("**檔案遠端存取系統**")
+    st.markdown(
+        """<marquee behavior="scroll" direction="left">目前正在修改'下載'功能，諾發現無法使用請先用"建立分享連結"</marquee>""",
+        unsafe_allow_html=True,
+    )
 
 if st.session_state.token is None:
     page_login()
