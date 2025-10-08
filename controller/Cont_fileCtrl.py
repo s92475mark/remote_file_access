@@ -213,10 +213,10 @@ class DownloadFile:
 class DeleteFile:
     """處理檔案刪除的核心邏輯"""
 
-    def __init__(self, session: Session, user_account: str, save_filename: str):
+    def __init__(self, session: Session, user_account: str, safe_filename: str):
         self.session = session
         self.user_account = user_account
-        self.save_filename = save_filename
+        self.save_filename = safe_filename
 
     def run(self):
         # 1. 查詢使用者和檔案
@@ -301,16 +301,18 @@ class ListFiles:
         file_stats = (
             self.session.query(
                 func.count(File.id).label("file_count"),
-                func.sum(
-                    case((File.is_permanent == True, 1), else_=0)
-                ).label("permanent_file_count"),
+                func.sum(case((File.is_permanent == True, 1), else_=0)).label(
+                    "permanent_file_count"
+                ),
             )
             .filter(File.owner_id == user_and_limits.user_id)
             .first()
         )
 
         # 查詢 3: 獲取檔案列表本身
-        query = self.session.query(File).filter(File.owner_id == user_and_limits.user_id)
+        query = self.session.query(File).filter(
+            File.owner_id == user_and_limits.user_id
+        )
 
         # 處理檔案名稱搜尋
         if self.filename:
@@ -341,8 +343,12 @@ class ListFiles:
                 else 0,
             },
             "limits": {
-                "file_limit": "∞" if user_and_limits.file_limit == -1 else user_and_limits.file_limit,
-                "permanent_file_limit": "∞" if user_and_limits.permanent_file_limit == -1 else user_and_limits.permanent_file_limit,
+                "file_limit": "∞"
+                if user_and_limits.file_limit == -1
+                else user_and_limits.file_limit,
+                "permanent_file_limit": "∞"
+                if user_and_limits.permanent_file_limit == -1
+                else user_and_limits.permanent_file_limit,
             },
         }
 
