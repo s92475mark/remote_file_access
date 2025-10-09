@@ -302,9 +302,8 @@ def page_file_list():
                             label_visibility="collapsed",
                         )
                     with col5:
-                        base_url = API_URL.rsplit("/api", 1)[0]
                         placeholder = st.empty()
-                        download_url = f"{base_url}{f['download_url']}"
+                        download_url = f["download_url"]
                         placeholder.markdown(
                             f"""
                             <div style="text-align:center; padding-top:0px;">
@@ -313,28 +312,6 @@ def page_file_list():
                             """,
                             unsafe_allow_html=True,
                         )
-
-                        # placeholder.markdown(
-                        #     f'<a href="{download_url}" download="{f["filename"]}">下載</a>',
-                        #     unsafe_allow_html=True,
-                        # )
-                        # if placeholder.button(
-                        #     "下載", key=f"download_{f['safe_filename']}"
-                        # ):
-                        #     response = api_request(
-                        #         "post", f"files/{f['safe_filename']}/download-token"
-                        #     )
-                        #     if response and response.status_code == 200:
-                        #         token = response.json()["download_token"]
-                        #         base_url = API_URL.rsplit("/api", 1)[0]
-                        #         placeholder.markdown(
-                        #             f'<a href="{download_url}" download="{f["filename"]}">下載</a>',
-                        #             unsafe_allow_html=True,
-                        #         )
-                        #     elif response:
-                        #         st.error(
-                        #             f"下載失敗: {response.json().get('message', '未知錯誤')}"
-                        #         )
                     with col6:
                         if st.button("刪除", key=f"delete_{f['safe_filename']}"):
                             response = api_request(
