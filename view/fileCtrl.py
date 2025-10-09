@@ -6,10 +6,11 @@ from flask_jwt_extended import get_jwt_identity, create_access_token, decode_tok
 from jwt.exceptions import PyJWTError
 from datetime import datetime, timedelta
 
-from schema.request_userCtrl import FileInfo  # 新增匯入
+from schema.request_userCtrl import FileInfo
 
 from util.db import get_db_session
 from util.auth import permission_required
+from util.global_variable import global_variable # 新增匯入
 from controller.Cont_fileCtrl import (
     UploadFile,
     DownloadFile,

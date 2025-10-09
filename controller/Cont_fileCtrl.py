@@ -331,7 +331,11 @@ class ListFiles:
             File.safe_filename.label("safe_filename"),
             File.share_token.label("share_token"),
             File.file_size.label("file_size"),
-            (download_token_str + File.filename).label("download_url"),
+            (
+                global_variable.config.APP.PUBLIC_DOMAIN
+                + download_token_str
+                + File.filename
+            ).label("download_url"),
         ).where(File.owner_id == user_and_limits.user_id)
         sort_column_map = {
             "filename": File.filename,
