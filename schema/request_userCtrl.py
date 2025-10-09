@@ -1,7 +1,9 @@
 from click import Option
 from pydantic import BaseModel, Field, field_validator
 from typing import Optional, List, Any
-from datetime import datetime  # 新增這一行
+from datetime import datetime
+
+
 
 
 class request_CreateUser(BaseModel):
@@ -38,6 +40,7 @@ class FileInfo(BaseModel):
     is_permanent: bool
     safe_filename: str
     share_token: str | None
+    download_url: str
 
 
 class response_Login(BaseModel):

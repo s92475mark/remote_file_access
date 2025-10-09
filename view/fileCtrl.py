@@ -1,9 +1,10 @@
 from flask_openapi3 import APIBlueprint, Tag
-from flask import send_file, abort
+from flask import send_file, abort, request
 from flask_openapi3.models.file import FileStorage
 from pydantic import BaseModel, Field
-from flask_jwt_extended import get_jwt_identity
-from datetime import datetime
+from flask_jwt_extended import get_jwt_identity, create_access_token, decode_token
+from jwt.exceptions import PyJWTError
+from datetime import datetime, timedelta
 
 from schema.request_userCtrl import FileInfo  # 新增匯入
 
@@ -149,6 +150,7 @@ def list_files(query: FileListQuery):
                 is_permanent=f.is_permanent,
                 safe_filename=f.safe_filename,
                 share_token=f.share_token,
+                download_url=f.download_url,
             )
             for f in result["files"]
         ]
@@ -192,6 +194,41 @@ def update_file_status(path: FileIdPath, body: UpdateFileStatusForm):
             safe_filename=updated_file.safe_filename,
             share_token=updated_file.share_token,
         ).model_dump()
+
+
+@filectrl.post(
+    "/<string:safe_filename>/download-token",
+    summary="為下載檔案建立一個一次性的 token",
+    responses={200: {"description": "Token created successfully"}},
+    security=[{"BearerAuth": []}],
+)
+@permission_required("file:upload")
+def create_download_token(path: FileIdPath):
+    """
+    為下載檔案建立一個短時間有效的一次性 token。
+    - 需要 `file:upload` 權限。
+    - Token 內會包含檔案資訊，並在 5 分鐘後過期。
+    """
+    current_user_account = get_jwt_identity()
+
+    # 驗證使用者是否有權限存取此檔案
+    with get_db_session() as db:
+        logic = DownloadFile(
+            session=db,
+            user_account=current_user_account,
+            safe_filename=path.safe_filename,
+        )
+        # 執行 run() 來觸發權限檢查，若無權限會拋出例外
+        logic.run()
+
+    # 建立一個包含特定下載聲明 (claim) 且短時間有效的 JWT
+    additional_claims = {"download_file": path.safe_filename}
+    download_token = create_access_token(
+        identity=current_user_account,
+        expires_delta=timedelta(minutes=5),
+        additional_claims=additional_claims,
+    )
+    return {"download_token": download_token}
 
 
 @filectrl.get(
@@ -315,3 +352,48 @@ def public_download_file(path: ShareTokenPath):
             as_attachment=True,
             download_name=file_record.filename,
         )
+
+
+@filectrl.get(
+    "/download_with_token",
+    summary="使用一次性 token 下載檔案",
+    # 此端點為公開，由 token 內容進行驗證
+)
+def download_with_token():
+    """
+    使用短時間有效的一次性 token 來下載檔案。
+    - Token 從 URL 查詢參數中獲取。
+    - Token 必須是有效的，且包含 'download_file' 的聲明。
+    """
+    token = request.args.get("token")
+    if not token:
+        abort(401, "Missing download token.")
+
+    try:
+        # 解碼 JWT，這會自動檢查過期時間
+        decoded_token = decode_token(token)
+
+        # 從 token 中獲取使用者身份和檔案名稱
+        user_account = decoded_token["sub"]
+        safe_filename = decoded_token.get("download_file")
+
+        if not safe_filename:
+            abort(400, "Invalid token: missing 'download_file' claim.")
+
+        # 使用從 token 獲取的資訊來下載檔案
+        with get_db_session() as db:
+            logic = DownloadFile(
+                session=db,
+                user_account=user_account,
+                safe_filename=safe_filename,
+            )
+            file_info = logic.run()
+            return send_file(
+                file_info["storage_path"],
+                as_attachment=True,
+                download_name=file_info["filename"],
+            )
+
+    except PyJWTError as e:
+        # 捕獲所有 JWT 相關的錯誤 (例如過期、簽名無效)
+        abort(401, f"Invalid or expired token: {e}")

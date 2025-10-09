@@ -7,6 +7,8 @@ from werkzeug.datastructures import FileStorage
 
 from share.model.model import User, File, Role
 from util.global_variable import global_variable
+from sqlalchemy import label, select, func
+from flask_jwt_extended import get_jwt_identity, create_access_token, decode_token
 
 
 class UploadFile:
@@ -276,6 +278,14 @@ class ListFiles:
     def run(self):
         from sqlalchemy import case, cast, String, func
 
+        download_token = create_access_token(
+            identity=self.user_account,
+            expires_delta=timedelta(minutes=5),
+        )
+        download_token_str = (
+            f"/api/files/download_with_token?token={download_token}&filename="
+        )
+
         # 查詢 1: 獲取使用者及其權限限制
         user_and_limits = (
             self.session.query(
@@ -310,15 +320,19 @@ class ListFiles:
         )
 
         # 查詢 3: 獲取檔案列表本身
-        query = self.session.query(File).filter(
-            File.owner_id == user_and_limits.user_id
-        )
 
-        # 處理檔案名稱搜尋
-        if self.filename:
-            query = query.filter(File.filename.like(f"%{self.filename}%"))
-
-        # 處理排序
+        q = select(
+            File.id.label("id"),
+            File.filename.label("filename"),
+            File.file_size.label("file_seize"),
+            File.createTime.label("createTime"),
+            File.expiry_time.label("expiry_time"),
+            File.is_permanent.label("is_permanent"),
+            File.safe_filename.label("safe_filename"),
+            File.share_token.label("share_token"),
+            File.file_size.label("file_size"),
+            (download_token_str + File.filename).label("download_url"),
+        ).where(File.owner_id == user_and_limits.user_id)
         sort_column_map = {
             "filename": File.filename,
             "size_bytes": File.file_size,
@@ -327,12 +341,14 @@ class ListFiles:
         sort_column = sort_column_map.get(self.sort_by, File.createTime)
 
         if self.order == "asc":
-            query = query.order_by(sort_column.asc())
+            q = q.order_by(sort_column.asc())
         else:
-            query = query.order_by(sort_column.desc())
+            q = q.order_by(sort_column.desc())
 
-        files = query.all()
+        if self.filename:
+            q = q.where(File.filename.like(f"%{self.filename}%"))
 
+        files = self.session.execute(q).all()
         # 組合所有結果並回傳
         return {
             "files": files,
