@@ -125,3 +125,19 @@ class UserListResponse(BaseModel):
     """使用者列表的回應模型"""
 
     users: List[UserInfoForAdmin]
+
+
+class request_UpdateUserRole(BaseModel):
+    """修改使用者角色的請求模型"""
+
+    account: str = Field(..., description="要修改的使用者帳號")
+    role_name: str = Field(..., description="要賦予的新角色名稱")
+
+
+class response_UpdateUserRole(BaseModel):
+    """修改使用者角色的回應模型"""
+
+    id: int
+    account: str
+    user_name: str
+    message: str = "User role updated successfully"

@@ -257,3 +257,61 @@ class ListAllUsers:
 
         users = self.session.execute(query).all()
         return users
+
+
+class UpdateUserRole:
+    """修改使用者角色的核心邏輯"""
+
+    def __init__(
+        self,
+        session: Session,
+        operator_account: str,
+        account_to_update: str,
+        new_role_name: str,
+    ):
+        self.session = session
+        self.operator_account = operator_account
+        self.account_to_update = account_to_update
+        self.new_role_name = new_role_name
+
+    def run(self):
+        # 1. 取得操作者資訊和最高權限等級
+        operator = (
+            self.session.query(User)
+            .filter(User.account == self.operator_account)
+            .one_or_none()
+        )
+        if not operator or not operator.roles:
+            abort(403, "操作者權限不足或角色未設定。")
+        operator_level = min(role.level for role in operator.roles)
+
+        # 2. 取得目標使用者和新角色
+        user_to_update = (
+            self.session.query(User)
+            .filter(User.account == self.account_to_update)
+            .one_or_none()
+        )
+        if not user_to_update:
+            abort(404, f"找不到帳號為 {self.account_to_update} 的使用者。")
+
+        new_role = (
+            self.session.query(Role)
+            .filter(Role.role_name == self.new_role_name)
+            .one_or_none()
+        )
+        if not new_role:
+            abort(400, f"找不到名為 {self.new_role_name} 的角色。")
+
+        # 3. 執行權限檢查
+        if operator.id == user_to_update.id:
+            abort(403, "無法修改自己的角色。")
+
+        if operator_level > new_role.level:
+            abort(403, "無法將使用者的權限等級提升到比自己更高。")
+
+        # 4. 更新角色
+        user_to_update.roles.clear()
+        user_to_update.roles.append(new_role)
+        self.session.commit()
+
+        return user_to_update

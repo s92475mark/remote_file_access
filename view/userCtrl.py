@@ -4,6 +4,7 @@ from flask import request
 
 from typing import Optional
 from util.db import get_db_session
+from util.auth import permission_required
 from schema.request_userCtrl import (
     request_CreateUser,
     response_CreateUser,
@@ -14,6 +15,8 @@ from schema.request_userCtrl import (
     response_UserInfo,
     UserInfoForAdmin,
     UserListResponse,
+    request_UpdateUserRole,  # 新增
+    response_UpdateUserRole,  # 新增
 )
 from controller.Cont_userCtrl import (
     createUser,
@@ -22,6 +25,7 @@ from controller.Cont_userCtrl import (
     ChangePassword,
     GetUserInfo,
     ListAllUsers,
+    UpdateUserRole,  # 新增
 )
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
@@ -143,3 +147,33 @@ def list_all_users():
         # 將 SQLAlchemy Row 物件列表轉換為 Pydantic 模型列表
         user_list = [UserInfoForAdmin(**row._asdict()) for row in users_rows]
         return UserListResponse(users=user_list).model_dump()
+
+
+@userctrl.patch(
+    "/update-role",
+    summary="修改使用者角色",
+    responses={200: response_UpdateUserRole},
+    security=[{"BearerAuth": []}],
+)
+@permission_required("role:update")
+def update_user_role(body: request_UpdateUserRole):
+    """
+    修改指定使用者的角色。
+    - 需要 `admin:update` 權限。
+    - 操作者的權限等級必須高於或等於目標角色等級。
+    - 無法修改自己的角色。
+    """
+    operator_account = get_jwt_identity()
+    with get_db_session("default") as db:
+        logic = UpdateUserRole(
+            session=db,
+            operator_account=operator_account,
+            account_to_update=body.account,
+            new_role_name=body.role_name,
+        )
+        updated_user = logic.run()
+        return response_UpdateUser(
+            id=updated_user.id,
+            account=updated_user.account,
+            user_name=updated_user.user_name,
+        ).model_dump()
