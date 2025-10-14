@@ -334,7 +334,7 @@ class ListFiles:
             (
                 global_variable.config.APP.PUBLIC_DOMAIN
                 + download_token_str
-                + File.filename
+                + File.safe_filename
             ).label("download_url"),
         ).where(File.owner_id == user_and_limits.user_id)
         sort_column_map = {
