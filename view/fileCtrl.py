@@ -10,7 +10,7 @@ from schema.request_userCtrl import FileInfo
 
 from util.db import get_db_session
 from util.auth import permission_required
-from util.global_variable import global_variable # 新增匯入
+from util.global_variable import global_variable  # 新增匯入
 from controller.Cont_fileCtrl import (
     UploadFile,
     DownloadFile,
@@ -367,6 +367,7 @@ def download_with_token():
     - Token 必須是有效的，且包含 'download_file' 的聲明。
     """
     token = request.args.get("token")
+    safe_filename = request.args.get("filename")
     if not token:
         abort(401, "Missing download token.")
 
@@ -376,7 +377,7 @@ def download_with_token():
 
         # 從 token 中獲取使用者身份和檔案名稱
         user_account = decoded_token["sub"]
-        safe_filename = decoded_token.get("download_file")
+        # safe_filename = decoded_token.get("download_file")
 
         if not safe_filename:
             abort(400, "Invalid token: missing 'download_file' claim.")

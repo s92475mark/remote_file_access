@@ -4,8 +4,6 @@ from typing import Optional, List, Any
 from datetime import datetime
 
 
-
-
 class request_CreateUser(BaseModel):
     account: str = Field(..., description="User's account, must be unique")
     password: str = Field(..., description="User's password")
@@ -40,7 +38,7 @@ class FileInfo(BaseModel):
     is_permanent: bool
     safe_filename: str
     share_token: str | None
-    download_url: str
+    download_url: str | None
 
 
 class response_Login(BaseModel):
