@@ -41,6 +41,33 @@ class FileInfo(BaseModel):
     download_url: str | None
 
 
+class UploadInitRequest(BaseModel):
+    """初始化上傳請求模型"""
+    filename: str = Field(..., description="原始檔名")
+    file_size: int = Field(..., description="檔案總大小 (bytes)")
+    file_type: str = Field(..., description="檔案類型 (MIME type)")
+
+
+class UploadInitResponse(BaseModel):
+    """初始化上傳回應模型"""
+    upload_id: str = Field(..., description="唯一上傳會話 ID")
+    chunk_size: int = Field(..., description="建議的分塊大小 (bytes)")
+    upload_url: str = Field(..., description="用於發送檔案塊的 API 端點 URL")
+
+
+class UploadCompleteRequest(BaseModel):
+    """完成上傳請求模型"""
+    upload_id: str = Field(..., description="唯一上傳會話 ID")
+
+
+class UploadCompleteResponse(BaseModel):
+    """完成上傳回應模型"""
+    id: int
+    filename: str
+    size_bytes: int
+    message: str = "File uploaded successfully"
+
+
 class response_Login(BaseModel):
     """成功登入的回應模型"""
 

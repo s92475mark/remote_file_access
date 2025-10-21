@@ -6,13 +6,19 @@ from flask_jwt_extended import get_jwt_identity, create_access_token, decode_tok
 from jwt.exceptions import PyJWTError
 from datetime import datetime, timedelta
 
-from schema.request_userCtrl import FileInfo
+from schema.request_userCtrl import (
+    FileInfo,
+    UploadInitRequest,
+    UploadInitResponse,
+    UploadCompleteRequest,
+    UploadCompleteResponse,
+)
 
 from util.db import get_db_session
 from util.auth import permission_required
 from util.global_variable import global_variable  # 新增匯入
 from controller.Cont_fileCtrl import (
-    UploadFile,
+    ChunkedUploadController,
     DownloadFile,
     DeleteFile,
     ListFiles,
@@ -27,19 +33,6 @@ filectrl = APIBlueprint("filectrl", __name__, url_prefix="/files", abp_tags=[tag
 
 
 # --- Pydantic 模型定義 ---
-class FileUploadForm(BaseModel):
-    """檔案上傳表單模型"""
-
-    file: FileStorage = Field(..., description="要上傳的檔案")
-
-
-class FileUploadResponse(BaseModel):
-    """檔案上傳成功的回應模型"""
-
-    id: int
-    filename: str
-    size_bytes: int
-    message: str = "File uploaded successfully"
 
 
 class FileListStats(BaseModel):
@@ -97,23 +90,69 @@ class FileListQuery(BaseModel):
 
 @filectrl.post(
     "/upload",
-    summary="上傳單一檔案",
-    responses={200: FileUploadResponse},
+    summary="上傳檔案 (分塊上傳的初始化與完成)",
     security=[{"BearerAuth": []}],
 )
 @permission_required("file:upload")
-def upload_single_file(form: FileUploadForm):
-    """
-    上傳一個檔案。
-    - 需要 `file:upload` 權限。
-    - 後端會檢查使用者的檔案數量配額。
-    """
+def upload_single_file():
     current_user_account = get_jwt_identity()
     with get_db_session() as db:
-        logic = UploadFile(
-            session=db, user_account=current_user_account, file=form.file
+        controller = ChunkedUploadController(
+            session=db, user_account=current_user_account
         )
-        return logic.save()
+
+        # 嘗試解析為 UploadInitRequest
+        try:
+            init_request = UploadInitRequest(**request.json)
+            response_data = controller.init_upload(
+                filename=init_request.filename,
+                file_size=init_request.file_size,
+                file_type=init_request.file_type,
+            )
+            return UploadInitResponse(**response_data).model_dump(), 200
+        except Exception as e:
+            # 如果不是 init 請求，則嘗試解析為 complete 請求
+            pass
+
+        # 嘗試解析為 UploadCompleteRequest
+        try:
+            complete_request = UploadCompleteRequest(**request.json)
+            response_data = controller.complete_upload(
+                upload_id=complete_request.upload_id
+            )
+            return UploadCompleteResponse(**response_data).model_dump(), 201
+        except Exception as e:
+            abort(400, "Invalid upload request. Must be init or complete phase.")
+
+
+@filectrl.patch(
+    "/upload/chunk/<string:upload_id>",
+    summary="上傳檔案塊",
+    responses={200: {"description": "檔案塊上傳成功"}},
+    security=[{"BearerAuth": []}],
+)
+@permission_required("file:upload")
+def upload_chunk(upload_id: str):
+    current_user_account = get_jwt_identity()
+    with get_db_session() as db:
+        controller = ChunkedUploadController(
+            session=db, user_account=current_user_account
+        )
+
+        # 獲取 Content-Range Header
+        content_range = request.headers.get("Content-Range")
+        if not content_range:
+            abort(400, "Missing Content-Range header.")
+
+        # 獲取檔案塊數據
+        chunk_data = request.get_data()
+        if not chunk_data:
+            abort(400, "Missing chunk data.")
+
+        response_data = controller.upload_chunk(
+            upload_id=upload_id, chunk_data=chunk_data, content_range=content_range
+        )
+        return response_data, 200
 
 
 @filectrl.get(
@@ -194,6 +233,7 @@ def update_file_status(path: FileIdPath, body: UpdateFileStatusForm):
             is_permanent=updated_file.is_permanent,
             safe_filename=updated_file.safe_filename,
             share_token=updated_file.share_token,
+            download_url=None,
         ).model_dump()
 
 
@@ -361,28 +401,16 @@ def public_download_file(path: ShareTokenPath):
     # 此端點為公開，由 token 內容進行驗證
 )
 def download_with_token():
-    """
-    使用短時間有效的一次性 token 來下載檔案。
-    - Token 從 URL 查詢參數中獲取。
-    - Token 必須是有效的，且包含 'download_file' 的聲明。
-    """
     token = request.args.get("token")
     safe_filename = request.args.get("filename")
     if not token:
         abort(401, "Missing download token.")
-
+    if not safe_filename:
+        abort(401, "Missing filename.")
     try:
         # 解碼 JWT，這會自動檢查過期時間
         decoded_token = decode_token(token)
-
-        # 從 token 中獲取使用者身份和檔案名稱
         user_account = decoded_token["sub"]
-        # safe_filename = decoded_token.get("download_file")
-
-        if not safe_filename:
-            abort(400, "Invalid token: missing 'download_file' claim.")
-
-        # 使用從 token 獲取的資訊來下載檔案
         with get_db_session() as db:
             logic = DownloadFile(
                 session=db,

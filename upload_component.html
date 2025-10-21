@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chunked File Uploader</title>
+    <style>
+        body { font-family: sans-serif; margin: 0; padding: 10px; background-color: #f0f2f6; }
+        .container { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        input[type="file"] { margin-bottom: 10px; display: block; }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover { background-color: #45a049; }
+        button:disabled { background-color: #cccccc; cursor: not-allowed; }
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 20px;
+            background-color: #2196F3;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+        #uploadStatus { margin-top: 10px; font-weight: bold; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <input type="file" id="fileInput">
+        <button id="uploadButton" disabled>上傳檔案</button>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="progressBar">0%</div>
+        </div>
+        <div id="uploadStatus">請選擇檔案</div>
+    </div>
+
+    <script>
+        // This script will be loaded by the Streamlit component
+        // It will communicate with the Streamlit parent frame
+        // and handle the chunked upload logic.
+        // The actual logic will be in upload_script.js
+    </script>
+</body>
+</html>

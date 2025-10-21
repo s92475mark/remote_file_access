@@ -5,7 +5,7 @@ from share.define.model_enum import RoleName
 from datetime import datetime
 
 # --- 設定 API 的基本 URL ---
-API_URL = "http://127.0.0.1:8964/api"
+API_URL = "http://lf2theo.ddns.net:8964/api"
 
 # --- Session State 初始化 ---
 st.set_page_config(
@@ -180,28 +180,33 @@ def page_file_list():
         st.session_state.download_file = None
 
     # --- 檔案上傳區塊 ---
-    if "upload_key" not in st.session_state:
-        st.session_state.upload_key = 0
+    import streamlit.components.v1 as components
+
+    with open(r"upload_component.html", "r", encoding="utf-8") as f:
+        html_template = f.read()
+    with open(r"upload_script.js", "r", encoding="utf-8") as f:
+        js_content = f.read()
+
+    # Inject JS and Streamlit data into HTML
+    injected_script = f"""
+        <script>
+            window.STREAMLIT_API_URL = '{API_URL}';
+            window.STREAMLIT_AUTH_TOKEN = '{st.session_state.token}';
+            {js_content}
+        </script>
+    """
+
+    html_with_js = html_template.replace(
+        '<script></script>',
+        injected_script
+    )
 
     with st.expander("上傳新檔案"):
-        uploaded_file = st.file_uploader(
-            "選擇檔案", label_visibility="collapsed", key=st.session_state.upload_key
+        components.html(
+            html_with_js,
+            height=250,
+            scrolling=False,
         )
-        if uploaded_file is not None:
-            if st.button("確認上傳"):
-                # 使用 multipart/form-data 格式準備檔案
-                file_payload = {
-                    "file": (uploaded_file.name, uploaded_file, uploaded_file.type)
-                }
-                # 呼叫後端上傳 API
-                response = api_request("post", "files/upload", files=file_payload)
-
-                if response and response.status_code == 200:
-                    st.success(f"檔案 '{uploaded_file.name}' 上傳成功！")
-                    st.session_state.upload_key += 1
-                    st.rerun()  # 重新整理頁面以看到新檔案
-                elif response:
-                    st.error(f"上傳失敗: {response.json().get('message', '未知錯誤')}")
 
     # --- 檔案列表顯示區塊 ---
     # 初始化排序狀態
@@ -216,8 +221,8 @@ def page_file_list():
         "sort_by": st.session_state.sort_by,
         "order": st.session_state.sort_order,
     }
-    print("\033c", end="")
-    print("st.session_state.sort_by", st.session_state.sort_by)
+    # print("\033c", end="")
+    # print("st.session_state.sort_by", st.session_state.sort_by)
     response = api_request("get", "files/list", params=params)
 
     if response and response.status_code == 200:
@@ -564,7 +569,7 @@ left, center, right = st.columns([3, 4, 3])
 with center:
     st.title("**檔案遠端存取系統**")
     st.markdown(
-        """<marquee behavior="scroll" direction="left">目前正在修改'下載'功能，諾發現無法使用請先用"建立分享連結"</marquee>""",
+        """<marquee behavior="scroll" direction="left">目前正在維修「上傳功能」，造成不便還請見諒"</marquee>""",
         unsafe_allow_html=True,
     )
 

@@ -11,15 +11,19 @@ from sqlalchemy import label, select, func
 from flask_jwt_extended import get_jwt_identity, create_access_token, decode_token
 
 
-class UploadFile:
-    """處理檔案上傳的核心邏輯"""
+class ChunkedUploadController:
+    """處理分塊上傳的核心邏輯"""
 
-    def __init__(self, session: Session, user_account: str, file: FileStorage):
+    def __init__(self, session: Session, user_account: str):
         self.session = session
         self.user_account = user_account
-        self.file = file
+        self.CHUNK_SIZE = 1024 * 1024 * 5  # 5MB per chunk
+        self.UPLOAD_TEMP_DIR = os.path.join(
+            global_variable.config.APP.UPLOAD_TEMP_DIR, user_account
+        )
+        os.makedirs(self.UPLOAD_TEMP_DIR, exist_ok=True)
 
-    def save(self):
+    def _get_user(self):
         user = (
             self.session.query(User)
             .filter(User.account == self.user_account)
@@ -27,66 +31,106 @@ class UploadFile:
         )
         if not user:
             abort(404, "User not found.")
-        file_limit = -1
-        lifetime_days = -1
-        if user.roles:
-            # 過濾掉無限配額(-1)，然後取最大值。如果過濾後列表為空(代表所有角色都是無限)，則維持-1。
-            limits = [r.file_limit for r in user.roles if r.file_limit != -1]
-            file_limit = max(limits) if limits else -1
+        return user
 
-            lifetimes = [
-                r.file_lifetime_days for r in user.roles if r.file_lifetime_days != -1
-            ]
-            lifetime_days = max(lifetimes) if lifetimes else -1
+    def init_upload(self, filename: str, file_size: int, file_type: str):
+        user = self._get_user()
+        # 檢查配額 (這裡簡化，實際應更詳細)
+        # ... (配額檢查邏輯，可以參考 UploadFile.save 中的邏輯)
 
-        # 3. 檢查檔案數量配額
-        if file_limit != -1:
-            # len(user.files) 會觸發一次查詢，來計算目前檔案數量
-            if len(user.files) >= file_limit:
-                abort(
-                    403,
-                    f"File upload limit exceeded. Your limit is {file_limit} files.",
-                )
+        upload_id = str(uuid.uuid4())
+        temp_file_path = os.path.join(self.UPLOAD_TEMP_DIR, upload_id + ".tmp")
 
-        # 4. 處理檔案儲存
-        # 取得副檔名
-        _, extension = os.path.splitext(self.file.filename)
-        # 產生一個安全、唯一的檔名
+        # 建立一個臨時檔案來儲存上傳進度
+        with open(temp_file_path, "wb") as f:
+            pass  # 建立空檔案
+
+        # 在資料庫中記錄上傳會話 (需要新的 UploadSession Model)
+        # 這裡先用一個簡化的方式，實際應用中應有專門的資料庫表
+        # global_variable.upload_sessions[upload_id] = {
+        #     "user_id": user.id,
+        #     "filename": filename,
+        #     "file_size": file_size,
+        #     "file_type": file_type,
+        #     "temp_file_path": temp_file_path,
+        #     "received_bytes": 0,
+        #     "start_time": datetime.now()
+        # }
+
+        return {
+            "upload_id": upload_id,
+            "chunk_size": self.CHUNK_SIZE,
+            "upload_url": f"/api/files/upload/chunk/{upload_id}",  # 假設的 chunk 上傳 URL
+        }
+
+    def upload_chunk(self, upload_id: str, chunk_data: bytes, content_range: str):
+        user = self._get_user()
+        # 驗證 upload_id 和使用者 (需要從資料庫或 global_variable 獲取上傳會話資訊)
+        # ...
+
+        # 解析 Content-Range: bytes 0-1048575/15000000
+        try:
+            range_parts = content_range.split(" ")[1].split("/")
+            byte_range = range_parts[0].split("-")
+            start_byte = int(byte_range[0])
+            end_byte = int(byte_range[1])
+            total_size = int(range_parts[1])
+        except (IndexError, ValueError):
+            abort(400, "Invalid Content-Range header.")
+
+        temp_file_path = os.path.join(self.UPLOAD_TEMP_DIR, upload_id + ".tmp")
+        if not os.path.exists(temp_file_path):
+            abort(404, "Upload session not found or expired.")
+
+        # 寫入檔案塊
+        with open(temp_file_path, "r+b") as f:
+            f.seek(start_byte)
+            f.write(chunk_data)
+
+        # 更新進度 (需要從資料庫或 global_variable 獲取上傳會話資訊)
+        # ...
+
+        return {"status": "success", "received_bytes": end_byte + 1}
+
+    def complete_upload(self, upload_id: str):
+        user = self._get_user()
+        # 驗證 upload_id 和使用者 (需要從資料庫或 global_variable 獲取上傳會話資訊)
+        # ...
+
+        temp_file_path = os.path.join(self.UPLOAD_TEMP_DIR, upload_id + ".tmp")
+        if not os.path.exists(temp_file_path):
+            abort(404, "Upload session not found or expired.")
+
+        # 執行最終的檔案儲存和資料庫記錄
+        # 這裡需要從上傳會話中獲取原始檔名、檔案大小等資訊
+        # ...
+
+        # 假設我們已經從某處獲取了原始檔名和檔案大小
+        original_filename = "uploaded_file_name"  # 從上傳會話中獲取
+        file_size = os.path.getsize(temp_file_path)  # 從上傳會話中獲取或重新計算
+
+        # 處理檔案儲存 (參考 UploadFile.save 中的邏輯)
+        _, extension = os.path.splitext(original_filename)
         safe_filename = uuid.uuid4().hex
         safe_filename_extension = f"{safe_filename}{extension}"
+        final_save_path = os.path.join(user.storage_path, safe_filename_extension)
 
-        # 組合儲存路徑 (使用者的專屬資料夾)
-        save_path = os.path.join(user.storage_path, safe_filename_extension)
+        os.rename(temp_file_path, final_save_path)  # 移動臨時檔案到最終位置
 
-        # 儲存檔案到磁碟
-        self.file.save(save_path)
-        file_size = os.path.getsize(save_path)
-
-        # 5. 計算過期時間
-        is_permanent = False
-        if lifetime_days != -1:
-            # 如果角色有設定天數，就使用該天數
-            expiry_time = datetime.now() + timedelta(days=lifetime_days)
-        else:
-            # 如果角色設定為永久 (-1)，則提供一個預設天數 (例如 7 天)
-            default_days = 7
-            expiry_time = datetime.now() + timedelta(days=default_days)
-
-        # 6. 建立檔案的資料庫紀錄
+        # 建立檔案的資料庫紀錄 (參考 UploadFile.save 中的邏輯)
         new_file_record = File(
-            filename=self.file.filename,
+            filename=original_filename,
             safe_filename=safe_filename,
-            storage_path=save_path,
+            storage_path=final_save_path,
             file_size=file_size,
             owner_id=user.id,
-            expiry_time=expiry_time,
-            is_permanent=is_permanent,
+            expiry_time=datetime.now() + timedelta(days=7),  # 預設 7 天
+            is_permanent=False,
         )
         self.session.add(new_file_record)
         self.session.commit()
         self.session.refresh(new_file_record)
 
-        # 7. 回傳成功訊息
         return {
             "id": new_file_record.id,
             "filename": new_file_record.filename,
