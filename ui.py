@@ -216,8 +216,8 @@ def page_file_list():
         "sort_by": st.session_state.sort_by,
         "order": st.session_state.sort_order,
     }
-    print("\033c", end="")
-    print("st.session_state.sort_by", st.session_state.sort_by)
+    # print("\033c", end="")
+    # print("st.session_state.sort_by", st.session_state.sort_by)
     response = api_request("get", "files/list", params=params)
 
     if response and response.status_code == 200:
