@@ -194,6 +194,7 @@ def update_file_status(path: FileIdPath, body: UpdateFileStatusForm):
             is_permanent=updated_file.is_permanent,
             safe_filename=updated_file.safe_filename,
             share_token=updated_file.share_token,
+            download_url=None,
         ).model_dump()
 
 
