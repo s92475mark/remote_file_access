@@ -1,0 +1,30 @@
+[FLASK]
+HOST = "0.0.0.0"
+PORT = 8965
+DEBUG = true
+
+[APP]
+PUBLIC_DOMAIN = "http://lf2theo.ddns.net:8964"
+
+[OPENAPI]
+BLUEPRINTS = ["view.aaa.bp","view.userCtrl.userctrl","view.fileCtrl.filectrl","view.configCtrl.config_api"]
+[[OPENAPI.SERVERS]]
+url = "http://127.0.0.1:8965"
+url1 = "http://localhost:8965"
+url2 = "http://lf2theo.ddns.net:8964/api"
+
+[OPENAPI.INFO]
+title = "My API"
+
+[DATABASES.default]
+SQLALCHEMY_DATABASE_URI = "sqlite:///C:/Users/79247/Desktop/Theo/ftp/remote_file_access.db"
+
+[DATABASES.log_db]
+SQLALCHEMY_DATABASE_URI = "sqlite:///log.db"
+
+[FILE]
+path = "C:/Users/79247/Desktop/Theo/ftp"
+
+[JWT]
+JWT_SECRET_KEY = "JWT_KEY"
+JWT_ACCESS_TOKEN_EXPIRES = 120
