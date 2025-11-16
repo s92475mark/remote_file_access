@@ -11,7 +11,7 @@ API_URL = "http://127.0.0.1:8964/api"
 st.set_page_config(
     layout="wide",
     page_title="雲端分享系統",
-    page_icon="C:/Users/79247/Desktop/Theo/python_projects/remote_file_access/設計一個極簡風格的 favicon，主題.png",
+    page_icon="./設計一個極簡風格的 favicon，主題.png",
 )
 
 if "token" not in st.session_state:
