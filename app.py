@@ -1,11 +1,12 @@
 import click
 import os
 import toml
+from typing import Union
 from util.createapp import Application
 from util.config_schema import Config
 
 # --- 全域變數 ---
-CONFIG: Config | None = None
+CONFIG: Union[Config, None] = None
 
 
 @click.group()
