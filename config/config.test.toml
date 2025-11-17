@@ -4,7 +4,7 @@ PORT = 8965
 DEBUG = true
 
 [APP]
-PUBLIC_DOMAIN = "http://lf2theo.ddns.net:8964"
+PUBLIC_DOMAIN = "http://lf2theo.ddns.net:5566"
 
 [OPENAPI]
 BLUEPRINTS = ["view.aaa.bp","view.userCtrl.userctrl","view.fileCtrl.filectrl","view.configCtrl.config_api"]
