@@ -6,6 +6,8 @@ from datetime import datetime
 
 # --- 設定 API 的基本 URL ---
 API_URL = "http://backend:5042"
+# API_URL = "http://127.0.0.1:8965"
+
 
 # --- Session State 初始化 ---
 st.set_page_config(
@@ -30,7 +32,7 @@ if "public_domain" not in st.session_state:
             st.session_state.public_domain = response.json().get("public_domain")
         else:
             # 如果後端API取不到，給一個備用值
-            st.session_state.public_domain = "http://127.0.0.1:8964"
+            st.session_state.public_domain = "http://lf2theo.ddns.net:5566"
     except Exception:
         st.session_state.public_domain = "http://127.0.0.1:8964"
 
