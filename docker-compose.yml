@@ -29,7 +29,4 @@ services:
     restart: unless-stopped
     command: --interval 120 --cleanup
     volumes:
-      - docker_sock:/var/run/docker.sock
-
-volumes:
-  docker_sock:  
+      - /var/run/docker.sock:/var/run/docker.sock
