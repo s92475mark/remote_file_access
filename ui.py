@@ -12,7 +12,7 @@ API_URL = "http://backend:5042"
 # --- Session State 初始化 ---
 st.set_page_config(
     layout="wide",
-    page_title="雲端分享系統",
+    page_title="雲端分享系統2",
     page_icon="./設計一個極簡風格的 favicon，主題.png",
 )
 
