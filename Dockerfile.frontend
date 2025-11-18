@@ -16,7 +16,7 @@ EXPOSE 5001
 
 # Command to run the application
 CMD ["streamlit", "run", "ui.py", \
-     "--server.port", "5000", \
+     "--server.port", "5001", \
      "--server.baseUrlPath", "/home", \
      "--server.enableCORS", "false", \
      "--server.enableXsrfProtection", "false"]
