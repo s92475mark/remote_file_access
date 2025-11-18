@@ -24,9 +24,12 @@ services:
     restart: unless-stopped
     # command: streamlit run ui.py --server.port 5001 --server.baseUrlPath /home --server.enableCORS false --server.enableXsrfProtection false
   watchtower:
-    image: containrrr/watchtower
+    image: containrrr/watchtower:latest
     container_name: watchtower
     restart: unless-stopped
-    command: --interval 120 --cleanup --debug
+    command: --interval 60 --cleanup --debug
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - //var/run/docker.sock:/var/run/docker.sock   # Windows Docker Desktop 專用寫法
+    environment:
+      - WATCHTOWER_INCLUDE_STOPPED=false
+      - WATCHTOWER_MONITOR_ONLY=false
