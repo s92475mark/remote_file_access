@@ -2,7 +2,7 @@ name: Docker Build & Push
 
 on:
   push:
-    branches: [ Released]
+    branches: [ Released ]
     tags: [ 'v*.*.*' ]
   pull_request:
     branches: [ Released ]
@@ -20,30 +20,18 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: 產生 Docker tags
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: s92475mark/remote-file-access   # ← 這裡用你的 GitHub 名稱當 repo
-
-      - name: Build 並推到 Docker Hub
-        uses: docker/build-push-action@v6
-        with:
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
       - name: Build & Push Backend
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: Dockerfile.backend
+          file: Dockerfile.backend          # 必須指定
           push: true
           tags: theo1024/remote-file-access-backend:latest
 
       - name: Build & Push Frontend
         uses: docker/build-push-action@v6
         with:
-            context: .
-            file: Dockerfile.frontend
-            push: true
-            tags: theo1024/remote-file-access-frontend:latest
+          context: .
+          file: Dockerfile.frontend         # 必須指定
+          push: true
+          tags: theo1024/remote-file-access-frontend:latest
