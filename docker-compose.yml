@@ -27,9 +27,9 @@ services:
     image: containrrr/watchtower:latest
     container_name: watchtower
     restart: unless-stopped
-    command: --interval 60 --cleanup --debug
+    command: --interval 600 --cleanup --http-api-update
     volumes:
-      - //var/run/docker.sock:/var/run/docker.sock   # Windows Docker Desktop 專用寫法
+      - //var/run/docker.sock:/var/run/docker.sock
     environment:
-      - WATCHTOWER_INCLUDE_STOPPED=false
-      - WATCHTOWER_MONITOR_ONLY=false
+      - WATCHTOWER_TIMEOUT=120s
+      - WATCHTOWER_SCHEDULE_RETRY=3
