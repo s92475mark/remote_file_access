@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.10'
 
 services:
   backend:
@@ -17,7 +17,15 @@ services:
     container_name: rfa-frontend
     ports:
       - "5000:5001"
+    volumes: 
+      - ./.streamlit:/app/.streamlit
     depends_on:
       - backend
     restart: unless-stopped
     # command: streamlit run ui.py --server.port 5001 --server.baseUrlPath /home --server.enableCORS false --server.enableXsrfProtection false
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 300
+    restart: unless-stopped
