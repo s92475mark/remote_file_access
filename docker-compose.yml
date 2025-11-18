@@ -25,7 +25,11 @@ services:
     # command: streamlit run ui.py --server.port 5001 --server.baseUrlPath /home --server.enableCORS false --server.enableXsrfProtection false
   watchtower:
     image: containrrr/watchtower
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 300
+    container_name: watchtower
     restart: unless-stopped
+    command: --interval 120 --cleanup
+    volumes:
+      - docker_sock:/var/run/docker.sock
+
+volumes:
+  docker_sock:  
