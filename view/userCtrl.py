@@ -40,7 +40,7 @@ userctrl = APIBlueprint("userctrl", __name__, url_prefix="/userCtrl")
 
 @userctrl.post(
     "/createUser",
-    summary="建新使用者",
+    summary="建新使用者v",
     responses={200: response_CreateUser},
 )
 def create_user(body: request_CreateUser):
