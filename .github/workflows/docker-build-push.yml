@@ -2,10 +2,10 @@ name: Docker Build & Push
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ Released]
     tags: [ 'v*.*.*' ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ Released ]
 
 jobs:
   build:
@@ -29,8 +29,21 @@ jobs:
       - name: Build 並推到 Docker Hub
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: Dockerfile.backend          # ← 確認你的 Dockerfile 真的叫這個名字
-          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Build & Push Backend
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.backend
+          push: true
+          tags: theo1024/remote-file-access-backend:latest
+
+      - name: Build & Push Frontend
+        uses: docker/build-push-action@v6
+        with:
+            context: .
+            file: Dockerfile.frontend
+            push: true
+            tags: theo1024/remote-file-access-frontend:latest
