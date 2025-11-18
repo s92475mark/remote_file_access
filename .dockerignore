@@ -1,0 +1,31 @@
+# Git
+.git
+.gitignore
+
+# Python virtual environment
+rfa_env/
+.venv/
+*.pyc
+__pycache__/
+
+# Database file (will be handled by a volume)
+*.db
+*.sqlite3
+
+# IDE and OS files
+.idea/
+.vscode/
+*.sublime-*
+.DS_Store
+
+# Log files and other unnecessary files
+log/
+*.log
+error_message.txt
+gemini_project_log.txt
+#設計一個極簡風格的 favicon，主題.png
+
+# Docker files
+Dockerfile.backend
+Dockerfile.frontend
+docker-compose.yml

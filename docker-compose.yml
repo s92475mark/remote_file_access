@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "5040:5042"
+    volumes:
+      - ./config:/app/config
+      - "C:/Users/79247/Desktop/Theo/ftp:/app/ftp"
+    command: python app.py run
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5000:5001"
+    # volumes:
+      # - .:/app
+    depends_on:
+      - backend
+    command: streamlit run ui.py --server.port 5001 --server.baseUrlPath /home --server.enableCORS false --server.enableXsrfProtection false

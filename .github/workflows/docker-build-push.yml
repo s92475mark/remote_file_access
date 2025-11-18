@@ -24,7 +24,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: Dockerfile.backend          # 必須指定
+          file: Dockerfile.backend          
           push: true
           tags: theo1024/remote-file-access-backend:latest
 
@@ -32,6 +32,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: Dockerfile.frontend         # 必須指定
+          file: Dockerfile.frontend         
           push: true
           tags: theo1024/remote-file-access-frontend:latest

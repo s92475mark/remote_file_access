@@ -7,8 +7,3 @@ alembic.ini
 *.pyc
 *.sublime-workspace
 data_permission.txt
-
-docker-compose.yml
-Dockerfile.backend
-Dockerfile.frontend
-.dockerignore
