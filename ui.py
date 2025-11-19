@@ -154,7 +154,8 @@ def page_login():
                         st.session_state.user_role = login_data.get("level_name")
                         st.session_state.user_name = login_data.get("user_name")  # 新增
                         st.rerun()
-
+                    elif response.status_code == 401:
+                        st.error(f"帳號密碼錯誤")
                     else:
                         st.error(f"登入失敗: {response.json().get('message', '未知錯誤')}")
                 except requests.exceptions.RequestException as e:
