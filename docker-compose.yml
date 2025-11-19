@@ -1,4 +1,4 @@
-version: '3.10'
+version: '3.11'
 
 services:
   backend:
@@ -27,7 +27,7 @@ services:
     image: containrrr/watchtower:latest
     container_name: watchtower
     restart: unless-stopped
-    command: --interval 600 --cleanup --http-api-update
+    command: --interval 60 --cleanup
     volumes:
       - //var/run/docker.sock:/var/run/docker.sock
     environment:
