@@ -5,8 +5,8 @@ from share.define.model_enum import RoleName
 from datetime import datetime
 
 # --- 設定 API 的基本 URL ---
-API_URL = "http://backend:5042"
-# API_URL = "http://127.0.0.1:8965"
+# API_URL = "http://backend:5042"
+API_URL = "http://127.0.0.1:8965"
 
 
 # --- Session State 初始化 ---
@@ -72,6 +72,33 @@ def api_request(method, endpoint, **kwargs):
         return None
 
 
+def format_bytes(size_bytes):
+    """將位元組數轉換為可讀的單位 (B, KB, MB, GB, TB)"""
+    if size_bytes is None:
+        return "N/A"
+
+    # 確保 size_bytes 是數字
+    try:
+        size_bytes = float(size_bytes)
+    except (ValueError, TypeError):
+        return "N/A"
+
+    if size_bytes == 0:
+        return "0 Bytes"
+
+    # 定義單位和閾值
+    units = ["Bytes", "KB", "MB", "GB", "TB"]
+    threshold = 1024.0
+
+    # 計算最適合的單位
+    for i in range(len(units)):
+        if size_bytes < threshold ** (i + 1):
+            return f"{size_bytes / (threshold**i):.2f} {units[i]}"
+
+    # 如果超過 TB，就用最大的單位表示
+    return f"{size_bytes / (threshold**(len(units)-1)):.2f} {units[-1]}"
+
+
 def handle_status_change(safe_filename: str):
     """當下拉選單變動時，呼叫 API 更新檔案狀態"""
     # 從 session_state 讀取新選擇的值
@@ -127,6 +154,7 @@ def page_login():
                         st.session_state.user_role = login_data.get("level_name")
                         st.session_state.user_name = login_data.get("user_name")  # 新增
                         st.rerun()
+
                     else:
                         st.error(f"登入失敗: {response.json().get('message', '未知錯誤')}")
                 except requests.exceptions.RequestException as e:
@@ -266,7 +294,7 @@ def page_file_list():
 
                 # 建立可排序的標頭
                 create_sort_button(col1, "filename", "檔案名稱")
-                create_sort_button(col2, "size_bytes", "size")
+                create_sort_button(col2, "size_bytes", "檔案大小")
                 create_sort_button(col3, "upload_time", "上傳時間")
 
                 # 建立不可排序的標頭 (使用 disabled button 以統一外觀)
@@ -290,7 +318,7 @@ def page_file_list():
                     with col1:
                         st.write(f["filename"])
                     with col2:
-                        st.write(f["size_bytes"])
+                        st.write(format_bytes(f["size_bytes"]))
                     with col3:
                         st.write(f["upload_time"])
                     with col4:
@@ -450,12 +478,7 @@ def page_user_management():
             for user in users:
                 # 格式化空間使用量
                 storage_usage_bytes = user.get("total_file_size", 0)
-                if storage_usage_bytes > (1024 * 1024):
-                    storage_display = f"{storage_usage_bytes / (1024 * 1024):.2f} MB"
-                elif storage_usage_bytes > 1024:
-                    storage_display = f"{storage_usage_bytes / 1024:.2f} KB"
-                else:
-                    storage_display = f"{storage_usage_bytes} Bytes"
+                storage_display = format_bytes(storage_usage_bytes)
 
                 cols = st.columns([2, 2, 2, 2, 2, 2])
                 cols[0].write(user.get("account"))
@@ -485,14 +508,9 @@ def page_change_password():
     if response and response.status_code == 200:
         user_info = response.json()
 
-        # 格式化空間使用量 (例如: 1024 KB -> 1 MB)
+        # 格式化空間使用量
         storage_usage_bytes = user_info.get("storage_usage", 0)
-        if storage_usage_bytes > (1024 * 1024):
-            storage_display = f"{storage_usage_bytes / (1024 * 1024):.2f} MB"
-        elif storage_usage_bytes > 1024:
-            storage_display = f"{storage_usage_bytes / 1024:.2f} KB"
-        else:
-            storage_display = f"{storage_usage_bytes} Bytes"
+        storage_display = format_bytes(storage_usage_bytes)
 
         col1, col2 = st.columns(2)
         with col1:
