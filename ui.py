@@ -231,6 +231,8 @@ def page_file_list():
                     st.success(f"檔案 '{uploaded_file.name}' 上傳成功！")
                     st.session_state.upload_key += 1
                     st.rerun()  # 重新整理頁面以看到新檔案
+                elif response.status_code == 403:
+                    st.error(f"檔案上傳已達上限")
                 elif response:
                     st.error(f"上傳失敗: {response.json().get('message', '未知錯誤')}")
 
