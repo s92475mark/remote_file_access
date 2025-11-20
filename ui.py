@@ -5,8 +5,8 @@ from share.define.model_enum import RoleName
 from datetime import datetime
 
 # --- 設定 API 的基本 URL ---
-# API_URL = "http://backend:5042"
-API_URL = "http://127.0.0.1:8965"
+API_URL = "http://backend:5042"
+# API_URL = "http://127.0.0.1:8965"
 
 
 # --- Session State 初始化 ---
