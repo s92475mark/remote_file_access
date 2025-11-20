@@ -58,6 +58,9 @@ class UploadFile:
         # 組合儲存路徑 (使用者的專屬資料夾)
         save_path = os.path.join(user.storage_path, safe_filename_extension)
 
+        # 確保目標資料夾存在
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
+
         # 儲存檔案到磁碟
         self.file.save(save_path)
         file_size = os.path.getsize(save_path)

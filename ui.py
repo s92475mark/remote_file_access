@@ -3,10 +3,11 @@ import requests
 from streamlit_option_menu import option_menu
 from share.define.model_enum import RoleName
 from datetime import datetime
+import streamlit.components.v1 as components
 
 # --- 設定 API 的基本 URL ---
-API_URL = "http://backend:5042"
-# API_URL = "http://127.0.0.1:8965"
+# API_URL = "http://backend:5042"
+API_URL = "http://127.0.0.1:8965"
 
 
 # --- Session State 初始化 ---
@@ -170,6 +171,37 @@ def page_file_list():
         div[data-testid="stHorizontalBlock"] {
             align-items: center;
         }
+        /* 讓上傳元件的按鈕更好看 */
+        #upload-button {
+            background-color: #0068c9;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #upload-button:hover {
+            background-color: #00509e;
+        }
+        #file-input {
+            display: none;
+        }
+        #progress-container {
+            width: 100%;
+            background-color: #f3f3f3;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        #progress-bar {
+            width: 0%;
+            height: 20px;
+            background-color: #4caf50;
+            border-radius: 5px;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -210,31 +242,136 @@ def page_file_list():
         # 清除 session state，避免重複顯示下載按鈕
         st.session_state.download_file = None
 
-    # --- 檔案上傳區塊 ---
-    if "upload_key" not in st.session_state:
-        st.session_state.upload_key = 0
-
+    # --- 檔案上傳區塊 (使用檔案切塊) ---
     with st.expander("上傳新檔案"):
-        uploaded_file = st.file_uploader(
-            "選擇檔案", label_visibility="collapsed", key=st.session_state.upload_key
-        )
-        if uploaded_file is not None:
-            if st.button("確認上傳"):
-                # 使用 multipart/form-data 格式準備檔案
-                file_payload = {
-                    "file": (uploaded_file.name, uploaded_file, uploaded_file.type)
-                }
-                # 呼叫後端上傳 API
-                response = api_request("post", "files/upload", files=file_payload)
+        uploader_html = f"""
+        <div id="upload-container">
+            <input type="file" id="file-input" />
+            <button id="upload-button">選擇檔案</button>
+            <div id="status"></div>
+            <div id="progress-container" style="display: none;">
+                <div id="progress-bar">0%</div>
+            </div>
+        </div>
 
-                if response and response.status_code == 200:
-                    st.success(f"檔案 '{uploaded_file.name}' 上傳成功！")
-                    st.session_state.upload_key += 1
-                    st.rerun()  # 重新整理頁面以看到新檔案
-                elif response.status_code == 403:
-                    st.error(f"檔案上傳已達上限")
-                elif response:
-                    st.error(f"上傳失敗: {response.json().get('message', '未知錯誤')}")
+        <script>
+        window.addEventListener('load', function() {{
+            const fileInput = document.getElementById('file-input');
+            const uploadButton = document.getElementById('upload-button');
+            const statusDiv = document.getElementById('status');
+            const progressContainer = document.getElementById('progress-container');
+            const progressBar = document.getElementById('progress-bar');
+            const api_url = "{API_URL}";
+            const token = "{st.session_state.token}";
+
+            // Ensure Streamlit object is available
+            function setStreamlitValue(value) {{
+                if (window.Streamlit) {{
+                    Streamlit.setComponentValue(value);
+                }} else {{
+                    console.error("Streamlit object not found, retrying in 100ms...");
+                    setTimeout(() => setStreamlitValue(value), 100);
+                }}
+            }}
+
+            uploadButton.onclick = () => fileInput.click();
+
+            fileInput.onchange = async (e) => {{
+                const file = e.target.files[0];
+                if (!file) return;
+
+                uploadButton.disabled = true;
+                uploadButton.innerText = '上傳中...';
+                statusDiv.innerText = `準備上傳: ${{file.name}}`;
+                progressContainer.style.display = 'block';
+
+                const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
+                const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+                const uploadId = `${{file.name}}-${{Date.now()}}`;
+
+                let start = 0;
+                let chunkIndex = 0;
+                let success = true;
+
+                while (start < file.size) {{
+                    const end = Math.min(start + CHUNK_SIZE, file.size);
+                    const chunk = file.slice(start, end);
+
+                    const formData = new FormData();
+                    formData.append('chunk', chunk, file.name);
+                    formData.append('upload_id', uploadId);
+                    formData.append('chunk_index', chunkIndex);
+                    formData.append('content_type', file.type);
+
+                    try {{
+                        const response = await fetch(`${{api_url}}/files/upload_chunk`, {{
+                            method: 'POST',
+                            body: formData,
+                        }});
+
+                        if (!response.ok) {{
+                            const error = await response.json();
+                            throw new Error(`檔案塊 ${{chunkIndex + 1}} 上傳失敗: ${{error.message || response.statusText}}`);
+                        }}
+
+                        chunkIndex++;
+                        start += CHUNK_SIZE;
+                        const progress = Math.round((chunkIndex / totalChunks) * 100);
+                        progressBar.style.width = `${{progress}}%`;
+                        progressBar.innerText = `${{progress}}%`;
+
+                    }} catch (error) {{
+                        statusDiv.innerText = `錯誤: ${{error.message}}`;
+                        statusDiv.style.color = 'red';
+                        success = false;
+                        break;
+                    }}
+                }}
+
+                if (success) {{
+                    statusDiv.innerText = '所有檔案塊上傳完畢，正在合併檔案...';
+                    try {{
+                        const completeResponse = await fetch(`${{api_url}}/files/upload_complete`, {{
+                            method: 'POST',
+                            headers: {{
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${{token}}`
+                            }},
+                            body: JSON.stringify({{
+                                upload_id: uploadId,
+                                filename: file.name,
+                                total_chunks: totalChunks
+                            }})
+                        }});
+
+                        if (completeResponse.ok) {{
+                            const result = await completeResponse.json();
+                            statusDiv.innerText = `成功: '${{file.name}}' 上傳成功！`;
+                            statusDiv.style.color = 'green';
+                            // 通知 Streamlit 刷新
+                            setStreamlitValue({{ "status": "success" }});
+                        }} else {{
+                            const error = await completeResponse.json();
+                            throw new Error(`檔案合併失敗: ${{error.detail || error.message || '未知錯誤'}}`);
+                        }}
+                    }} catch (error) {{
+                        statusDiv.innerText = `錯誤: ${{error.message}}`;
+                        statusDiv.style.color = 'red';
+                    }}
+                }}
+
+                uploadButton.disabled = false;
+                uploadButton.innerText = '選擇檔案';
+                // Reset file input to allow re-uploading the same file
+                fileInput.value = '';
+            }};
+        }});
+        </script>
+        """
+        upload_status = components.html(uploader_html, height=100)
+
+        if upload_status == {"status": "success"}:
+            st.rerun()
 
     # --- 檔案列表顯示區塊 ---
     # 初始化排序狀態

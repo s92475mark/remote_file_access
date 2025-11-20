@@ -16,6 +16,7 @@ from jwt.exceptions import ExpiredSignatureError
 from apscheduler.schedulers.background import BackgroundScheduler
 import atexit
 from util.register_jobs import scheduler_jobs
+from flask_cors import CORS
 
 
 class Application:
@@ -50,6 +51,10 @@ class Application:
                 )
             },
         )
+
+        # --- 新增：設定 CORS ---
+        CORS(self.app, resources={r"/*": {"origins": "*"}})
+        # --- 結束 ---
 
         # --- 資料庫連線設定 ---
         global_variable.database = {}  # 初始化為字典

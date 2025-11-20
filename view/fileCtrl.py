@@ -1,10 +1,13 @@
 from flask_openapi3 import APIBlueprint, Tag
-from flask import send_file, abort, request
+from flask import send_file, abort, request, jsonify
 from flask_openapi3.models.file import FileStorage
 from pydantic import BaseModel, Field
 from flask_jwt_extended import get_jwt_identity, create_access_token, decode_token
 from jwt.exceptions import PyJWTError
 from datetime import datetime, timedelta
+import os
+import shutil
+from werkzeug.utils import secure_filename
 
 from schema.request_userCtrl import FileInfo
 
@@ -25,12 +28,27 @@ from controller.Cont_fileCtrl import (
 tag = Tag(name="File Operations", description="檔案相關操作")
 filectrl = APIBlueprint("filectrl", __name__, url_prefix="/files", abp_tags=[tag])
 
+# --- 新增：檔案切塊上傳相關設定 ---
+TEMP_UPLOAD_FOLDER = "share/temp_uploads"
+if not os.path.exists(TEMP_UPLOAD_FOLDER):
+    os.makedirs(TEMP_UPLOAD_FOLDER)
+
 
 # --- Pydantic 模型定義 ---
 class FileUploadForm(BaseModel):
     """檔案上傳表單模型"""
 
     file: FileStorage = Field(..., description="要上傳的檔案")
+
+
+class ChunkUploadResponse(BaseModel):
+    message: str = "Chunk uploaded successfully"
+
+
+class UploadCompleteBody(BaseModel):
+    upload_id: str = Field(..., description="唯一的上傳ID")
+    filename: str = Field(..., description="原始檔案名稱")
+    total_chunks: int = Field(..., description="總塊數")
 
 
 class FileUploadResponse(BaseModel):
@@ -93,6 +111,103 @@ class FileListQuery(BaseModel):
 
 
 # --- API 端點定義 ---
+
+
+@filectrl.post("/upload_chunk", summary="上傳檔案塊", responses={200: ChunkUploadResponse})
+def upload_chunk():
+    """
+    上傳單個檔案塊。
+    - 這個端點沒有 JWT 驗證，依賴最後的 complete 步驟進行驗證。
+    """
+    upload_id = request.form.get("upload_id")
+    chunk_index = request.form.get("chunk_index")
+    chunk_file = request.files.get("chunk")
+
+    if not all([upload_id, chunk_index is not None, chunk_file]):
+        abort(400, "Missing upload_id, chunk_index, or chunk file.")
+
+    # 清理 upload_id 和 chunk_index 以防止路徑遍歷攻擊
+    safe_upload_id = secure_filename(upload_id)
+    safe_chunk_index = secure_filename(chunk_index)
+
+    temp_chunk_path = os.path.join(
+        TEMP_UPLOAD_FOLDER, f"{safe_upload_id}_part_{safe_chunk_index}"
+    )
+    chunk_file.save(temp_chunk_path)
+
+    return jsonify({"message": "Chunk uploaded successfully"}), 200
+
+
+@filectrl.post(
+    "/upload_complete",
+    summary="完成檔案上傳並合併塊",
+    responses={200: FileUploadResponse},
+    security=[{"BearerAuth": []}],
+)
+@permission_required("file:upload")
+def upload_complete(body: UploadCompleteBody):
+    """
+    在所有檔案塊上傳完成後，合併它們並完成檔案儲存流程。
+    - 需要 'file:upload' 權限。
+    """
+    safe_upload_id = secure_filename(body.upload_id)
+    safe_filename = secure_filename(body.filename)
+    total_chunks = body.total_chunks
+
+    chunk_files = [
+        f
+        for f in os.listdir(TEMP_UPLOAD_FOLDER)
+        if f.startswith(f"{safe_upload_id}_part_")
+    ]
+
+    if len(chunk_files) != total_chunks:
+        # 清理不完整的塊
+        for f in chunk_files:
+            os.remove(os.path.join(TEMP_UPLOAD_FOLDER, f))
+        abort(
+            400,
+            f"Incorrect chunk count. Expected {total_chunks}, found {len(chunk_files)}.",
+        )
+
+    # 排序塊並合併
+    chunk_files.sort(key=lambda x: int(x.split("_part_")[-1]))
+
+    # 合併到一個臨時的最終檔案
+    temp_final_path = os.path.join(TEMP_UPLOAD_FOLDER, f"{safe_upload_id}.tmp")
+    with open(temp_final_path, "wb") as final_file:
+        for chunk_name in chunk_files:
+            with open(os.path.join(TEMP_UPLOAD_FOLDER, chunk_name), "rb") as chunk_file:
+                final_file.write(chunk_file.read())
+
+    # --- 使用現有的 UploadFile 邏輯 ---
+    # 1. 建立一個模擬的 FileStorage 物件
+    class MockFileStorage:
+        def __init__(self, filepath, filename):
+            self.filepath = filepath
+            self.filename = filename
+            self.content_type = request.form.get(
+                "content_type", "application/octet-stream"
+            )
+
+        def save(self, dst):
+            # 當 UploadFile.save() 呼叫此方法時，我們移動已經合併好的檔案
+            shutil.move(self.filepath, dst)
+
+    mock_file = MockFileStorage(temp_final_path, safe_filename)
+
+    # 2. 執行現有的儲存邏輯
+    current_user_account = get_jwt_identity()
+    with get_db_session() as db:
+        logic = UploadFile(
+            session=db, user_account=current_user_account, file=mock_file
+        )
+        result = logic.save()
+
+    # 3. 清理臨時的檔案塊
+    for chunk_name in chunk_files:
+        os.remove(os.path.join(TEMP_UPLOAD_FOLDER, chunk_name))
+
+    return jsonify(result), 200
 
 
 @filectrl.post(
