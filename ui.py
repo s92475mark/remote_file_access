@@ -261,7 +261,13 @@ def page_file_list():
             const statusDiv = document.getElementById('status');
             const progressContainer = document.getElementById('progress-container');
             const progressBar = document.getElementById('progress-bar');
-            const api_url = "{API_URL}";
+            const api_url_from_python = "{API_URL}"; // This is for Python's internal use.
+            const backend_host_port = 8965; // The external port mapped to the Flask backend
+
+            // For client-side JavaScript, construct the API URL dynamically
+            // using the same host as the Streamlit app, but the backend's exposed port.
+            const api_url = `${{window.location.protocol}}//${{window.location.hostname}}:${{backend_host_port}}`;
+
             const token = "{st.session_state.token}";
 
             // Ensure Streamlit object is available
