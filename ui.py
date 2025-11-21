@@ -11,6 +11,8 @@ API_URL = "http://backend:5042"
 # API_URL = "http://127.0.0.1:8965"
 
 
+
+
 # --- Session State 初始化 ---
 st.set_page_config(
     layout="wide",
@@ -34,7 +36,8 @@ if "public_domain" not in st.session_state:
             st.session_state.public_domain = response.json().get("public_domain")
         else:
             # 如果後端API取不到，給一個備用值
-            st.session_state.public_domain = "http://lf2theo.ddns.net:5566"
+            st.session_state.public_domain = "http://lf2theo.ddns.net:5566/api"
+            # st.session_state.public_domain = "http://127.0.0.1:8965"
     except Exception:
         st.session_state.public_domain = "http://127.0.0.1:8964"
 
@@ -248,7 +251,8 @@ def page_file_list():
         # 構建客戶端可訪問的 API URL
         # 使用 public_domain 作為基礎 URL（通常是 http://lf2theo.ddns.net:5566）
         # 然後添加 /api 前綴來訪問後端 API
-        public_domain = st.session_state.get("public_domain", "http://lf2theo.ddns.net:5566")
+        # public_domain = st.session_state.get("public_domain", "http://lf2theo.ddns.net:5566/api")
+        public_domain = st.session_state.get("public_domain", "http://127.0.0.1:8963")
         
         uploader_html = f"""
         <div id="upload-container">
@@ -399,12 +403,22 @@ def page_file_list():
             const token = "{st.session_state.token}";
 
             // Ensure Streamlit object is available
-            function setStreamlitValue(value) {{
+            function setStreamlitValue(value, retryCount = 0) {{
+                const maxRetries = 10; // 最多重试 10 次（1 秒）
+                
                 if (window.Streamlit) {{
-                    Streamlit.setComponentValue(value);
+                    try {{
+                        Streamlit.setComponentValue(value);
+                        console.log("成功通知 Streamlit 刷新");
+                    }} catch (e) {{
+                        console.error("调用 Streamlit.setComponentValue 失败:", e);
+                    }}
+                }} else if (retryCount < maxRetries) {{
+                    // 只在重试次数未达到上限时继续重试
+                    setTimeout(() => setStreamlitValue(value, retryCount + 1), 100);
                 }} else {{
-                    console.error("Streamlit object not found, retrying in 100ms...");
-                    setTimeout(() => setStreamlitValue(value), 100);
+                    // 达到最大重试次数后，静默失败（不输出错误，避免控制台刷屏）
+                    console.warn("Streamlit object 在 1 秒内未找到，停止重试");
                 }}
             }}
 
@@ -445,7 +459,7 @@ def page_file_list():
                     formData.append('content_type', file.type);
 
                     try {{
-                        const response = await fetch(`${{api_url}}/api/files/upload_chunk`, {{
+                        const response = await fetch(`${{api_url}}/files/upload_chunk`, {{
                             method: 'POST',
                             body: formData,
                         }});
@@ -472,7 +486,7 @@ def page_file_list():
                 if (success) {{
                     statusDiv.innerText = '所有檔案塊上傳完畢，正在合併檔案...';
                     try {{
-                        const completeResponse = await fetch(`${{api_url}}/api/files/upload_complete`, {{
+                        const completeResponse = await fetch(`${{api_url}}/files/upload_complete`, {{
                             method: 'POST',
                             headers: {{
                                 'Content-Type': 'application/json',
