@@ -401,6 +401,11 @@ def page_file_list():
             }}
 
             const token = "{st.session_state.token}";
+            const MAX_CHUNK_RETRY = 3;
+            const RETRY_DELAY_MS = 1500;
+            const RETRIABLE_STATUS = new Set([502, 503, 504, 522]);
+            const CHUNK_SIZE = 1 * 1024 * 1024; // 1MB，降低每次請求的壓力
+            const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
             // Ensure Streamlit object is available
             function setStreamlitValue(value, retryCount = 0) {{
@@ -439,8 +444,66 @@ def page_file_list():
                 uploadButton.innerText = '上傳中...';
                 statusDiv.innerText = `準備上傳: ${{file.name}}`;
                 progressContainer.style.display = 'block';
+                statusDiv.style.color = '#333';
 
-                const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
+                const safeParseError = async (response) => {{
+                    if (!response) {{
+                        return '未知錯誤';
+                    }}
+                    try {{
+                        const data = await response.clone().json();
+                        return data.detail || data.message || response.statusText || '未知錯誤';
+                    }} catch (jsonError) {{
+                        try {{
+                            const text = await response.text();
+                            return text || response.statusText || '未知錯誤';
+                        }} catch (textError) {{
+                            return response.statusText || '未知錯誤';
+                        }}
+                    }}
+                }};
+
+                const uploadChunkWithRetry = async (chunk, chunkIndex) => {{
+                    for (let attempt = 1; attempt <= MAX_CHUNK_RETRY; attempt++) {{
+                        try {{
+                            const formData = new FormData();
+                            formData.append('chunk', chunk, file.name);
+                            formData.append('upload_id', uploadId);
+                            formData.append('chunk_index', chunkIndex);
+                            formData.append('content_type', file.type || 'application/octet-stream');
+
+                            const response = await fetch(`${{api_url}}/files/upload_chunk`, {{
+                                method: 'POST',
+                                body: formData,
+                            }});
+
+                            if (response.ok) {{
+                                return;
+                            }}
+
+                            const errorMessage = await safeParseError(response);
+                            if (RETRIABLE_STATUS.has(response.status) && attempt < MAX_CHUNK_RETRY) {{
+                                const waitSeconds = Math.ceil((RETRY_DELAY_MS * attempt) / 1000);
+                                statusDiv.innerText = `檔案塊 ${{chunkIndex + 1}} 遭遇 ${{response.status}}，${{waitSeconds}} 秒後重試...`;
+                                statusDiv.style.color = '#f39c12';
+                                await sleep(RETRY_DELAY_MS * attempt);
+                                continue;
+                            }}
+
+                            throw new Error(`檔案塊 ${{chunkIndex + 1}} 上傳失敗: ${{errorMessage}}`);
+                        }} catch (networkError) {{
+                            if (attempt < MAX_CHUNK_RETRY) {{
+                                const waitSeconds = Math.ceil((RETRY_DELAY_MS * attempt) / 1000);
+                                statusDiv.innerText = `網路異常，正在重新嘗試檔案塊 ${{chunkIndex + 1}} (第 ${{attempt + 1}} 次)，${{waitSeconds}} 秒後重試...`;
+                                statusDiv.style.color = '#f39c12';
+                                await sleep(RETRY_DELAY_MS * attempt);
+                            }} else {{
+                                throw networkError;
+                            }}
+                        }}
+                    }}
+                }};
+
                 const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
                 const uploadId = `${{file.name}}-${{Date.now()}}`;
 
@@ -452,28 +515,14 @@ def page_file_list():
                     const end = Math.min(start + CHUNK_SIZE, file.size);
                     const chunk = file.slice(start, end);
 
-                    const formData = new FormData();
-                    formData.append('chunk', chunk, file.name);
-                    formData.append('upload_id', uploadId);
-                    formData.append('chunk_index', chunkIndex);
-                    formData.append('content_type', file.type);
-
                     try {{
-                        const response = await fetch(`${{api_url}}/files/upload_chunk`, {{
-                            method: 'POST',
-                            body: formData,
-                        }});
-
-                        if (!response.ok) {{
-                            const error = await response.json();
-                            throw new Error(`檔案塊 ${{chunkIndex + 1}} 上傳失敗: ${{error.message || response.statusText}}`);
-                        }}
-
+                        await uploadChunkWithRetry(chunk, chunkIndex);
                         chunkIndex++;
-                        start += CHUNK_SIZE;
+                        start = end;
                         const progress = Math.round((chunkIndex / totalChunks) * 100);
                         progressBar.style.width = `${{progress}}%`;
                         progressBar.innerText = `${{progress}}%`;
+                        statusDiv.style.color = '#333';
 
                     }} catch (error) {{
                         statusDiv.innerText = `錯誤: ${{error.message}}`;
@@ -506,8 +555,8 @@ def page_file_list():
                             // 通知 Streamlit 刷新
                             setStreamlitValue({{ "status": "success" }});
                         }} else {{
-                            const error = await completeResponse.json();
-                            throw new Error(`檔案合併失敗: ${{error.detail || error.message || '未知錯誤'}}`);
+                            const errorDetail = await safeParseError(completeResponse);
+                            throw new Error(`檔案合併失敗: ${{errorDetail}}`);
                         }}
                     }} catch (error) {{
                         statusDiv.innerText = `錯誤: ${{error.message}}`;
