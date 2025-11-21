@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+from streamlit.elements.lib.utils import Key
 from streamlit_option_menu import option_menu
 from share.define.model_enum import RoleName
 from datetime import datetime
@@ -266,7 +267,7 @@ def page_file_list():
 
             // For client-side JavaScript, construct the API URL dynamically
             // using the same host as the Streamlit app, but the backend's exposed port.
-            const api_url = `${{window.location.protocol}}//${{window.location.hostname}}:${{backend_host_port}}`;
+            const api_url = window.location.protocol + '//' + window.location.hostname + ':' + backend_host_port;
 
             const token = "{st.session_state.token}";
 
