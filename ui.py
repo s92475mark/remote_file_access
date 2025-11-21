@@ -572,9 +572,13 @@ def page_file_list():
         }});
         </script>
         """
-        upload_status = components.html(uploader_html, height=100)
+        upload_status = components.html(
+            uploader_html,
+            height=120,
+            key="chunk_uploader_component",
+        )
 
-        if upload_status == {"status": "success"}:
+        if isinstance(upload_status, dict) and upload_status.get("status") == "success":
             st.rerun()
 
     # --- 檔案列表顯示區塊 ---
