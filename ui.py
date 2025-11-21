@@ -11,8 +11,6 @@ API_URL = "http://backend:5042"
 # API_URL = "http://127.0.0.1:8965"
 
 
-
-
 # --- Session State 初始化 ---
 st.set_page_config(
     layout="wide",
@@ -253,7 +251,7 @@ def page_file_list():
         # 然後添加 /api 前綴來訪問後端 API
         # public_domain = st.session_state.get("public_domain", "http://lf2theo.ddns.net:5566/api")
         public_domain = st.session_state.get("public_domain", "http://127.0.0.1:8963")
-        
+
         uploader_html = f"""
         <div id="upload-container">
             <input type="file" id="file-input" />
@@ -572,13 +570,9 @@ def page_file_list():
         }});
         </script>
         """
-        upload_status = components.html(
-            uploader_html,
-            height=120,
-            key="chunk_uploader_component",
-        )
+        upload_status = components.html(uploader_html, height=100)
 
-        if isinstance(upload_status, dict) and upload_status.get("status") == "success":
+        if upload_status == {"status": "success"}:
             st.rerun()
 
     # --- 檔案列表顯示區塊 ---
