@@ -246,9 +246,9 @@ def page_file_list():
     # --- 檔案上傳區塊 (使用檔案切塊) ---
     with st.expander("上傳新檔案"):
         # 構建客戶端可訪問的 API URL
-        # 在 Docker 環境中，前端容器外部端口是 5000，後端容器外部端口是 5040
-        # 我們需要從瀏覽器的角度構建 URL，所以使用相同的 hostname 但不同的端口
-        backend_external_port = 5040  # 從 docker-compose.yml 中的端口映射
+        # 使用 public_domain 作為基礎 URL（通常是 http://lf2theo.ddns.net:5566）
+        # 然後添加 /api 前綴來訪問後端 API
+        public_domain = st.session_state.get("public_domain", "http://lf2theo.ddns.net:5566")
         
         uploader_html = f"""
         <div id="upload-container">
@@ -267,10 +267,23 @@ def page_file_list():
             const statusDiv = document.getElementById('status');
             const progressContainer = document.getElementById('progress-container');
             const progressBar = document.getElementById('progress-bar');
-            const backend_external_port = {backend_external_port};
+            const public_domain = "{public_domain}";
 
-            // 構建 API URL - 處理 Streamlit HTML 組件在 about:srcdoc iframe 中的情況
+            // 構建 API URL - 使用 public_domain 作為基礎 URL
             function buildApiUrl() {{
+                // 直接使用 public_domain，它已經包含了正確的協議、hostname 和端口
+                try {{
+                    const baseUrl = new URL(public_domain);
+                    // 確保 URL 有效
+                    if (['http:', 'https:'].includes(baseUrl.protocol)) {{
+                        console.log('使用 public_domain 作為 API 基礎 URL:', public_domain);
+                        return public_domain;
+                    }}
+                }} catch (e) {{
+                    console.warn('public_domain URL 無效，嘗試動態構建:', e);
+                }}
+                
+                // 如果 public_domain 無效，則動態構建（備用方案）
                 let protocol = 'http:';
                 let hostname = 'localhost';
                 
@@ -351,7 +364,8 @@ def page_file_list():
                     hostname = 'localhost';
                 }}
                 
-                const port = backend_external_port;
+                // 備用方案：使用 localhost:5566（如果動態構建失敗）
+                const port = 5566;
                 
                 // 構建 URL
                 const url = `${{protocol}}//${{hostname}}:${{port}}`;
@@ -364,7 +378,7 @@ def page_file_list():
                         console.error('無效的協議:', testUrl.protocol);
                         return null;
                     }}
-                    console.log('構建的 API URL:', url);
+                    console.log('構建的 API URL (備用方案):', url);
                     return url;
                 }} catch (e) {{
                     console.error('構建的 API URL 無效:', url, e);
@@ -431,7 +445,7 @@ def page_file_list():
                     formData.append('content_type', file.type);
 
                     try {{
-                        const response = await fetch(`${{api_url}}/files/upload_chunk`, {{
+                        const response = await fetch(`${{api_url}}/api/files/upload_chunk`, {{
                             method: 'POST',
                             body: formData,
                         }});
@@ -458,7 +472,7 @@ def page_file_list():
                 if (success) {{
                     statusDiv.innerText = '所有檔案塊上傳完畢，正在合併檔案...';
                     try {{
-                        const completeResponse = await fetch(`${{api_url}}/files/upload_complete`, {{
+                        const completeResponse = await fetch(`${{api_url}}/api/files/upload_complete`, {{
                             method: 'POST',
                             headers: {{
                                 'Content-Type': 'application/json',
