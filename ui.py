@@ -245,6 +245,11 @@ def page_file_list():
 
     # --- 檔案上傳區塊 (使用檔案切塊) ---
     with st.expander("上傳新檔案"):
+        # 構建客戶端可訪問的 API URL
+        # 在 Docker 環境中，前端容器外部端口是 5000，後端容器外部端口是 5040
+        # 我們需要從瀏覽器的角度構建 URL，所以使用相同的 hostname 但不同的端口
+        backend_external_port = 5040  # 從 docker-compose.yml 中的端口映射
+        
         uploader_html = f"""
         <div id="upload-container">
             <input type="file" id="file-input" />
@@ -262,27 +267,104 @@ def page_file_list():
             const statusDiv = document.getElementById('status');
             const progressContainer = document.getElementById('progress-container');
             const progressBar = document.getElementById('progress-bar');
-            const api_url_from_python = "{API_URL}"; // This is for Python's internal use.
-            const backend_host_port = 5040; // The external port mapped to the Flask backend (from docker-compose.yml)
+            const backend_external_port = {backend_external_port};
 
-            // For client-side JavaScript, construct the API URL dynamically
-            // using the same host as the Streamlit app, but the backend's exposed port.
+            // 構建 API URL - 處理 Streamlit HTML 組件在 about:srcdoc iframe 中的情況
             function buildApiUrl() {{
-                const protocol = window.location.protocol || 'http:';
-                const hostname = window.location.hostname || 'localhost';
-                const port = backend_host_port;
+                let protocol = 'http:';
+                let hostname = 'localhost';
                 
-                // Validate that we have valid components
-                if (!hostname || !port) {{
-                    console.error('無法構建 API URL: hostname 或 port 無效');
-                    return null;
+                // 方法1: 嘗試從頂層窗口獲取 location（最可靠）
+                try {{
+                    if (window.top && window.top.location && window.top.location !== window.location) {{
+                        const topLocation = window.top.location;
+                        if (topLocation.protocol && topLocation.protocol !== 'about:') {{
+                            protocol = topLocation.protocol;
+                        }}
+                        if (topLocation.hostname && topLocation.hostname !== '') {{
+                            hostname = topLocation.hostname;
+                        }}
+                    }}
+                }} catch (e) {{
+                    // 跨域錯誤，繼續嘗試其他方法
+                    console.warn('無法訪問頂層窗口 location:', e);
                 }}
                 
+                // 方法2: 如果方法1失敗，嘗試父窗口
+                if (protocol === 'http:' && hostname === 'localhost') {{
+                    try {{
+                        if (window.parent && window.parent.location && window.parent.location !== window.location) {{
+                            const parentLocation = window.parent.location;
+                            if (parentLocation.protocol && parentLocation.protocol !== 'about:') {{
+                                protocol = parentLocation.protocol;
+                            }}
+                            if (parentLocation.hostname && parentLocation.hostname !== '') {{
+                                hostname = parentLocation.hostname;
+                            }}
+                        }}
+                    }} catch (e) {{
+                        console.warn('無法訪問父窗口 location:', e);
+                    }}
+                }}
+                
+                // 方法3: 嘗試從 document.referrer 獲取（如果可用）
+                if (protocol === 'http:' && hostname === 'localhost') {{
+                    try {{
+                        const referrer = document.referrer;
+                        if (referrer && referrer !== '') {{
+                            const referrerUrl = new URL(referrer);
+                            if (referrerUrl.protocol && referrerUrl.protocol !== 'about:') {{
+                                protocol = referrerUrl.protocol;
+                            }}
+                            if (referrerUrl.hostname && referrerUrl.hostname !== '') {{
+                                hostname = referrerUrl.hostname;
+                            }}
+                        }}
+                    }} catch (e) {{
+                        console.warn('無法從 referrer 獲取 URL:', e);
+                    }}
+                }}
+                
+                // 方法4: 如果還是失敗，嘗試當前窗口（雖然在 iframe 中可能無效）
+                if (protocol === 'http:' && hostname === 'localhost') {{
+                    const currentLocation = window.location;
+                    if (currentLocation.protocol && currentLocation.protocol !== 'about:') {{
+                        protocol = currentLocation.protocol;
+                    }}
+                    if (currentLocation.hostname && currentLocation.hostname !== '') {{
+                        hostname = currentLocation.hostname;
+                    }}
+                }}
+                
+                // 確保協議有效（處理 'about:' 協議）
+                if (protocol === 'about:' || !protocol || protocol === '') {{
+                    protocol = 'http:';
+                }}
+                
+                // 確保協議以 ':' 結尾
+                if (!protocol.endsWith(':')) {{
+                    protocol += ':';
+                }}
+                
+                // 如果 hostname 仍然無效，使用默認值
+                if (!hostname || hostname === '' || hostname === 'null' || hostname === 'undefined') {{
+                    hostname = 'localhost';
+                }}
+                
+                const port = backend_external_port;
+                
+                // 構建 URL
                 const url = `${{protocol}}//${{hostname}}:${{port}}`;
                 
-                // Validate the constructed URL
+                // 驗證構建的 URL
                 try {{
-                    new URL(url);
+                    const testUrl = new URL(url);
+                    // 確保 URL 有有效的協議
+                    if (!['http:', 'https:'].includes(testUrl.protocol)) {{
+                        console.error('無效的協議:', testUrl.protocol);
+                        return null;
+                    }}
+                    console.log('構建的 API URL:', url);
                     return url;
                 }} catch (e) {{
                     console.error('構建的 API URL 無效:', url, e);
@@ -296,6 +378,8 @@ def page_file_list():
                 statusDiv.innerText = '錯誤: 無法構建 API URL，請檢查配置';
                 statusDiv.style.color = 'red';
                 uploadButton.disabled = true;
+            }} else {{
+                console.log('使用 API URL:', api_url);
             }}
 
             const token = "{st.session_state.token}";
