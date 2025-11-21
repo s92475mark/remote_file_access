@@ -263,11 +263,40 @@ def page_file_list():
             const progressContainer = document.getElementById('progress-container');
             const progressBar = document.getElementById('progress-bar');
             const api_url_from_python = "{API_URL}"; // This is for Python's internal use.
-            const backend_host_port = 8965; // The external port mapped to the Flask backend
+            const backend_host_port = 5040; // The external port mapped to the Flask backend (from docker-compose.yml)
 
             // For client-side JavaScript, construct the API URL dynamically
             // using the same host as the Streamlit app, but the backend's exposed port.
-            const api_url = window.location.protocol + '//' + window.location.hostname + ':' + backend_host_port;
+            function buildApiUrl() {{
+                const protocol = window.location.protocol || 'http:';
+                const hostname = window.location.hostname || 'localhost';
+                const port = backend_host_port;
+                
+                // Validate that we have valid components
+                if (!hostname || !port) {{
+                    console.error('無法構建 API URL: hostname 或 port 無效');
+                    return null;
+                }}
+                
+                const url = `${{protocol}}//${{hostname}}:${{port}}`;
+                
+                // Validate the constructed URL
+                try {{
+                    new URL(url);
+                    return url;
+                }} catch (e) {{
+                    console.error('構建的 API URL 無效:', url, e);
+                    return null;
+                }}
+            }}
+            
+            const api_url = buildApiUrl();
+            
+            if (!api_url) {{
+                statusDiv.innerText = '錯誤: 無法構建 API URL，請檢查配置';
+                statusDiv.style.color = 'red';
+                uploadButton.disabled = true;
+            }}
 
             const token = "{st.session_state.token}";
 
@@ -286,6 +315,13 @@ def page_file_list():
             fileInput.onchange = async (e) => {{
                 const file = e.target.files[0];
                 if (!file) return;
+                
+                // Check if API URL is valid before proceeding
+                if (!api_url) {{
+                    statusDiv.innerText = '錯誤: API URL 配置無效，無法上傳檔案';
+                    statusDiv.style.color = 'red';
+                    return;
+                }}
 
                 uploadButton.disabled = true;
                 uploadButton.innerText = '上傳中...';
