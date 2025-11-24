@@ -93,7 +93,7 @@ class ChangePasswordResponse(BaseModel):
     responses={200: ChangePasswordResponse, 401: {"description": "舊密碼不正確"}},
     security=[{"BearerAuth": []}],
 )
-@jwt_required()
+@permission_required("user:updatepassword")
 def change_password(body: ChangePasswordForm):
     """
     更改目前已登入使用者的密碼。
