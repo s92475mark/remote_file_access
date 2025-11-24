@@ -8,7 +8,7 @@ import streamlit.components.v1 as components
 
 # --- 設定 API 的基本 URL ---
 API_URL = "http://backend:5042"
-# API_URL = "http://127.0.0.1:8965"
+API_URL = "http://127.0.0.1:8965"
 
 
 # --- Session State 初始化 ---
@@ -913,6 +913,8 @@ def page_change_password():
                         st.session_state.user_role = None
                         st.session_state.user_name = None
                         st.rerun()
+                    elif response.status_code == 403:
+                        st.error(f"權限不足")
                     elif response:
                         st.error(f"更改失敗: {response.json().get('message', '未知錯誤')}")
 
